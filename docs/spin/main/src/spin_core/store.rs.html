@@ -321,6 +321,8 @@
 <a href="#321" id="321">321</a>
 <a href="#322" id="322">322</a>
 <a href="#323" id="323">323</a>
+<a href="#324" id="324">324</a>
+<a href="#325" id="325">325</a>
 </pre><pre class="rust"><code><span class="kw">use </span>anyhow::{anyhow, <span class="prelude-ty">Result</span>};
 <span class="kw">use </span>std::{
     io::{Read, Write},
@@ -332,13 +334,15 @@
 <span class="kw">use </span>wasi_common::{file::FileCaps, pipe::ReadPipe};
 <span class="kw">use </span>wasmtime_wasi::tokio::WasiCtxBuilder;
 
-<span class="kw">use </span><span class="kw">crate</span>::io::OutputBuffer;
-
-<span class="kw">use super</span>::{
+<span class="kw">use crate</span>::{
     host_component::{HostComponents, HostComponentsData},
+    io::OutputBuffer,
     limits::StoreLimitsAsync,
     Data,
 };
+
+<span class="attr">#[cfg(doc)]
+</span><span class="kw">use </span><span class="kw">crate</span>::EngineBuilder;
 
 <span class="doccomment">/// A `Store` holds the runtime state of a Spin instance.
 ///
