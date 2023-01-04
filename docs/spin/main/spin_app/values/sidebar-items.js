@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["ValuesMapBuilder","ValuesMapBuilder assists in building a ValuesMap."]],"type":[["ValuesMap","A String-keyed map with dynamically-typed values."]]};
