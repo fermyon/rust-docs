@@ -1,6 +1,9 @@
 name: Spin docs
 
 on:
+  repository_dispatch:
+    types:
+      - spin-update
   workflow_dispatch:
     inputs:
       ref:
@@ -13,10 +16,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Dispatch variables
+        env:
+          repository_dispatch_ref: ${{ github.event.client_payload.ref }}
+          workflow_dispatch_ref: ${{ inputs.ref }}
+        run: 'echo spin_ref=${repository_dispatch_ref:-$workflow_dispatch_ref} >> $GITHUB_ENV'
+
       - uses: actions/checkout@v3
         with:
           repository: 'fermyon/spin'
-          ref: ${{ inputs.ref }}
+          ref: ${{ env.spin_ref }}
           path: spin
 
       # Use nightly to enable unstable (-Z) options
@@ -41,7 +50,7 @@ jobs:
       - name: 'Push docs'
         working-directory: rust-docs
         env:
-          OUT: 'docs/spin/${{ inputs.ref }}'
+          OUT: 'docs/spin/${{ env.spin_ref }}'
         run: |
           rm -rf $OUT
           mkdir -p docs/spin
