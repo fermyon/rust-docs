@@ -1,0 +1,53 @@
+name: Spin docs
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Spin branch or tag'
+        required: true
+        default: 'main'
+
+jobs:
+  publish-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: 'fermyon/spin'
+          ref: ${{ inputs.ref }}
+          path: spin
+
+      # Use nightly to enable unstable (-Z) options
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          default: true
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: spin
+
+      - name: 'Build docs'
+        working-directory: spin
+        env:
+          RUSTDOCFLAGS: '-Zunstable-options --enable-index-page'
+        run: 'cargo doc -Zrustdoc-map --no-deps -p spin-core -p spin-app -p spin-sdk'
+
+      - uses: actions/checkout@v3
+        with:
+          path: rust-docs
+      - name: 'Push docs'
+        working-directory: rust-docs
+        env:
+          OUT: 'docs/spin/${{ inputs.ref }}'
+        run: |
+          rm -rf $OUT
+          mkdir -p docs/spin
+          mv -T ../spin/target/doc $OUT
+          git add $OUT
+          git config user.name Fermybot
+          git config user.email fermybot@fermyon.com
+          git commit -m "Update $OUT"
+          git push
