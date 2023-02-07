@@ -569,7 +569,7 @@
         guest_path: PathBuf,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="kw">let </span>dir = wasmtime_wasi::Dir::open_ambient_dir(host_path, ambient_authority())<span class="question-mark">?</span>;
-        <span class="self">self</span>.try_with_wasi(|wasi| wasi.preopened_dir(dir, guest_path))
+        <span class="self">self</span>.try_with_wasi(|wasi| wasi.preopened_dir(dir, guest_path).map_err(|e| <span class="macro">anyhow!</span>(e)))
     }
 
     <span class="doccomment">/// Returns a mutable reference to the built
