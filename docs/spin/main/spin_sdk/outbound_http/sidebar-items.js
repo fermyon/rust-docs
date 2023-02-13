@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["send_request","Send an HTTP request and get a fully formed HTTP response."]]};
+window.SIDEBAR_ITEMS = {"fn":["send_request"]};

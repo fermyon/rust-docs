@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["DbDataType",""],["DbValue",""],["Error","A MySQL error"],["MysqlError",""],["ParameterValue",""]],"fn":[["execute",""],["query",""]],"struct":[["Column",""],["RowSet",""]],"trait":[["Decode","A type that can be decoded from the database."]],"type":[["Row",""]]};
+window.SIDEBAR_ITEMS = {"enum":["DbDataType","DbValue","Error","MysqlError","ParameterValue"],"fn":["execute","query"],"struct":["Column","RowSet"],"trait":["Decode"],"type":["Row"]};

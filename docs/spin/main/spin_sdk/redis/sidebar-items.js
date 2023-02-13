@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["Error",""]],"fn":[["del",""],["get",""],["incr",""],["publish",""],["sadd",""],["set",""],["smembers",""],["srem",""]],"type":[["PayloadParam",""],["PayloadResult",""]]};
+window.SIDEBAR_ITEMS = {"enum":["Error"],"fn":["del","get","incr","publish","sadd","set","smembers","srem"],"type":["PayloadParam","PayloadResult"]};

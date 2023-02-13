@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["Error","Exports the generated Spin config items."]],"fn":[["get","Exports the generated Spin config items."]]};
+window.SIDEBAR_ITEMS = {"enum":["Error"],"fn":["get"]};
