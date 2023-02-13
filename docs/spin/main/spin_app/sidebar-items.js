@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"attr":["async_trait"],"enum":["Error"],"mod":["locked","values"],"struct":["App","AppComponent","AppLoader","AppTrigger","OwnedApp"],"trait":["DynamicHostComponent","Loader"],"type":["Result"]};
+window.SIDEBAR_ITEMS = {"attr":["async_trait"],"enum":["Error"],"mod":["locked","values"],"struct":["App","AppComponent","AppLoader","AppParts","AppTrigger","OwnedApp"],"trait":["DynamicHostComponent","Loader"],"type":["Result"]};
