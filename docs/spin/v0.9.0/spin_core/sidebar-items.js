@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["DEFAULT_EPOCH_TICK_INTERVAL"],"enum":["Trap"],"struct":["Config","Data","Engine","EngineBuilder","HostComponentDataHandle","HostComponentsData","I32Exit","Instance","InstancePre","Module","OutputBuffer","Store","StoreBuilder"],"trait":["HostComponent"],"type":["Linker"]};
