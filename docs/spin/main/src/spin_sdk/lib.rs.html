@@ -109,6 +109,16 @@
 <a href="#109" id="109">109</a>
 <a href="#110" id="110">110</a>
 <a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
 </pre><pre class="rust"><code><span class="doccomment">//! The Rust Spin SDK.
 
 </span><span class="attr">#![deny(missing_docs)]
@@ -121,6 +131,16 @@
 
 <span class="doccomment">/// Exports the procedural macros for writing handlers for Spin components.
 </span><span class="kw">pub use </span>spin_macro::<span class="kw-2">*</span>;
+
+<span class="attr">#[export_name = <span class="macro">concat!</span>(<span class="string">&quot;spin-sdk-version-&quot;</span>, <span class="macro">env!</span>(<span class="string">&quot;SDK_VERSION&quot;</span>))]
+</span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>__spin_sdk_version() {}
+
+<span class="attr">#[cfg(feature = <span class="string">&quot;export-sdk-language&quot;</span>)]
+#[export_name = <span class="string">&quot;spin-sdk-language-rust&quot;</span>]
+</span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>__spin_sdk_language() {}
+
+<span class="attr">#[export_name = <span class="macro">concat!</span>(<span class="string">&quot;spin-sdk-commit-&quot;</span>, <span class="macro">env!</span>(<span class="string">&quot;SDK_COMMIT&quot;</span>))]
+</span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>__spin_sdk_hash() {}
 
 <span class="doccomment">/// Helpers for building Spin HTTP components.
 /// These are convenience helpers, and the types in this module are
