@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/core/src/lib.rs`."><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-d8cc97c322676e1b.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.70.0-nightly (1459b3128 2023-03-23)" data-search-js="search-a6dd7f063a44c279.js" data-settings-js="settings-f0c5c39777a9a2f6.js" data-settings-css="settings-0bcba95ff279c1db.css" data-theme-light-css="light-db279b6232be9c13.css" data-theme-dark-css="dark-cf923f49f397b216.css" data-theme-ayu-css="ayu-be46fdc453a55015.css" ></div><script src="../../static.files/storage-9184409068f70b79.js"></script><script defer src="../../static.files/source-script-1b95b7cca98b26e5.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-f5a2577c5297a973.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-db279b6232be9c13.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-cf923f49f397b216.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../spin_core/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/core/src/lib.rs`."><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-fbd14db5c88ed452.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.70.0-nightly (db0cbc48d 2023-03-26)" data-search-js="search-0db6af764fd5e08b.js" data-settings-js="settings-f0c5c39777a9a2f6.js" data-settings-css="settings-0bcba95ff279c1db.css" data-theme-light-css="light-db279b6232be9c13.css" data-theme-dark-css="dark-cf923f49f397b216.css" data-theme-ayu-css="ayu-be46fdc453a55015.css" ></div><script src="../../static.files/storage-d4a1a279bad1a0c0.js"></script><script defer src="../../static.files/source-script-1b95b7cca98b26e5.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-9ade54abd4bd73c8.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-db279b6232be9c13.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-cf923f49f397b216.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../spin_core/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -284,11 +284,57 @@
 <a href="#284" id="284">284</a>
 <a href="#285" id="285">285</a>
 <a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
+<a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
+<a href="#300" id="300">300</a>
+<a href="#301" id="301">301</a>
+<a href="#302" id="302">302</a>
+<a href="#303" id="303">303</a>
+<a href="#304" id="304">304</a>
+<a href="#305" id="305">305</a>
+<a href="#306" id="306">306</a>
+<a href="#307" id="307">307</a>
+<a href="#308" id="308">308</a>
+<a href="#309" id="309">309</a>
+<a href="#310" id="310">310</a>
+<a href="#311" id="311">311</a>
+<a href="#312" id="312">312</a>
+<a href="#313" id="313">313</a>
+<a href="#314" id="314">314</a>
+<a href="#315" id="315">315</a>
+<a href="#316" id="316">316</a>
+<a href="#317" id="317">317</a>
+<a href="#318" id="318">318</a>
+<a href="#319" id="319">319</a>
+<a href="#320" id="320">320</a>
+<a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
+<a href="#324" id="324">324</a>
+<a href="#325" id="325">325</a>
+<a href="#326" id="326">326</a>
+<a href="#327" id="327">327</a>
+<a href="#328" id="328">328</a>
+<a href="#329" id="329">329</a>
+<a href="#330" id="330">330</a>
+<a href="#331" id="331">331</a>
+<a href="#332" id="332">332</a>
 </pre><pre class="rust"><code><span class="doccomment">//! Spin core execution engine
 //!
 //! This crate provides low-level Wasm and WASI functionality required by Spin.
 //! Most of this functionality consists of wrappers around [`wasmtime`] and
-//! [`wasmtime_wasi`] that narrows the flexibility of `wasmtime` to the set of
+//! [`wasi_common`] that narrows the flexibility of `wasmtime` to the set of
 //! features used by Spin (such as only supporting `wasmtime`&#39;s async calling style).
 
 </span><span class="attr">#![deny(missing_docs)]
@@ -298,23 +344,35 @@
 <span class="kw">mod </span>limits;
 <span class="kw">mod </span>store;
 
-<span class="kw">use </span>std::{
-    sync::{Arc, Mutex},
-    time::Duration,
-};
+<span class="kw">use </span>std::{sync::Arc, time::Duration};
 
 <span class="kw">use </span>anyhow::Result;
+<span class="kw">pub use </span>async_trait::async_trait;
 <span class="kw">use </span>crossbeam_channel::Sender;
 <span class="kw">use </span>tracing::instrument;
-<span class="kw">pub use </span>wasmtime::{<span class="self">self</span>, Instance, Module, Trap};
-<span class="kw">pub use </span>wasmtime_wasi::I32Exit;
-<span class="kw">use </span>wasmtime_wasi::WasiCtx;
+<span class="kw">pub use </span>wasi_common::I32Exit;
+<span class="kw">pub use </span>wasmtime::{
+    <span class="self">self</span>,
+    component::{Component, Instance},
+    Instance <span class="kw">as </span>ModuleInstance, Module, Trap,
+};
 
 <span class="kw">use </span><span class="self">self</span>::host_component::{HostComponents, HostComponentsBuilder};
 
 <span class="kw">pub use </span>host_component::{HostComponent, HostComponentDataHandle, HostComponentsData};
 <span class="kw">pub use </span>io::OutputBuffer;
-<span class="kw">pub use </span>store::{Store, StoreBuilder};
+<span class="kw">pub use </span>store::{Store, StoreBuilder, Wasi};
+
+<span class="attr">#[allow(missing_docs)]
+</span><span class="kw">mod </span>bindgen {
+    <span class="macro">wasmtime::component::bindgen!</span>({
+        path: <span class="string">&quot;../../wit/preview2&quot;</span>,
+        world: <span class="string">&quot;reactor&quot;</span>,
+        <span class="kw">async</span>: <span class="bool-val">true
+    </span>});
+}
+
+<span class="kw">pub use </span>bindgen::<span class="kw-2">*</span>;
 
 <span class="doccomment">/// The default [`EngineBuilder::epoch_tick_interval`].
 </span><span class="kw">pub const </span>DEFAULT_EPOCH_TICK_INTERVAL: Duration = Duration::from_millis(<span class="number">10</span>);
@@ -340,6 +398,7 @@
         <span class="kw">let </span><span class="kw-2">mut </span>inner = wasmtime::Config::new();
         inner.async_support(<span class="bool-val">true</span>);
         inner.epoch_interruption(<span class="bool-val">true</span>);
+        inner.wasm_component_model(<span class="bool-val">true</span>);
         <span class="self">Self </span>{ inner }
     }
 }
@@ -347,7 +406,7 @@
 <span class="doccomment">/// Host state data associated with individual [Store]s and [Instance]s.
 </span><span class="kw">pub struct </span>Data&lt;T&gt; {
     inner: T,
-    wasi: WasiCtx,
+    wasi: Wasi,
     host_components_data: HostComponentsData,
     store_limits: limits::StoreLimitsAsync,
 }
@@ -365,7 +424,10 @@
 }
 
 <span class="doccomment">/// An alias for [`wasmtime::Linker`] specialized to [`Data`].
-</span><span class="kw">pub type </span>Linker&lt;T&gt; = wasmtime::Linker&lt;Data&lt;T&gt;&gt;;
+</span><span class="kw">pub type </span>ModuleLinker&lt;T&gt; = wasmtime::Linker&lt;Data&lt;T&gt;&gt;;
+
+<span class="doccomment">/// An alias for [`wasmtime::component::Linker`] specialized to [`Data`].
+</span><span class="kw">pub type </span>Linker&lt;T&gt; = wasmtime::component::Linker&lt;Data&lt;T&gt;&gt;;
 
 <span class="doccomment">/// A builder interface for configuring a new [`Engine`].
 ///
@@ -373,6 +435,7 @@
 </span><span class="kw">pub struct </span>EngineBuilder&lt;T&gt; {
     engine: wasmtime::Engine,
     linker: Linker&lt;T&gt;,
+    module_linker: ModuleLinker&lt;T&gt;,
     host_components_builder: HostComponentsBuilder,
     epoch_tick_interval: Duration,
     epoch_ticker_thread: bool,
@@ -383,11 +446,21 @@
         <span class="kw">let </span>engine = wasmtime::Engine::new(<span class="kw-2">&amp;</span>config.inner)<span class="question-mark">?</span>;
 
         <span class="kw">let </span><span class="kw-2">mut </span>linker: Linker&lt;T&gt; = Linker::new(<span class="kw-2">&amp;</span>engine);
-        wasmtime_wasi::tokio::add_to_linker(<span class="kw-2">&amp;mut </span>linker, |data| <span class="kw-2">&amp;mut </span>data.wasi)<span class="question-mark">?</span>;
+        wasi_host::command::add_to_linker(<span class="kw-2">&amp;mut </span>linker, |data| <span class="kw">match </span><span class="kw-2">&amp;mut </span>data.wasi {
+            Wasi::Preview1(<span class="kw">_</span>) =&gt; <span class="macro">panic!</span>(<span class="string">&quot;using WASI Preview 1 functions with Preview 2 store&quot;</span>),
+            Wasi::Preview2(ctx) =&gt; ctx,
+        })<span class="question-mark">?</span>;
+
+        <span class="kw">let </span><span class="kw-2">mut </span>module_linker = ModuleLinker::new(<span class="kw-2">&amp;</span>engine);
+        wasmtime_wasi::tokio::add_to_linker(<span class="kw-2">&amp;mut </span>module_linker, |data| <span class="kw">match </span><span class="kw-2">&amp;mut </span>data.wasi {
+            Wasi::Preview1(ctx) =&gt; ctx,
+            Wasi::Preview2(<span class="kw">_</span>) =&gt; <span class="macro">panic!</span>(<span class="string">&quot;using WASI Preview 2 functions with Preview 1 store&quot;</span>),
+        })<span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
             engine,
             linker,
+            module_linker,
             host_components_builder: HostComponents::builder(),
             epoch_tick_interval: DEFAULT_EPOCH_TICK_INTERVAL,
             epoch_ticker_thread: <span class="bool-val">true</span>,
@@ -397,14 +470,14 @@
     <span class="doccomment">/// Adds definition(s) to the built [`Engine`].
     ///
     /// This method&#39;s signature is meant to be used with
-    /// [`wit-bindgen`](https://github.com/bytecodealliance/wit-bindgen)&#39;s
+    /// [`wit-bindgen`](https://github.com/bytecodealliance/wasmtime/tree/main/crates/wit-bindgen)&#39;s
     /// generated `add_to_linker` functions, e.g.:
     ///
     /// ```ignore
-    /// wit_bindgen_wasmtime::import!({paths: [&quot;my-interface.wit&quot;], async: *});
+    /// use spin_core::my_interface;
     /// // ...
     /// let mut builder: EngineBuilder&lt;my_interface::MyInterfaceData&gt; = Engine::builder();
-    /// builder.link_import(my_interface::MyInterface::add_to_linker)?;
+    /// builder.link_import(my_interface::add_to_linker)?;
     /// ```
     </span><span class="kw">pub fn </span>link_import(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
@@ -466,37 +539,20 @@
         <span class="prelude-val">Some</span>(send)
     }
 
-    <span class="doccomment">/// Builds an [`Engine`] from this builder with the given host state data.
-    ///
-    /// Note that this data will generally go entirely unused, but is needed
-    /// by the implementation of [`Engine::instantiate_pre`]. If `T: Default`,
-    /// it is probably preferable to use [`EngineBuilder::build`].
-    </span><span class="kw">pub fn </span>build_with_data(<span class="self">self</span>, instance_pre_data: T) -&gt; Engine&lt;T&gt; {
+    <span class="doccomment">/// Builds an [`Engine`] from this builder.
+    </span><span class="kw">pub fn </span>build(<span class="self">self</span>) -&gt; Engine&lt;T&gt; {
         <span class="kw">let </span>epoch_ticker_signal = <span class="self">self</span>.maybe_spawn_epoch_ticker();
 
         <span class="kw">let </span>host_components = <span class="self">self</span>.host_components_builder.build();
 
-        <span class="kw">let </span>instance_pre_store = Arc::new(Mutex::new(
-            StoreBuilder::new(<span class="self">self</span>.engine.clone(), Duration::ZERO, <span class="kw-2">&amp;</span>host_components)
-                .build_with_data(instance_pre_data)
-                .expect(<span class="string">&quot;instance_pre_store build should not fail&quot;</span>),
-        ));
-
         Engine {
             inner: <span class="self">self</span>.engine,
             linker: <span class="self">self</span>.linker,
+            module_linker: <span class="self">self</span>.module_linker,
             host_components,
-            instance_pre_store,
             epoch_tick_interval: <span class="self">self</span>.epoch_tick_interval,
             _epoch_ticker_signal: epoch_ticker_signal,
         }
-    }
-}
-
-<span class="kw">impl</span>&lt;T: Default + Send + Sync&gt; EngineBuilder&lt;T&gt; {
-    <span class="doccomment">/// Builds an [`Engine`] from this builder.
-    </span><span class="kw">pub fn </span>build(<span class="self">self</span>) -&gt; Engine&lt;T&gt; {
-        <span class="self">self</span>.build_with_data(T::default())
     }
 }
 
@@ -505,8 +561,8 @@
 </span><span class="kw">pub struct </span>Engine&lt;T&gt; {
     inner: wasmtime::Engine,
     linker: Linker&lt;T&gt;,
+    module_linker: ModuleLinker&lt;T&gt;,
     host_components: HostComponents,
-    instance_pre_store: Arc&lt;Mutex&lt;Store&lt;T&gt;&gt;&gt;,
     epoch_tick_interval: Duration,
     <span class="comment">// Matching receiver closes on drop
     </span>_epoch_ticker_signal: <span class="prelude-ty">Option</span>&lt;Sender&lt;()&gt;&gt;,
@@ -519,20 +575,27 @@
     }
 
     <span class="doccomment">/// Creates a new [`StoreBuilder`].
-    </span><span class="kw">pub fn </span>store_builder(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; StoreBuilder {
+    </span><span class="kw">pub fn </span>store_builder(<span class="kw-2">&amp;</span><span class="self">self</span>, wasi: Wasi) -&gt; StoreBuilder {
         StoreBuilder::new(
             <span class="self">self</span>.inner.clone(),
             <span class="self">self</span>.epoch_tick_interval,
             <span class="kw-2">&amp;</span><span class="self">self</span>.host_components,
+            wasi,
         )
     }
 
-    <span class="doccomment">/// Creates a new [`InstancePre`] for the given [`Module`].
+    <span class="doccomment">/// Creates a new [`InstancePre`] for the given [`Component`].
     </span><span class="attr">#[instrument(skip_all)]
-    </span><span class="kw">pub fn </span>instantiate_pre(<span class="kw-2">&amp;</span><span class="self">self</span>, module: <span class="kw-2">&amp;</span>Module) -&gt; <span class="prelude-ty">Result</span>&lt;InstancePre&lt;T&gt;&gt; {
-        <span class="kw">let </span><span class="kw-2">mut </span>store = <span class="self">self</span>.instance_pre_store.lock().unwrap();
-        <span class="kw">let </span>inner = <span class="self">self</span>.linker.instantiate_pre(<span class="kw-2">&amp;mut *</span>store, module)<span class="question-mark">?</span>;
+    </span><span class="kw">pub fn </span>instantiate_pre(<span class="kw-2">&amp;</span><span class="self">self</span>, component: <span class="kw-2">&amp;</span>Component) -&gt; <span class="prelude-ty">Result</span>&lt;InstancePre&lt;T&gt;&gt; {
+        <span class="kw">let </span>inner = Arc::new(<span class="self">self</span>.linker.instantiate_pre(component)<span class="question-mark">?</span>);
         <span class="prelude-val">Ok</span>(InstancePre { inner })
+    }
+
+    <span class="doccomment">/// Creates a new [`ModuleInstancePre`] for the given [`Module`].
+    </span><span class="attr">#[instrument(skip_all)]
+    </span><span class="kw">pub fn </span>module_instantiate_pre(<span class="kw-2">&amp;</span><span class="self">self</span>, module: <span class="kw-2">&amp;</span>Module) -&gt; <span class="prelude-ty">Result</span>&lt;ModuleInstancePre&lt;T&gt;&gt; {
+        <span class="kw">let </span>inner = Arc::new(<span class="self">self</span>.module_linker.instantiate_pre(module)<span class="question-mark">?</span>);
+        <span class="prelude-val">Ok</span>(ModuleInstancePre { inner })
     }
 }
 
@@ -544,9 +607,9 @@
 
 <span class="doccomment">/// A pre-initialized instance that is ready to be instantiated.
 ///
-/// See [`wasmtime::InstancePre`] for more information.
+/// See [`wasmtime::component::InstancePre`] for more information.
 </span><span class="kw">pub struct </span>InstancePre&lt;T&gt; {
-    inner: wasmtime::InstancePre&lt;Data&lt;T&gt;&gt;,
+    inner: Arc&lt;wasmtime::component::InstancePre&lt;Data&lt;T&gt;&gt;&gt;,
 }
 
 <span class="kw">impl</span>&lt;T: Send + Sync&gt; InstancePre&lt;T&gt; {
@@ -565,7 +628,36 @@
     }
 }
 
-<span class="kw">impl</span>&lt;T&gt; AsRef&lt;wasmtime::InstancePre&lt;Data&lt;T&gt;&gt;&gt; <span class="kw">for </span>InstancePre&lt;T&gt; {
+<span class="kw">impl</span>&lt;T&gt; AsRef&lt;wasmtime::component::InstancePre&lt;Data&lt;T&gt;&gt;&gt; <span class="kw">for </span>InstancePre&lt;T&gt; {
+    <span class="kw">fn </span>as_ref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>wasmtime::component::InstancePre&lt;Data&lt;T&gt;&gt; {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.inner
+    }
+}
+
+<span class="doccomment">/// A pre-initialized module instance that is ready to be instantiated.
+///
+/// See [`wasmtime::InstancePre`] for more information.
+</span><span class="kw">pub struct </span>ModuleInstancePre&lt;T&gt; {
+    inner: Arc&lt;wasmtime::InstancePre&lt;Data&lt;T&gt;&gt;&gt;,
+}
+
+<span class="kw">impl</span>&lt;T: Send + Sync&gt; ModuleInstancePre&lt;T&gt; {
+    <span class="doccomment">/// Instantiates this instance with the given [`Store`].
+    </span><span class="attr">#[instrument(skip_all)]
+    </span><span class="kw">pub async fn </span>instantiate_async(<span class="kw-2">&amp;</span><span class="self">self</span>, store: <span class="kw-2">&amp;mut </span>Store&lt;T&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;ModuleInstance&gt; {
+        <span class="self">self</span>.inner.instantiate_async(store).<span class="kw">await
+    </span>}
+}
+
+<span class="kw">impl</span>&lt;T&gt; Clone <span class="kw">for </span>ModuleInstancePre&lt;T&gt; {
+    <span class="kw">fn </span>clone(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            inner: <span class="self">self</span>.inner.clone(),
+        }
+    }
+}
+
+<span class="kw">impl</span>&lt;T&gt; AsRef&lt;wasmtime::InstancePre&lt;Data&lt;T&gt;&gt;&gt; <span class="kw">for </span>ModuleInstancePre&lt;T&gt; {
     <span class="kw">fn </span>as_ref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>wasmtime::InstancePre&lt;Data&lt;T&gt;&gt; {
         <span class="kw-2">&amp;</span><span class="self">self</span>.inner
     }

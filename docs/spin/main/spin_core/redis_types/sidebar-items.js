@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Error","RedisParameter","RedisResult"],"fn":["add_to_linker"],"trait":["Host"],"type":["PayloadParam","PayloadResult"]};
