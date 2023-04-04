@@ -90,7 +90,7 @@
 <a href="#90" id="90">90</a>
 <a href="#91" id="91">91</a>
 <a href="#92" id="92">92</a>
-</pre><pre class="rust"><code><span class="kw">use </span>http::{header::HeaderName, HeaderValue};
+</pre><pre class="rust"><code><span class="kw">use </span>http_types::{header::HeaderName, HeaderValue};
 
 <span class="kw">use </span><span class="kw">super</span>::http::{Request, Response};
 
@@ -134,7 +134,7 @@
         body,
     } = wasi_outbound_http::request(out_req)<span class="question-mark">?</span>;
 
-    <span class="kw">let </span>resp_builder = http::response::Builder::new().status(status);
+    <span class="kw">let </span>resp_builder = http_types::response::Builder::new().status(status);
     <span class="kw">let </span>resp_builder = headers
         .into_iter()
         .flatten()
@@ -156,11 +156,11 @@
     ))
 }
 
-<span class="kw">impl </span>TryFrom&lt;http::Method&gt; <span class="kw">for </span>wasi_outbound_http::Method {
+<span class="kw">impl </span>TryFrom&lt;http_types::Method&gt; <span class="kw">for </span>wasi_outbound_http::Method {
     <span class="kw">type </span>Error = OutboundHttpError;
 
-    <span class="kw">fn </span>try_from(method: http::Method) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
-        <span class="kw">use </span>http::Method;
+    <span class="kw">fn </span>try_from(method: http_types::Method) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="kw">use </span>http_types::Method;
         <span class="kw">use </span>wasi_outbound_http::Method::<span class="kw-2">*</span>;
         <span class="prelude-val">Ok</span>(<span class="kw">match </span>method {
             Method::GET =&gt; Get,

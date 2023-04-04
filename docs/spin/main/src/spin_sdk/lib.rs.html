@@ -119,6 +119,10 @@
 <a href="#119" id="119">119</a>
 <a href="#120" id="120">120</a>
 <a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
 </pre><pre class="rust"><code><span class="doccomment">//! The Rust Spin SDK.
 
 </span><span class="attr">#![deny(missing_docs)]
@@ -149,23 +153,27 @@
     <span class="kw">use </span>anyhow::Result;
 
     <span class="doccomment">/// The Spin HTTP request.
-    </span><span class="kw">pub type </span>Request = http::Request&lt;<span class="prelude-ty">Option</span>&lt;bytes::Bytes&gt;&gt;;
+    </span><span class="kw">pub type </span>Request = http_types::Request&lt;<span class="prelude-ty">Option</span>&lt;bytes::Bytes&gt;&gt;;
 
     <span class="doccomment">/// The Spin HTTP response.
-    </span><span class="kw">pub type </span>Response = http::Response&lt;<span class="prelude-ty">Option</span>&lt;bytes::Bytes&gt;&gt;;
+    </span><span class="kw">pub type </span>Response = http_types::Response&lt;<span class="prelude-ty">Option</span>&lt;bytes::Bytes&gt;&gt;;
 
     <span class="kw">pub use </span><span class="kw">crate</span>::outbound_http::send_request <span class="kw">as </span>send;
 
+    <span class="doccomment">/// Exports HTTP Router items.
+    </span><span class="kw">pub use </span>router::<span class="kw-2">*</span>;
+    <span class="kw">mod </span>router;
+
     <span class="doccomment">/// Helper function to return a 404 Not Found response.
     </span><span class="kw">pub fn </span>not_found() -&gt; <span class="prelude-ty">Result</span>&lt;Response&gt; {
-        <span class="prelude-val">Ok</span>(http::Response::builder()
+        <span class="prelude-val">Ok</span>(http_types::Response::builder()
             .status(<span class="number">404</span>)
             .body(<span class="prelude-val">Some</span>(<span class="string">&quot;Not Found&quot;</span>.into()))<span class="question-mark">?</span>)
     }
 
     <span class="doccomment">/// Helper function to return a 500 Internal Server Error response.
     </span><span class="kw">pub fn </span>internal_server_error() -&gt; <span class="prelude-ty">Result</span>&lt;Response&gt; {
-        <span class="prelude-val">Ok</span>(http::Response::builder()
+        <span class="prelude-val">Ok</span>(http_types::Response::builder()
             .status(<span class="number">500</span>)
             .body(<span class="prelude-val">Some</span>(<span class="string">&quot;Internal Server Error&quot;</span>.into()))<span class="question-mark">?</span>)
     }
