@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["DbDataType","DbValue","Error","ParameterValue","PgError"],"fn":["execute","query"],"struct":["Column","RowSet"],"trait":["Decode"],"type":["Row"]};
