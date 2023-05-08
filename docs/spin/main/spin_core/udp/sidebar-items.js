@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["add_to_linker"],"struct":["Datagram"],"trait":["Host"],"type":["Error","IpAddressFamily","IpSocketAddress","Network","Pollable","UdpSocket"]};

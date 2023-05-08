@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["add_to_linker"],"struct":["StreamError"],"trait":["Host"],"type":["InputStream","OutputStream","Pollable"]};

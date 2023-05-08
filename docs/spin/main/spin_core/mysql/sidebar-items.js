@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["MysqlError"],"fn":["add_to_linker"],"trait":["Host"],"type":["ParameterValue","RowSet"]};

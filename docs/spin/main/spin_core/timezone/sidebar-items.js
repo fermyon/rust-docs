@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["add_to_linker"],"struct":["TimezoneDisplay"],"trait":["Host"],"type":["Datetime","Timezone"]};
