@@ -319,6 +319,8 @@
 <a href="#319" id="319">319</a>
 <a href="#320" id="320">320</a>
 <a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Spin core execution engine
 //!
 //! This crate provides low-level Wasm and WASI functionality required by Spin.
@@ -348,7 +350,9 @@
 
 <span class="kw">use </span><span class="self">self</span>::host_component::{HostComponents, HostComponentsBuilder};
 
-<span class="kw">pub use </span>host_component::{HostComponent, HostComponentDataHandle, HostComponentsData};
+<span class="kw">pub use </span>host_component::{
+    AnyHostComponentDataHandle, HostComponent, HostComponentDataHandle, HostComponentsData,
+};
 <span class="kw">pub use </span>io::OutputBuffer;
 <span class="kw">pub use </span>store::{Store, StoreBuilder, Wasi};
 
