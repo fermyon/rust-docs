@@ -320,6 +320,13 @@
 <a href="#320" id="320">320</a>
 <a href="#321" id="321">321</a>
 <a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
+<a href="#324" id="324">324</a>
+<a href="#325" id="325">325</a>
+<a href="#326" id="326">326</a>
+<a href="#327" id="327">327</a>
+<a href="#328" id="328">328</a>
+<a href="#329" id="329">329</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Spin core execution engine
 //!
 //! This crate provides low-level Wasm and WASI functionality required by Spin.
@@ -390,6 +397,13 @@
     wasi: Wasi,
     host_components_data: HostComponentsData,
     store_limits: limits::StoreLimitsAsync,
+}
+
+<span class="kw">impl</span>&lt;T&gt; Data&lt;T&gt; {
+    <span class="doccomment">/// Get the amount of memory in bytes consumed by instances in the store
+    </span><span class="kw">pub fn </span>memory_consumed(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u64 {
+        <span class="self">self</span>.store_limits.memory_consumed()
+    }
 }
 
 <span class="kw">impl</span>&lt;T&gt; AsRef&lt;T&gt; <span class="kw">for </span>Data&lt;T&gt; {
