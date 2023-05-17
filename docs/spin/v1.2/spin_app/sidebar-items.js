@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"attr":["async_trait"],"enum":["Error"],"mod":["locked","values"],"struct":["App","AppComponent","AppLoader","AppTrigger","InertLoader","MetadataKey","OwnedApp"],"trait":["DynamicHostComponent","Loader"],"type":["Result"]};
