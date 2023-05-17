@@ -379,6 +379,41 @@
 <a href="#379" id="379">379</a>
 <a href="#380" id="380">380</a>
 <a href="#381" id="381">381</a>
+<a href="#382" id="382">382</a>
+<a href="#383" id="383">383</a>
+<a href="#384" id="384">384</a>
+<a href="#385" id="385">385</a>
+<a href="#386" id="386">386</a>
+<a href="#387" id="387">387</a>
+<a href="#388" id="388">388</a>
+<a href="#389" id="389">389</a>
+<a href="#390" id="390">390</a>
+<a href="#391" id="391">391</a>
+<a href="#392" id="392">392</a>
+<a href="#393" id="393">393</a>
+<a href="#394" id="394">394</a>
+<a href="#395" id="395">395</a>
+<a href="#396" id="396">396</a>
+<a href="#397" id="397">397</a>
+<a href="#398" id="398">398</a>
+<a href="#399" id="399">399</a>
+<a href="#400" id="400">400</a>
+<a href="#401" id="401">401</a>
+<a href="#402" id="402">402</a>
+<a href="#403" id="403">403</a>
+<a href="#404" id="404">404</a>
+<a href="#405" id="405">405</a>
+<a href="#406" id="406">406</a>
+<a href="#407" id="407">407</a>
+<a href="#408" id="408">408</a>
+<a href="#409" id="409">409</a>
+<a href="#410" id="410">410</a>
+<a href="#411" id="411">411</a>
+<a href="#412" id="412">412</a>
+<a href="#413" id="413">413</a>
+<a href="#414" id="414">414</a>
+<a href="#415" id="415">415</a>
+<a href="#416" id="416">416</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Spin internal application interfaces
 //!
 //! This crate contains interfaces to Spin application configuration to be used
@@ -517,20 +552,26 @@
     }
 }
 
+<span class="comment">// Implementation detail of [`App::inert`]; &quot;sealed&quot; to prevent external impls.
+</span><span class="kw">mod </span>private {
+    <span class="kw">pub trait </span>MaybeLoader {}
+}
+<span class="kw">use </span>private::MaybeLoader;
+
+<span class="kw">impl </span>MaybeLoader <span class="kw">for </span>AppLoader {}
+
 <span class="doccomment">/// An `App` holds loaded configuration for a Spin application.
+///
+/// Note: The `L: MaybeLoader` param is an implementation detail to support the
+/// [`App::inert`] constructor.
 </span><span class="attr">#[derive(Debug)]
-</span><span class="kw">pub struct </span>App&lt;<span class="lifetime">&#39;a</span>&gt; {
-    loader: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>AppLoader,
+</span><span class="kw">pub struct </span>App&lt;<span class="lifetime">&#39;a</span>, L: MaybeLoader = AppLoader&gt; {
+    loader: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>L,
     uri: String,
     locked: LockedApp,
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; App&lt;<span class="lifetime">&#39;a</span>&gt; {
-    <span class="doccomment">/// Returns a [`Loader`]-implementation-specific URI for this app.
-    </span><span class="kw">pub fn </span>uri(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>str {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.uri
-    }
-
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, L: MaybeLoader&gt; App&lt;<span class="lifetime">&#39;a</span>, L&gt; {
     <span class="doccomment">/// Deserializes typed metadata for this app.
     ///
     /// Returns `Ok(None)` if there is no metadata for the given `key` and an
@@ -560,7 +601,7 @@
     }
 
     <span class="doccomment">/// Returns an iterator of [`AppComponent`]s defined for this app.
-    </span><span class="kw">pub fn </span>components(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = AppComponent&gt; {
+    </span><span class="kw">pub fn </span>components(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = AppComponent&lt;<span class="lifetime">&#39;_</span>, L&gt;&gt; {
         <span class="self">self</span>.locked
             .components
             .iter()
@@ -569,13 +610,13 @@
 
     <span class="doccomment">/// Returns the [`AppComponent`] with the given `component_id`, or `None`
     /// if it doesn&#39;t exist.
-    </span><span class="kw">pub fn </span>get_component(<span class="kw-2">&amp;</span><span class="self">self</span>, component_id: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;AppComponent&gt; {
+    </span><span class="kw">pub fn </span>get_component(<span class="kw-2">&amp;</span><span class="self">self</span>, component_id: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;AppComponent&lt;<span class="lifetime">&#39;_</span>, L&gt;&gt; {
         <span class="self">self</span>.components()
             .find(|component| component.locked.id == component_id)
     }
 
     <span class="doccomment">/// Returns an iterator of [`AppTrigger`]s defined for this app.
-    </span><span class="kw">pub fn </span>triggers(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = AppTrigger&gt; {
+    </span><span class="kw">pub fn </span>triggers(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = AppTrigger&lt;<span class="lifetime">&#39;_</span>, L&gt;&gt; {
         <span class="self">self</span>.locked
             .triggers
             .iter()
@@ -584,20 +625,47 @@
 
     <span class="doccomment">/// Returns an iterator of [`AppTrigger`]s defined for this app with
     /// the given `trigger_type`.
-    </span><span class="kw">pub fn </span>triggers_with_type(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="self">self</span>, trigger_type: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str) -&gt; <span class="kw">impl </span>Iterator&lt;Item = AppTrigger&gt; {
+    </span><span class="kw">pub fn </span>triggers_with_type(
+        <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="self">self</span>,
+        trigger_type: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str,
+    ) -&gt; <span class="kw">impl </span>Iterator&lt;Item = AppTrigger&lt;<span class="lifetime">&#39;_</span>, L&gt;&gt; {
         <span class="self">self</span>.triggers()
             .filter(<span class="kw">move </span>|trigger| trigger.locked.trigger_type == trigger_type)
     }
 }
 
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; App&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="doccomment">/// Returns a [`Loader`]-implementation-specific URI for this app.
+    </span><span class="kw">pub fn </span>uri(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>str {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.uri
+    }
+}
+
+<span class="doccomment">/// Used in the return type of [`App::inert`] to prevent the use of methods
+/// that require an [`AppLoader`].
+</span><span class="kw">pub struct </span>InertLoader;
+<span class="kw">impl </span>MaybeLoader <span class="kw">for </span>InertLoader {}
+
+<span class="kw">impl </span>App&lt;<span class="lifetime">&#39;static</span>, InertLoader&gt; {
+    <span class="doccomment">/// Return an &quot;inert&quot; App which does not have an associated [`AppLoader`]
+    /// and cannot be used to instantiate components.
+    </span><span class="kw">pub fn </span>inert(locked: LockedApp) -&gt; App&lt;<span class="lifetime">&#39;static</span>, InertLoader&gt; {
+        App {
+            loader: <span class="kw-2">&amp;</span>InertLoader,
+            uri: <span class="string">&quot;&quot;</span>.into(),
+            locked,
+        }
+    }
+}
+
 <span class="doccomment">/// An `AppComponent` holds configuration for a Spin application component.
-</span><span class="kw">pub struct </span>AppComponent&lt;<span class="lifetime">&#39;a</span>&gt; {
+</span><span class="kw">pub struct </span>AppComponent&lt;<span class="lifetime">&#39;a</span>, L: MaybeLoader = AppLoader&gt; {
     <span class="doccomment">/// The app this component belongs to.
-    </span><span class="kw">pub </span>app: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>App&lt;<span class="lifetime">&#39;a</span>&gt;,
+    </span><span class="kw">pub </span>app: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>App&lt;<span class="lifetime">&#39;a</span>, L&gt;,
     locked: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>LockedComponent,
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; AppComponent&lt;<span class="lifetime">&#39;a</span>&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, L: MaybeLoader&gt; AppComponent&lt;<span class="lifetime">&#39;a</span>, L&gt; {
     <span class="doccomment">/// Returns this component&#39;s app-unique ID.
     </span><span class="kw">pub fn </span>id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>str {
         <span class="kw-2">&amp;</span><span class="self">self</span>.locked.id
@@ -638,7 +706,9 @@
     </span><span class="kw">pub fn </span>config(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = (<span class="kw-2">&amp;</span>String, <span class="kw-2">&amp;</span>String)&gt; {
         <span class="self">self</span>.locked.config.iter()
     }
+}
 
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; AppComponent&lt;<span class="lifetime">&#39;a</span>&gt; {
     <span class="doccomment">/// Loads and returns the [`spin_core::Component`] for this component.
     </span><span class="kw">pub async fn </span>load_component&lt;T: Send + Sync&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
@@ -690,13 +760,13 @@
 }
 
 <span class="doccomment">/// An `AppTrigger` holds configuration for a Spin application trigger.
-</span><span class="kw">pub struct </span>AppTrigger&lt;<span class="lifetime">&#39;a</span>&gt; {
+</span><span class="kw">pub struct </span>AppTrigger&lt;<span class="lifetime">&#39;a</span>, L: MaybeLoader = AppLoader&gt; {
     <span class="doccomment">/// The app this trigger belongs to.
-    </span><span class="kw">pub </span>app: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>App&lt;<span class="lifetime">&#39;a</span>&gt;,
+    </span><span class="kw">pub </span>app: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>App&lt;<span class="lifetime">&#39;a</span>, L&gt;,
     locked: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>LockedTrigger,
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; AppTrigger&lt;<span class="lifetime">&#39;a</span>&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, L: MaybeLoader&gt; AppTrigger&lt;<span class="lifetime">&#39;a</span>, L&gt; {
     <span class="doccomment">/// Returns this trigger&#39;s app-unique ID.
     </span><span class="kw">pub fn </span>id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>str {
         <span class="kw-2">&amp;</span><span class="self">self</span>.locked.id
@@ -711,7 +781,7 @@
     ///
     /// This is a convenience wrapper that looks up the component based on the
     /// &#39;component&#39; metadata value which is conventionally a component ID.
-    </span><span class="kw">pub fn </span>component(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;AppComponent&lt;<span class="lifetime">&#39;a</span>&gt;&gt; {
+    </span><span class="kw">pub fn </span>component(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;AppComponent&lt;<span class="lifetime">&#39;a</span>, L&gt;&gt; {
         <span class="kw">let </span>component_id = <span class="self">self</span>.locked.trigger_config.get(<span class="string">&quot;component&quot;</span>).ok_or_else(|| {
             Error::MetadataError(<span class="macro">format!</span>(
                 <span class="string">&quot;trigger {:?} missing &#39;component&#39; config field&quot;</span>,
