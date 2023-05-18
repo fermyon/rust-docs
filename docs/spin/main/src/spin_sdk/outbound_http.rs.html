@@ -90,15 +90,25 @@
 <a href="#90" id="90">90</a>
 <a href="#91" id="91">91</a>
 <a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>http_types::{header::HeaderName, HeaderValue};
 
 <span class="kw">use </span><span class="kw">super</span>::http::{Request, Response};
 
-<span class="macro">wit_bindgen_rust::import!</span>(<span class="string">&quot;../../wit/ephemeral/wasi-outbound-http.wit&quot;</span>);
+<span class="attr">#[allow(missing_docs)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>wit {
+    <span class="macro">wit_bindgen_rust::import!</span>(<span class="string">&quot;../../wit/ephemeral/wasi-outbound-http.wit&quot;</span>);
+    <span class="kw">pub use </span>wasi_outbound_http::<span class="kw-2">*</span>;
+}
 
-<span class="kw">use </span>wasi_outbound_http::{
-    HttpError <span class="kw">as </span>OutboundHttpError, Request <span class="kw">as </span>OutboundRequest, Response <span class="kw">as </span>OutboundResponse,
-};
+<span class="kw">use </span>wit::{Request <span class="kw">as </span>OutboundRequest, Response <span class="kw">as </span>OutboundResponse};
+
+<span class="doccomment">/// Error type returned by [`send_request`]
+</span><span class="kw">pub use </span>wit::HttpError <span class="kw">as </span>OutboundHttpError;
 
 <span class="kw">type </span><span class="prelude-ty">Result</span>&lt;T&gt; = std::result::Result&lt;T, OutboundHttpError&gt;;
 
@@ -132,7 +142,7 @@
         status,
         headers,
         body,
-    } = wasi_outbound_http::request(out_req)<span class="question-mark">?</span>;
+    } = wit::request(out_req)<span class="question-mark">?</span>;
 
     <span class="kw">let </span>resp_builder = http_types::response::Builder::new().status(status);
     <span class="kw">let </span>resp_builder = headers
@@ -156,12 +166,12 @@
     ))
 }
 
-<span class="kw">impl </span>TryFrom&lt;http_types::Method&gt; <span class="kw">for </span>wasi_outbound_http::Method {
+<span class="kw">impl </span>TryFrom&lt;http_types::Method&gt; <span class="kw">for </span>wit::Method {
     <span class="kw">type </span>Error = OutboundHttpError;
 
     <span class="kw">fn </span>try_from(method: http_types::Method) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
         <span class="kw">use </span>http_types::Method;
-        <span class="kw">use </span>wasi_outbound_http::Method::<span class="kw-2">*</span>;
+        <span class="kw">use </span>wit::Method::<span class="kw-2">*</span>;
         <span class="prelude-val">Ok</span>(<span class="kw">match </span>method {
             Method::GET =&gt; Get,
             Method::POST =&gt; Post,
@@ -170,7 +180,7 @@
             Method::PATCH =&gt; Patch,
             Method::HEAD =&gt; Head,
             Method::OPTIONS =&gt; Options,
-            <span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(wasi_outbound_http::HttpError::RequestError),
+            <span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(wit::HttpError::RequestError),
         })
     }
 }
