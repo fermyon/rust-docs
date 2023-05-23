@@ -414,9 +414,6 @@
 <a href="#414" id="414">414</a>
 <a href="#415" id="415">415</a>
 <a href="#416" id="416">416</a>
-<a href="#417" id="417">417</a>
-<a href="#418" id="418">418</a>
-<a href="#419" id="419">419</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Spin internal application interfaces
 //!
 //! This crate contains interfaces to Spin application configuration to be used
@@ -432,7 +429,7 @@
 
 <span class="kw">use </span>ouroboros::self_referencing;
 <span class="kw">use </span>serde::Deserialize;
-<span class="kw">use </span>spin_core::{wasmtime, Engine, EngineBuilder, StoreBuilder};
+<span class="kw">use </span>spin_core::{wasmtime, Engine, EngineBuilder, HostComponentDataHandle, StoreBuilder};
 
 <span class="kw">use </span>host_component::DynamicHostComponents;
 <span class="kw">use </span>locked::{ContentPath, LockedApp, LockedComponent, LockedComponentSource, LockedTrigger};
@@ -502,7 +499,7 @@
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         engine_builder: <span class="kw-2">&amp;mut </span>EngineBuilder&lt;T&gt;,
         host_component: DHC,
-    ) -&gt; anyhow::Result&lt;()&gt; {
+    ) -&gt; anyhow::Result&lt;HostComponentDataHandle&lt;DHC&gt;&gt; {
         <span class="self">self</span>.dynamic_host_components
             .add_dynamic_host_component(engine_builder, host_component)
     }
@@ -780,35 +777,32 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>.locked.trigger_type
     }
 
+    <span class="doccomment">/// Deserializes this trigger&#39;s configuration into a typed value.
+    </span><span class="kw">pub fn </span>typed_config&lt;Config: Deserialize&lt;<span class="lifetime">&#39;a</span>&gt;&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Config&gt; {
+        <span class="prelude-val">Ok</span>(Config::deserialize(<span class="kw-2">&amp;</span><span class="self">self</span>.locked.trigger_config)<span class="question-mark">?</span>)
+    }
+
     <span class="doccomment">/// Returns a reference to the [`AppComponent`] configured for this trigger.
     ///
     /// This is a convenience wrapper that looks up the component based on the
     /// &#39;component&#39; metadata value which is conventionally a component ID.
     </span><span class="kw">pub fn </span>component(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;AppComponent&lt;<span class="lifetime">&#39;a</span>, L&gt;&gt; {
-        <span class="kw">let </span>component_id = <span class="self">self</span>.locked.trigger_config.get(<span class="string">&quot;component&quot;</span>).ok_or_else(|| {
-            Error::MetadataError(<span class="macro">format!</span>(
-                <span class="string">&quot;trigger {:?} missing &#39;component&#39; config field&quot;</span>,
-                <span class="self">self</span>.locked.id
-            ))
+        <span class="kw">let </span>id = <span class="kw-2">&amp;</span><span class="self">self</span>.locked.id;
+        <span class="kw">let </span>common_config: CommonTriggerConfig = <span class="self">self</span>.typed_config()<span class="question-mark">?</span>;
+        <span class="kw">let </span>component_id = common_config.component.ok_or_else(|| {
+            Error::MetadataError(<span class="macro">format!</span>(<span class="string">&quot;trigger {id:?} missing &#39;component&#39; config field&quot;</span>))
         })<span class="question-mark">?</span>;
-        <span class="kw">let </span>component_id = component_id.as_str().ok_or_else(|| {
+        <span class="self">self</span>.app.get_component(<span class="kw-2">&amp;</span>component_id).ok_or_else(|| {
             Error::MetadataError(<span class="macro">format!</span>(
-                <span class="string">&quot;trigger {:?} &#39;component&#39; field has unexpected value {:?}&quot;</span>,
-                <span class="self">self</span>.locked.id, component_id
-            ))
-        })<span class="question-mark">?</span>;
-        <span class="self">self</span>.app.get_component(component_id).ok_or_else(|| {
-            Error::MetadataError(<span class="macro">format!</span>(
-                <span class="string">&quot;missing component {:?} configured for trigger {:?}&quot;</span>,
-                component_id, <span class="self">self</span>.locked.id
-            ))
+                <span class="string">&quot;missing component {component_id:?} configured for trigger {id:?}&quot;
+            </span>))
         })
     }
+}
 
-    <span class="doccomment">/// Deserializes this trigger&#39;s configuration into a typed value.
-    </span><span class="kw">pub fn </span>typed_config&lt;Config: Deserialize&lt;<span class="lifetime">&#39;a</span>&gt;&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Config&gt; {
-        <span class="prelude-val">Ok</span>(Config::deserialize(<span class="kw-2">&amp;</span><span class="self">self</span>.locked.trigger_config)<span class="question-mark">?</span>)
-    }
+<span class="attr">#[derive(Deserialize)]
+</span><span class="kw">struct </span>CommonTriggerConfig {
+    component: <span class="prelude-ty">Option</span>&lt;String&gt;,
 }
 
 <span class="doccomment">/// Type alias for a [`Result`]s with [`Error`].

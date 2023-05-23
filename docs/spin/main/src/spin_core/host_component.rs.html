@@ -244,6 +244,20 @@
 <a href="#244" id="244">244</a>
 <a href="#245" id="245">245</a>
 <a href="#246" id="246">246</a>
+<a href="#247" id="247">247</a>
+<a href="#248" id="248">248</a>
+<a href="#249" id="249">249</a>
+<a href="#250" id="250">250</a>
+<a href="#251" id="251">251</a>
+<a href="#252" id="252">252</a>
+<a href="#253" id="253">253</a>
+<a href="#254" id="254">254</a>
+<a href="#255" id="255">255</a>
+<a href="#256" id="256">256</a>
+<a href="#257" id="257">257</a>
+<a href="#258" id="258">258</a>
+<a href="#259" id="259">259</a>
+<a href="#260" id="260">260</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{any::Any, marker::PhantomData, sync::Arc};
 
 <span class="kw">use </span>anyhow::Result;
@@ -334,6 +348,20 @@
 </span><span class="kw">pub struct </span>HostComponentDataHandle&lt;HC: HostComponent&gt; {
     inner: AnyHostComponentDataHandle,
     _phantom: PhantomData&lt;<span class="kw">fn</span>() -&gt; HC::Data&gt;,
+}
+
+<span class="kw">impl</span>&lt;HC: HostComponent&gt; HostComponentDataHandle&lt;HC&gt; {
+    <span class="doccomment">/// Return a typed handle to some [`HostComponent::Data`].
+    ///
+    /// # Safety
+    /// Caller must ensure that the handle is associated with the
+    /// given type or use of the handle will panic.
+    </span><span class="kw">pub unsafe fn </span>from_any(handle: AnyHostComponentDataHandle) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            inner: handle,
+            _phantom: PhantomData,
+        }
+    }
 }
 
 <span class="kw">impl</span>&lt;HC: HostComponent&gt; Clone <span class="kw">for </span>HostComponentDataHandle&lt;HC&gt; {

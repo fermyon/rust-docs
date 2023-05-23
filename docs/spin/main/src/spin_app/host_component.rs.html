@@ -106,10 +106,19 @@
 <a href="#106" id="106">106</a>
 <a href="#107" id="107">107</a>
 <a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{any::Any, sync::Arc};
 
 <span class="kw">use </span>anyhow::Context;
-<span class="kw">use </span>spin_core::{AnyHostComponentDataHandle, EngineBuilder, HostComponent, HostComponentsData};
+<span class="kw">use </span>spin_core::{
+    AnyHostComponentDataHandle, EngineBuilder, HostComponent, HostComponentDataHandle,
+    HostComponentsData,
+};
 
 <span class="kw">use crate</span>::{App, AppComponent};
 
@@ -179,7 +188,7 @@
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         engine_builder: <span class="kw-2">&amp;mut </span>EngineBuilder&lt;T&gt;,
         host_component: DHC,
-    ) -&gt; anyhow::Result&lt;()&gt; {
+    ) -&gt; anyhow::Result&lt;HostComponentDataHandle&lt;DHC&gt;&gt; {
         <span class="kw">let </span>host_component = Arc::new(host_component);
         <span class="kw">let </span>handle = engine_builder
             .add_host_component(host_component.clone())<span class="question-mark">?
@@ -188,7 +197,10 @@
             host_component,
             handle,
         });
-        <span class="prelude-val">Ok</span>(())
+        <span class="kw">unsafe </span>{
+            <span class="comment">// Safe because `EngineBuilder::add_host_component` must have correct type.
+            </span><span class="prelude-val">Ok</span>(HostComponentDataHandle::from_any(handle))
+        }
     }
 
     <span class="kw">pub fn </span>update_data(
