@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["Connection","Row"],"type":["Error","ValueParam","ValueResult"]};
