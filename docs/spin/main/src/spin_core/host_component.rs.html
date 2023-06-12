@@ -266,9 +266,51 @@
 <a href="#266" id="266">266</a>
 <a href="#267" id="267">267</a>
 <a href="#268" id="268">268</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::{any::Any, marker::PhantomData, sync::Arc};
+<a href="#269" id="269">269</a>
+<a href="#270" id="270">270</a>
+<a href="#271" id="271">271</a>
+<a href="#272" id="272">272</a>
+<a href="#273" id="273">273</a>
+<a href="#274" id="274">274</a>
+<a href="#275" id="275">275</a>
+<a href="#276" id="276">276</a>
+<a href="#277" id="277">277</a>
+<a href="#278" id="278">278</a>
+<a href="#279" id="279">279</a>
+<a href="#280" id="280">280</a>
+<a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
+<a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
+<a href="#300" id="300">300</a>
+<a href="#301" id="301">301</a>
+<a href="#302" id="302">302</a>
+<a href="#303" id="303">303</a>
+<a href="#304" id="304">304</a>
+<a href="#305" id="305">305</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span>std::{
+    any::{type_name, Any, TypeId},
+    collections::HashMap,
+    marker::PhantomData,
+    sync::Arc,
+};
 
-<span class="kw">use </span>anyhow::Result;
+<span class="kw">use </span>anyhow::{bail, <span class="prelude-ty">Result</span>};
 
 <span class="kw">use super</span>::{Data, Linker};
 
@@ -399,6 +441,7 @@
 
 <span class="attr">#[derive(Default)]
 </span><span class="kw">pub struct </span>HostComponentsBuilder {
+    handles: HashMap&lt;TypeId, AnyHostComponentDataHandle&gt;,
     host_components: Vec&lt;BoxHostComponent&gt;,
 }
 
@@ -408,7 +451,17 @@
         linker: <span class="kw-2">&amp;mut </span>Linker&lt;T&gt;,
         host_component: HC,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;HostComponentDataHandle&lt;HC&gt;&gt; {
+        <span class="kw">let </span>type_id = TypeId::of::&lt;HC&gt;();
+        <span class="kw">if </span><span class="self">self</span>.handles.contains_key(<span class="kw-2">&amp;</span>type_id) {
+            <span class="macro">bail!</span>(
+                <span class="string">&quot;already have a host component of type {}&quot;</span>,
+                type_name::&lt;HC&gt;()
+            )
+        }
+
         <span class="kw">let </span>handle = AnyHostComponentDataHandle(<span class="self">self</span>.host_components.len());
+        <span class="self">self</span>.handles.insert(type_id, handle);
+
         <span class="self">self</span>.host_components.push(Box::new(host_component));
         HC::add_to_linker(linker, <span class="kw">move </span>|data| {
             data.host_components_data
@@ -424,12 +477,14 @@
 
     <span class="kw">pub fn </span>build(<span class="self">self</span>) -&gt; HostComponents {
         HostComponents {
+            handles: <span class="self">self</span>.handles,
             host_components: Arc::new(<span class="self">self</span>.host_components),
         }
     }
 }
 
 <span class="kw">pub struct </span>HostComponents {
+    handles: HashMap&lt;TypeId, AnyHostComponentDataHandle&gt;,
     host_components: Arc&lt;Vec&lt;BoxHostComponent&gt;&gt;,
 }
 
@@ -447,6 +502,12 @@
             data,
             host_components: <span class="self">self</span>.host_components.clone(),
         }
+    }
+
+    <span class="kw">pub fn </span>find_handle&lt;HC: HostComponent&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;HostComponentDataHandle&lt;HC&gt;&gt; {
+        <span class="self">self</span>.handles
+            .get(<span class="kw-2">&amp;</span>TypeId::of::&lt;HC&gt;())
+            .map(|handle| HostComponentDataHandle::from_any(<span class="kw-2">*</span>handle))
     }
 }
 
@@ -532,6 +593,19 @@
 
         hc_data.set(handle2, <span class="number">1</span>);
         <span class="macro">assert_eq!</span>(hc_data.get_or_insert(handle2), <span class="kw-2">&amp;</span><span class="number">1</span>);
+    }
+
+    <span class="attr">#[test]
+    </span><span class="kw">fn </span>find_handle() {
+        <span class="kw">let </span>engine = wasmtime::Engine::default();
+        <span class="kw">let </span><span class="kw-2">mut </span>linker: <span class="kw">crate</span>::Linker&lt;()&gt; = <span class="kw">crate</span>::Linker::new(<span class="kw-2">&amp;</span>engine);
+
+        <span class="kw">let </span><span class="kw-2">mut </span>builder = HostComponents::builder();
+        builder.add_host_component(<span class="kw-2">&amp;mut </span>linker, TestHC).unwrap();
+        <span class="kw">let </span>host_components = builder.build();
+        <span class="kw">let </span>handle = host_components.find_handle::&lt;TestHC&gt;().unwrap();
+        <span class="kw">let </span><span class="kw-2">mut </span>hc_data = host_components.new_data();
+        <span class="macro">assert_eq!</span>(hc_data.get_or_insert(handle), <span class="kw-2">&amp;</span><span class="number">0</span>);
     }
 }
 </code></pre></div></section></main></body></html>
