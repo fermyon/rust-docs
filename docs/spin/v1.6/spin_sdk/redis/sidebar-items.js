@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Error","RedisParameter","RedisResult"],"fn":["del","execute","get","incr","publish","sadd","set","smembers","srem"],"type":["PayloadParam","PayloadResult"]};

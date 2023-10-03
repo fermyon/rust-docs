@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Error","ValueParam","ValueResult"],"struct":["Connection","QueryResult","Row","RowResult"]};
