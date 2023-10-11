@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `sdk/rust/src/llm.rs`."><title>llm.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-fa3bb1812debf86c.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_sdk" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0-nightly (59edd6705 2023-10-09)" data-channel="nightly" data-search-js="search-5f5ec5419eadd0c9.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-c5bd66d33317d69f.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../spin_sdk/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `sdk/rust/src/llm.rs`."><title>llm.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-fa3bb1812debf86c.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_sdk" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0-nightly (d627cf07c 2023-10-10)" data-channel="nightly" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-0689c575f077d64f.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../spin_sdk/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -73,28 +73,30 @@
 <a href="#73" id="73">73</a>
 <a href="#74" id="74">74</a>
 <a href="#75" id="75">75</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::wit::fermyon::spin::llm;
-
-<span class="kw">pub use </span><span class="kw">crate</span>::wit::fermyon::spin::llm::{
-    EmbeddingsResult, EmbeddingsUsage, Error, InferencingParams, InferencingResult,
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+</pre></div><pre class="rust"><code><span class="kw">pub use </span><span class="kw">crate</span>::wit::v1::llm::{
+    <span class="self">self</span>, EmbeddingsResult, EmbeddingsUsage, Error, InferencingParams, InferencingResult,
     InferencingUsage,
 };
 
 <span class="doccomment">/// The model use for inferencing
 </span><span class="attr">#[allow(missing_docs)]
+#[derive(Debug, Clone, Copy)]
 </span><span class="kw">pub enum </span>InferencingModel&lt;<span class="lifetime">&#39;a</span>&gt; {
     Llama2Chat,
     CodellamaInstruct,
     Other(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str),
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; InferencingModel&lt;<span class="lifetime">&#39;a</span>&gt; {
-    <span class="kw">fn </span>as_str(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; llm::InferencingModel&lt;<span class="lifetime">&#39;a</span>&gt; {
-        <span class="kw">match </span><span class="self">self </span>{
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; std::fmt::Display <span class="kw">for </span>InferencingModel&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
+        <span class="kw">let </span>str = <span class="kw">match </span><span class="self">self </span>{
             InferencingModel::Llama2Chat =&gt; <span class="string">&quot;llama2-chat&quot;</span>,
             InferencingModel::CodellamaInstruct =&gt; <span class="string">&quot;codellama-instruct&quot;</span>,
             InferencingModel::Other(s) =&gt; s,
-        }
+        };
+        f.write_str(str)
     }
 }
 
@@ -113,7 +115,7 @@
 
 <span class="doccomment">/// Perform inferencing using the provided model and prompt
 </span><span class="kw">pub fn </span>infer(model: InferencingModel, prompt: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;InferencingResult, Error&gt; {
-    llm::infer(model.as_str(), prompt, <span class="prelude-val">None</span>)
+    llm::infer(<span class="kw-2">&amp;</span>model.to_string(), prompt, <span class="prelude-val">None</span>)
 }
 
 <span class="doccomment">/// Perform inferencing using the provided model, prompt, and options
@@ -122,30 +124,32 @@
     prompt: <span class="kw-2">&amp;</span>str,
     options: InferencingParams,
 ) -&gt; <span class="prelude-ty">Result</span>&lt;InferencingResult, Error&gt; {
-    llm::infer(model.as_str(), prompt, <span class="prelude-val">Some</span>(options))
+    llm::infer(<span class="kw-2">&amp;</span>model.to_string(), prompt, <span class="prelude-val">Some</span>(options))
 }
 
 <span class="doccomment">/// Model used for generating embeddings
 </span><span class="attr">#[allow(missing_docs)]
+#[derive(Debug, Clone, Copy)]
 </span><span class="kw">pub enum </span>EmbeddingModel&lt;<span class="lifetime">&#39;a</span>&gt; {
     AllMiniLmL6V2,
     Other(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str),
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; EmbeddingModel&lt;<span class="lifetime">&#39;a</span>&gt; {
-    <span class="kw">fn </span>as_str(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; llm::EmbeddingModel&lt;<span class="lifetime">&#39;a</span>&gt; {
-        <span class="kw">match </span><span class="self">self </span>{
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; std::fmt::Display <span class="kw">for </span>EmbeddingModel&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
+        <span class="kw">let </span>str = <span class="kw">match </span><span class="self">self </span>{
             EmbeddingModel::AllMiniLmL6V2 =&gt; <span class="string">&quot;all-minilm-l6-v2&quot;</span>,
             EmbeddingModel::Other(s) =&gt; s,
-        }
+        };
+        f.write_str(str)
     }
 }
 
 <span class="doccomment">/// Generate embeddings using the provided model and collection of text
 </span><span class="kw">pub fn </span>generate_embeddings(
     model: EmbeddingModel,
-    text: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str],
+    text: <span class="kw-2">&amp;</span>[String],
 ) -&gt; <span class="prelude-ty">Result</span>&lt;llm::EmbeddingsResult, Error&gt; {
-    llm::generate_embeddings(model.as_str(), text)
+    llm::generate_embeddings(<span class="kw-2">&amp;</span>model.to_string(), text)
 }
 </code></pre></div></section></main></body></html>

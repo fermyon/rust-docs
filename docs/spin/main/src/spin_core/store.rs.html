@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/core/src/store.rs`."><title>store.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-fa3bb1812debf86c.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0-nightly (59edd6705 2023-10-09)" data-channel="nightly" data-search-js="search-5f5ec5419eadd0c9.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-c5bd66d33317d69f.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../spin_core/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/core/src/store.rs`."><title>store.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-fa3bb1812debf86c.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0-nightly (d627cf07c 2023-10-10)" data-channel="nightly" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-0689c575f077d64f.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../spin_core/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -446,17 +446,49 @@
 <a href="#446" id="446">446</a>
 <a href="#447" id="447">447</a>
 <a href="#448" id="448">448</a>
+<a href="#449" id="449">449</a>
+<a href="#450" id="450">450</a>
+<a href="#451" id="451">451</a>
+<a href="#452" id="452">452</a>
+<a href="#453" id="453">453</a>
+<a href="#454" id="454">454</a>
+<a href="#455" id="455">455</a>
+<a href="#456" id="456">456</a>
+<a href="#457" id="457">457</a>
+<a href="#458" id="458">458</a>
+<a href="#459" id="459">459</a>
+<a href="#460" id="460">460</a>
+<a href="#461" id="461">461</a>
+<a href="#462" id="462">462</a>
+<a href="#463" id="463">463</a>
+<a href="#464" id="464">464</a>
+<a href="#465" id="465">465</a>
+<a href="#466" id="466">466</a>
+<a href="#467" id="467">467</a>
+<a href="#468" id="468">468</a>
+<a href="#469" id="469">469</a>
+<a href="#470" id="470">470</a>
+<a href="#471" id="471">471</a>
+<a href="#472" id="472">472</a>
+<a href="#473" id="473">473</a>
+<a href="#474" id="474">474</a>
+<a href="#475" id="475">475</a>
+<a href="#476" id="476">476</a>
+<a href="#477" id="477">477</a>
+<a href="#478" id="478">478</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>anyhow::{anyhow, <span class="prelude-ty">Result</span>};
 <span class="kw">use </span>std::{
     io::{Read, Write},
     path::{Path, PathBuf},
+    sync::Mutex,
     time::{Duration, Instant},
 };
 <span class="kw">use </span>system_interface::io::ReadReady;
 <span class="kw">use </span>tokio::io::{AsyncRead, AsyncWrite};
 <span class="kw">use </span>wasi_common_preview1 <span class="kw">as </span>wasi_preview1;
 <span class="kw">use </span>wasmtime_wasi <span class="kw">as </span>wasmtime_wasi_preview1;
-<span class="kw">use </span>wasmtime_wasi::preview2 <span class="kw">as </span>wasi_preview2;
+<span class="kw">use </span>wasmtime_wasi::preview2::{<span class="self">self </span><span class="kw">as </span>wasi_preview2, StdinStream, StdoutStream};
+<span class="kw">use </span>wasmtime_wasi_preview1::preview2::{HostInputStream, HostOutputStream};
 
 <span class="kw">use crate</span>::{
     host_component::{HostComponents, HostComponentsData},
@@ -620,10 +652,9 @@
                 ctx.set_stdin(Box::new(wasi_preview1::pipe::ReadPipe::new(r)))
             }
             WasiCtxBuilder::Preview2(ctx) =&gt; {
-                ctx.stdin(
+                ctx.stdin(MyStdinStream(Mutex::new(<span class="prelude-val">Some</span>(Box::new(
                     wasi_preview2::pipe::AsyncReadStream::new(r),
-                    wasi_preview2::IsATTY::No,
-                );
+                )))));
             }
         })
     }
@@ -660,10 +691,9 @@
                 ctx.set_stdout(Box::new(wasi_preview1::pipe::WritePipe::new(w)))
             }
             WasiCtxBuilder::Preview2(ctx) =&gt; {
-                ctx.stdout(
+                ctx.stdout(MyStdoutStream(Mutex::new(<span class="prelude-val">Some</span>(Box::new(
                     wasi_preview2::pipe::AsyncWriteStream::new(<span class="number">1024 </span>* <span class="number">1024</span>, w),
-                    wasi_preview2::IsATTY::No,
-                );
+                )))));
             }
         })
     }
@@ -678,7 +708,7 @@
                 <span class="string">&quot;`Store::stdout_buffered` only supported with WASI Preview 2&quot;
             </span>)),
             WasiCtxBuilder::Preview2(ctx) =&gt; {
-                ctx.stdout(buffer.writer(), wasi_preview2::IsATTY::No);
+                ctx.stdout(MyStdoutStream(Mutex::new(<span class="prelude-val">Some</span>(Box::new(buffer.writer())))));
                 <span class="prelude-val">Ok</span>(())
             }
         })<span class="question-mark">?</span>;
@@ -704,10 +734,9 @@
                 ctx.set_stderr(Box::new(wasi_preview1::pipe::WritePipe::new(w)))
             }
             WasiCtxBuilder::Preview2(ctx) =&gt; {
-                ctx.stderr(
+                ctx.stderr(MyStdoutStream(Mutex::new(<span class="prelude-val">Some</span>(Box::new(
                     wasi_preview2::pipe::AsyncWriteStream::new(<span class="number">1024 </span>* <span class="number">1024</span>, w),
-                    wasi_preview2::IsATTY::No,
-                );
+                )))));
             }
         })
     }
@@ -812,8 +841,7 @@
     ///
     /// If `T: Default`, it may be preferable to use [`Store::build`].
     </span><span class="kw">pub fn </span>build_with_data&lt;T&gt;(<span class="self">self</span>, inner_data: T) -&gt; <span class="prelude-ty">Result</span>&lt;Store&lt;T&gt;&gt; {
-        <span class="kw">let </span><span class="kw-2">mut </span>table = wasi_preview2::Table::new();
-        <span class="kw">let </span>wasi = <span class="self">self</span>.wasi.map_err(anyhow::Error::msg)<span class="question-mark">?</span>.build(<span class="kw-2">&amp;mut </span>table)<span class="question-mark">?</span>;
+        <span class="kw">let </span>wasi = <span class="self">self</span>.wasi.map_err(anyhow::Error::msg)<span class="question-mark">?</span>.build();
 
         <span class="kw">let </span><span class="kw-2">mut </span>inner = wasmtime::Store::new(
             <span class="kw-2">&amp;</span><span class="self">self</span>.engine,
@@ -822,7 +850,7 @@
                 wasi,
                 host_components_data: <span class="self">self</span>.host_components_data,
                 store_limits: <span class="self">self</span>.store_limits,
-                table,
+                table: wasi_preview2::Table::new(),
             },
         );
 
@@ -868,6 +896,38 @@
     }
 }
 
+<span class="kw">struct </span>MyStdinStream(Mutex&lt;<span class="prelude-ty">Option</span>&lt;Box&lt;<span class="kw">dyn </span>HostInputStream&gt;&gt;&gt;);
+
+<span class="kw">impl </span>StdinStream <span class="kw">for </span>MyStdinStream {
+    <span class="kw">fn </span>stream(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Box&lt;<span class="kw">dyn </span>HostInputStream&gt; {
+        <span class="self">self</span>.<span class="number">0
+            </span>.lock()
+            .unwrap()
+            .take()
+            .expect(<span class="string">&quot;MyStdinStream::stream should only be called once&quot;</span>)
+    }
+
+    <span class="kw">fn </span>isatty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="bool-val">false
+    </span>}
+}
+
+<span class="kw">struct </span>MyStdoutStream(Mutex&lt;<span class="prelude-ty">Option</span>&lt;Box&lt;<span class="kw">dyn </span>HostOutputStream&gt;&gt;&gt;);
+
+<span class="kw">impl </span>StdoutStream <span class="kw">for </span>MyStdoutStream {
+    <span class="kw">fn </span>stream(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Box&lt;<span class="kw">dyn </span>HostOutputStream&gt; {
+        <span class="self">self</span>.<span class="number">0
+            </span>.lock()
+            .unwrap()
+            .take()
+            .expect(<span class="string">&quot;MyStdoutStream::stream should only be called once&quot;</span>)
+    }
+
+    <span class="kw">fn </span>isatty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="bool-val">false
+    </span>}
+}
+
 <span class="doccomment">/// A builder of a `WasiCtx` for all versions of Wasi
 </span><span class="attr">#[allow(clippy::large_enum_variant)]
 </span><span class="kw">enum </span>WasiCtxBuilder {
@@ -887,10 +947,10 @@
 }
 
 <span class="kw">impl </span>WasiCtxBuilder {
-    <span class="kw">fn </span>build(<span class="self">self</span>, table: <span class="kw-2">&amp;mut </span>wasi_preview2::Table) -&gt; anyhow::Result&lt;Wasi&gt; {
+    <span class="kw">fn </span>build(<span class="self">self</span>) -&gt; Wasi {
         <span class="kw">match </span><span class="self">self </span>{
-            WasiCtxBuilder::Preview1(ctx) =&gt; <span class="prelude-val">Ok</span>(Wasi::Preview1(ctx)),
-            WasiCtxBuilder::Preview2(<span class="kw-2">mut </span>b) =&gt; b.build(table).map(Wasi::Preview2),
+            WasiCtxBuilder::Preview1(ctx) =&gt; Wasi::Preview1(ctx),
+            WasiCtxBuilder::Preview2(<span class="kw-2">mut </span>b) =&gt; Wasi::Preview2(b.build()),
         }
     }
 }
