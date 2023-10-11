@@ -476,6 +476,17 @@
 <a href="#476" id="476">476</a>
 <a href="#477" id="477">477</a>
 <a href="#478" id="478">478</a>
+<a href="#479" id="479">479</a>
+<a href="#480" id="480">480</a>
+<a href="#481" id="481">481</a>
+<a href="#482" id="482">482</a>
+<a href="#483" id="483">483</a>
+<a href="#484" id="484">484</a>
+<a href="#485" id="485">485</a>
+<a href="#486" id="486">486</a>
+<a href="#487" id="487">487</a>
+<a href="#488" id="488">488</a>
+<a href="#489" id="489">489</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>anyhow::{anyhow, <span class="prelude-ty">Result</span>};
 <span class="kw">use </span>std::{
     io::{Read, Write},
@@ -487,8 +498,10 @@
 <span class="kw">use </span>tokio::io::{AsyncRead, AsyncWrite};
 <span class="kw">use </span>wasi_common_preview1 <span class="kw">as </span>wasi_preview1;
 <span class="kw">use </span>wasmtime_wasi <span class="kw">as </span>wasmtime_wasi_preview1;
-<span class="kw">use </span>wasmtime_wasi::preview2::{<span class="self">self </span><span class="kw">as </span>wasi_preview2, StdinStream, StdoutStream};
-<span class="kw">use </span>wasmtime_wasi_preview1::preview2::{HostInputStream, HostOutputStream};
+<span class="kw">use </span>wasmtime_wasi::preview2::{
+    <span class="self">self </span><span class="kw">as </span>wasi_preview2, HostInputStream, HostOutputStream, StdinStream, StdoutStream,
+};
+<span class="kw">use </span>wasmtime_wasi_http::types::WasiHttpCtx;
 
 <span class="kw">use crate</span>::{
     host_component::{HostComponents, HostComponentsData},
@@ -519,7 +532,13 @@
     <span class="doccomment">/// Preview 1 `WasiCtx`
     </span>Preview1(wasi_preview1::WasiCtx),
     <span class="doccomment">/// Preview 2 `WasiCtx`
-    </span>Preview2(wasi_preview2::WasiCtx),
+    </span>Preview2 {
+        <span class="doccomment">/// `wasi-cli` context
+        </span>wasi_ctx: wasi_preview2::WasiCtx,
+
+        <span class="doccomment">/// `wasi-http` context
+        </span>wasi_http_ctx: WasiHttpCtx,
+    },
 }
 
 <span class="doccomment">/// The version of Wasi being used
@@ -950,7 +969,10 @@
     <span class="kw">fn </span>build(<span class="self">self</span>) -&gt; Wasi {
         <span class="kw">match </span><span class="self">self </span>{
             WasiCtxBuilder::Preview1(ctx) =&gt; Wasi::Preview1(ctx),
-            WasiCtxBuilder::Preview2(<span class="kw-2">mut </span>b) =&gt; Wasi::Preview2(b.build()),
+            WasiCtxBuilder::Preview2(<span class="kw-2">mut </span>b) =&gt; Wasi::Preview2 {
+                wasi_ctx: b.build(),
+                wasi_http_ctx: WasiHttpCtx,
+            },
         }
     }
 }

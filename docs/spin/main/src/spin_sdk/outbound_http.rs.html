@@ -107,7 +107,7 @@
     <span class="kw">let </span>headers = req
         .headers
         .iter()
-        .map(try_header_to_strs)
+        .map(try_header_to_strings)
         .collect::&lt;<span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;&gt;()<span class="question-mark">?</span>;
 
     <span class="kw">let </span>body = body.map(|bytes| bytes.to_vec());
@@ -136,7 +136,7 @@
         .map_err(|<span class="kw">_</span>| OutboundHttpError::RuntimeError)
 }
 
-<span class="kw">fn </span>try_header_to_strs(
+<span class="kw">fn </span>try_header_to_strings(
     (header_name, header_value): (<span class="kw-2">&amp;</span>HeaderName, <span class="kw-2">&amp;</span>HeaderValue),
 ) -&gt; <span class="prelude-ty">Result</span>&lt;(String, String)&gt; {
     <span class="prelude-val">Ok</span>((

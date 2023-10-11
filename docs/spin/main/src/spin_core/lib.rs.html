@@ -432,6 +432,20 @@
 <a href="#432" id="432">432</a>
 <a href="#433" id="433">433</a>
 <a href="#434" id="434">434</a>
+<a href="#435" id="435">435</a>
+<a href="#436" id="436">436</a>
+<a href="#437" id="437">437</a>
+<a href="#438" id="438">438</a>
+<a href="#439" id="439">439</a>
+<a href="#440" id="440">440</a>
+<a href="#441" id="441">441</a>
+<a href="#442" id="442">442</a>
+<a href="#443" id="443">443</a>
+<a href="#444" id="444">444</a>
+<a href="#445" id="445">445</a>
+<a href="#446" id="446">446</a>
+<a href="#447" id="447">447</a>
+<a href="#448" id="448">448</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Spin core execution engine
 //!
 //! This crate provides low-level Wasm and WASI functionality required by Spin.
@@ -454,6 +468,7 @@
 <span class="kw">use </span>tracing::instrument;
 <span class="kw">use </span>wasmtime::{InstanceAllocationStrategy, PoolingAllocationConfig};
 <span class="kw">use </span>wasmtime_wasi::preview2::Table;
+<span class="kw">use </span>wasmtime_wasi_http::types::{WasiHttpCtx, WasiHttpView};
 
 <span class="kw">use </span><span class="self">self</span>::host_component::{HostComponents, HostComponentsBuilder};
 
@@ -612,15 +627,28 @@
     <span class="kw">fn </span>ctx(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>wasmtime_wasi::preview2::WasiCtx {
         <span class="kw">match </span><span class="kw-2">&amp;</span><span class="self">self</span>.wasi {
             Wasi::Preview1(<span class="kw">_</span>) =&gt; <span class="macro">panic!</span>(<span class="string">&quot;using WASI Preview 1 functions with Preview 2 store&quot;</span>),
-            Wasi::Preview2(ctx) =&gt; ctx,
+            Wasi::Preview2 { wasi_ctx, .. } =&gt; wasi_ctx,
         }
     }
 
     <span class="kw">fn </span>ctx_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>wasmtime_wasi::preview2::WasiCtx {
         <span class="kw">match </span><span class="kw-2">&amp;mut </span><span class="self">self</span>.wasi {
             Wasi::Preview1(<span class="kw">_</span>) =&gt; <span class="macro">panic!</span>(<span class="string">&quot;using WASI Preview 1 functions with Preview 2 store&quot;</span>),
-            Wasi::Preview2(ctx) =&gt; ctx,
+            Wasi::Preview2 { wasi_ctx, .. } =&gt; wasi_ctx,
         }
+    }
+}
+
+<span class="kw">impl</span>&lt;T: Send&gt; WasiHttpView <span class="kw">for </span>Data&lt;T&gt; {
+    <span class="kw">fn </span>ctx(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>WasiHttpCtx {
+        <span class="kw">match </span><span class="kw-2">&amp;mut </span><span class="self">self</span>.wasi {
+            Wasi::Preview1(<span class="kw">_</span>) =&gt; <span class="macro">panic!</span>(<span class="string">&quot;using WASI Preview 1 functions with Preview 2 store&quot;</span>),
+            Wasi::Preview2 { wasi_http_ctx, .. } =&gt; wasi_http_ctx,
+        }
+    }
+
+    <span class="kw">fn </span>table(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>Table {
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>.table
     }
 }
 
@@ -647,12 +675,12 @@
         <span class="kw">let </span>engine = wasmtime::Engine::new(<span class="kw-2">&amp;</span>config.inner)<span class="question-mark">?</span>;
 
         <span class="kw">let </span><span class="kw-2">mut </span>linker: Linker&lt;T&gt; = Linker::new(<span class="kw-2">&amp;</span>engine);
-        wasmtime_wasi::preview2::command::add_to_linker(<span class="kw-2">&amp;mut </span>linker)<span class="question-mark">?</span>;
+        wasmtime_wasi_http::proxy::add_to_linker(<span class="kw-2">&amp;mut </span>linker)<span class="question-mark">?</span>;
 
         <span class="kw">let </span><span class="kw-2">mut </span>module_linker = ModuleLinker::new(<span class="kw-2">&amp;</span>engine);
         wasmtime_wasi::tokio::add_to_linker(<span class="kw-2">&amp;mut </span>module_linker, |data| <span class="kw">match </span><span class="kw-2">&amp;mut </span>data.wasi {
             Wasi::Preview1(ctx) =&gt; ctx,
-            Wasi::Preview2(<span class="kw">_</span>) =&gt; <span class="macro">panic!</span>(<span class="string">&quot;using WASI Preview 2 functions with Preview 1 store&quot;</span>),
+            Wasi::Preview2 { .. } =&gt; <span class="macro">panic!</span>(<span class="string">&quot;using WASI Preview 2 functions with Preview 1 store&quot;</span>),
         })<span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(<span class="self">Self </span>{

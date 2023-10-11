@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"attr":["http_component","redis_component"],"macro":["http_router"],"mod":["config","http","key_value","llm","mysql","outbound_http","pg","redis","sqlite"]};
+window.SIDEBAR_ITEMS = {"attr":["http_component","redis_component","wasi_http_component"],"macro":["http_router"],"mod":["config","http","key_value","llm","mysql","outbound_http","pg","redis","sqlite"]};

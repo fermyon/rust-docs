@@ -133,6 +133,9 @@
 <a href="#133" id="133">133</a>
 <a href="#134" id="134">134</a>
 <a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! The Rust Spin SDK.
 
 </span><span class="attr">#![deny(missing_docs)]
@@ -152,12 +155,15 @@
 <span class="doccomment">/// Exports the procedural macros for writing handlers for Spin components.
 </span><span class="kw">pub use </span>spin_macro::<span class="kw-2">*</span>;
 
+<span class="kw">pub use </span>http_types;
+
 <span class="attr">#[doc(hidden)]
 </span><span class="doccomment">/// Module containing wit bindgen generated code.
 ///
 /// This is only meant for internal consumption.
 </span><span class="kw">pub mod </span>wit {
     <span class="attr">#![allow(missing_docs)]
+
     </span><span class="macro">wit_bindgen::generate!</span>({
         world: <span class="string">&quot;platform&quot;</span>,
         path: <span class="string">&quot;../../wit/preview2&quot;</span>,
