@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"trait":["FromBody","IntoBody","IntoResponse","IntoStatusCode","TryFromBody","TryFromRequest","TryIntoBody","TryNonRequestFromRequest"]};

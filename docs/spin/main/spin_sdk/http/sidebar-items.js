@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["internal_server_error","not_found"],"macro":["http_router"],"struct":["Router"],"type":["Params","Request","Response"]};
+window.SIDEBAR_ITEMS = {"enum":["Method","SendError"],"fn":["send"],"macro":["http_router"],"mod":["conversions","responses"],"struct":["Body","Json","JsonBodyError","NonUtf8BodyError","Request","Response","Router"],"trait":["IntoResponse"],"type":["Params"]};

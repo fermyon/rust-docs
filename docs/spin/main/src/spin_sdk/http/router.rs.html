@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `sdk/rust/src/http/router.rs`."><title>router.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-deb46770fd761b69.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="spin_sdk" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0-nightly (49691b1f7 2023-10-16)" data-channel="nightly" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-5f34af1a0ee6bacd.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `sdk/rust/src/http/router.rs`."><title>router.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-deb46770fd761b69.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="spin_sdk" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0-nightly (09df6108c 2023-10-17)" data-channel="nightly" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-5f34af1a0ee6bacd.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -379,18 +379,52 @@
 <a href="#379" id="379">379</a>
 <a href="#380" id="380">380</a>
 <a href="#381" id="381">381</a>
-</pre></div><pre class="rust"><code><span class="kw">use super</span>::{Request, Response, <span class="prelude-ty">Result</span>};
+<a href="#382" id="382">382</a>
+<a href="#383" id="383">383</a>
+<a href="#384" id="384">384</a>
+<a href="#385" id="385">385</a>
+<a href="#386" id="386">386</a>
+<a href="#387" id="387">387</a>
+<a href="#388" id="388">388</a>
+<a href="#389" id="389">389</a>
+<a href="#390" id="390">390</a>
+<a href="#391" id="391">391</a>
+<a href="#392" id="392">392</a>
+<a href="#393" id="393">393</a>
+<a href="#394" id="394">394</a>
+<a href="#395" id="395">395</a>
+<a href="#396" id="396">396</a>
+<a href="#397" id="397">397</a>
+<a href="#398" id="398">398</a>
+<a href="#399" id="399">399</a>
+<a href="#400" id="400">400</a>
+<a href="#401" id="401">401</a>
+<a href="#402" id="402">402</a>
+<a href="#403" id="403">403</a>
+<a href="#404" id="404">404</a>
+<a href="#405" id="405">405</a>
+<a href="#406" id="406">406</a>
+<a href="#407" id="407">407</a>
+<a href="#408" id="408">408</a>
+<a href="#409" id="409">409</a>
+<a href="#410" id="410">410</a>
+<a href="#411" id="411">411</a>
+<a href="#412" id="412">412</a>
+<a href="#413" id="413">413</a>
+<a href="#414" id="414">414</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">super</span>::conversions::{IntoResponse, TryFromRequest};
+<span class="kw">use super</span>::{responses, Method, Request, Response};
 <span class="kw">use </span>routefinder::{Captures, Router <span class="kw">as </span>MethodRouter};
 <span class="kw">use </span>std::{collections::HashMap, fmt::Display};
 
-<span class="kw">type </span>Handler = <span class="kw">dyn </span>Fn(Request, Params) -&gt; <span class="prelude-ty">Result</span>&lt;Response&gt;;
+<span class="kw">type </span>Handler = <span class="kw">dyn </span>Fn(Request, Params) -&gt; Response;
 
 <span class="doccomment">/// Route parameters extracted from a URI that match a route pattern.
 </span><span class="kw">pub type </span>Params = Captures&lt;<span class="lifetime">&#39;static</span>, <span class="lifetime">&#39;static</span>&gt;;
 
 <span class="doccomment">/// The Spin SDK HTTP router.
 </span><span class="kw">pub struct </span>Router {
-    methods_map: HashMap&lt;http_types::Method, MethodRouter&lt;Box&lt;Handler&gt;&gt;&gt;,
+    methods_map: HashMap&lt;Method, MethodRouter&lt;Box&lt;Handler&gt;&gt;&gt;,
     any_methods: MethodRouter&lt;Box&lt;Handler&gt;&gt;,
 }
 
@@ -419,14 +453,15 @@
 
 <span class="kw">impl </span>Router {
     <span class="doccomment">/// Dispatches a request to the appropriate handler along with the URI parameters.
-    </span><span class="kw">pub fn </span>handle(<span class="kw-2">&amp;</span><span class="self">self</span>, request: Request) -&gt; <span class="prelude-ty">Result</span>&lt;Response&gt; {
-        <span class="kw">let </span>method = request.method().to_owned();
-        <span class="kw">let </span>path = request.uri().path().to_owned();
-        <span class="kw">let </span>RouteMatch { params, handler } = <span class="self">self</span>.find(<span class="kw-2">&amp;</span>path, method);
+    </span><span class="kw">pub fn </span>handle&lt;R: Into&lt;Request&gt;&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, request: R) -&gt; Response {
+        <span class="kw">let </span>request = request.into();
+        <span class="kw">let </span>method = request.method;
+        <span class="kw">let </span>path = <span class="kw-2">&amp;</span>request.uri;
+        <span class="kw">let </span>RouteMatch { params, handler } = <span class="self">self</span>.find(path, method);
         handler(request, params)
     }
 
-    <span class="kw">fn </span>find(<span class="kw-2">&amp;</span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, method: http_types::Method) -&gt; RouteMatch&lt;<span class="lifetime">&#39;_</span>&gt; {
+    <span class="kw">fn </span>find(<span class="kw-2">&amp;</span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, method: Method) -&gt; RouteMatch&lt;<span class="lifetime">&#39;_</span>&gt; {
         <span class="kw">let </span>best_match = <span class="self">self
             </span>.methods_map
             .get(<span class="kw-2">&amp;</span>method)
@@ -446,10 +481,10 @@
                 <span class="kw">let </span>handler = m.handler();
                 RouteMatch { handler, params }
             }
-            <span class="prelude-val">None </span><span class="kw">if </span>method == http_types::Method::HEAD =&gt; {
+            <span class="prelude-val">None </span><span class="kw">if </span>method == Method::Head =&gt; {
                 <span class="comment">// If it is a HTTP HEAD request then check if there is a callback in the methods map
                 // if not then fallback to the behavior of HTTP GET else proceed as usual
-                </span><span class="self">self</span>.find(path, http_types::Method::GET)
+                </span><span class="self">self</span>.find(path, Method::Get)
             }
             <span class="prelude-val">None </span>=&gt; {
                 <span class="comment">// Handle the failure case where no match could be resolved.
@@ -459,7 +494,7 @@
     }
 
     <span class="comment">// Helper function to handle the case where a best match couldn&#39;t be resolved.
-    </span><span class="kw">fn </span>fail(<span class="kw-2">&amp;</span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, method: http_types::Method) -&gt; RouteMatch&lt;<span class="lifetime">&#39;_</span>&gt; {
+    </span><span class="kw">fn </span>fail(<span class="kw-2">&amp;</span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, method: Method) -&gt; RouteMatch&lt;<span class="lifetime">&#39;_</span>&gt; {
         <span class="comment">// First, filter all routers to determine if the path can match but the provided method is not allowed.
         </span><span class="kw">let </span>is_method_not_allowed = <span class="self">self
             </span>.methods_map
@@ -484,79 +519,124 @@
     }
 
     <span class="doccomment">/// Register a handler at the path for all methods.
-    </span><span class="kw">pub fn </span>any&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
+    </span><span class="kw">pub fn </span>any&lt;F, I, O&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Request, Params) -&gt; <span class="prelude-ty">Result</span>&lt;Response&gt; + <span class="lifetime">&#39;static</span>,
+        </span>F: Fn(I, Params) -&gt; O + <span class="lifetime">&#39;static</span>,
+        I: TryFromRequest,
+        I::Error: IntoResponse,
+        O: IntoResponse,
     {
-        <span class="self">self</span>.any_methods.add(path, Box::new(handler)).unwrap();
+        <span class="self">self</span>.any_methods
+            .add(
+                path,
+                Box::new(
+                    <span class="kw">move </span>|req, params| <span class="kw">match </span>TryFromRequest::try_from_request(req) {
+                        <span class="prelude-val">Ok</span>(r) =&gt; handler(r, params).into_response(),
+                        <span class="prelude-val">Err</span>(e) =&gt; e.into_response(),
+                    },
+                ),
+            )
+            .unwrap();
     }
 
     <span class="doccomment">/// Register a handler at the path for the specified HTTP method.
-    </span><span class="kw">pub fn </span>add&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, method: http_types::Method, handler: F)
+    </span><span class="kw">pub fn </span>add&lt;F, I, O&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, method: Method, handler: F)
     <span class="kw">where
-        </span>F: Fn(Request, Params) -&gt; <span class="prelude-ty">Result</span>&lt;Response&gt; + <span class="lifetime">&#39;static</span>,
+        </span>F: Fn(I, Params) -&gt; O + <span class="lifetime">&#39;static</span>,
+        I: TryFromRequest,
+        I::Error: IntoResponse,
+        O: IntoResponse,
     {
         <span class="self">self</span>.methods_map
             .entry(method)
             .or_default()
-            .add(path, Box::new(handler))
+            .add(
+                path,
+                Box::new(
+                    <span class="kw">move </span>|req, params| <span class="kw">match </span>TryFromRequest::try_from_request(req) {
+                        <span class="prelude-val">Ok</span>(r) =&gt; handler(r, params).into_response(),
+                        <span class="prelude-val">Err</span>(e) =&gt; e.into_response(),
+                    },
+                ),
+            )
             .unwrap();
     }
 
     <span class="doccomment">/// Register a handler at the path for the HTTP GET method.
-    </span><span class="kw">pub fn </span>get&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
+    </span><span class="kw">pub fn </span>get&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Request, Params) -&gt; <span class="prelude-ty">Result</span>&lt;Response&gt; + <span class="lifetime">&#39;static</span>,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">&#39;static</span>,
+        Req: TryFromRequest,
+        Req::Error: IntoResponse,
+        Resp: IntoResponse,
     {
-        <span class="self">self</span>.add(path, http_types::Method::GET, handler)
+        <span class="self">self</span>.add(path, Method::Get, handler)
     }
 
     <span class="doccomment">/// Register a handler at the path for the HTTP HEAD method.
-    </span><span class="kw">pub fn </span>head&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
+    </span><span class="kw">pub fn </span>head&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Request, Params) -&gt; <span class="prelude-ty">Result</span>&lt;Response&gt; + <span class="lifetime">&#39;static</span>,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">&#39;static</span>,
+        Req: TryFromRequest,
+        Req::Error: IntoResponse,
+        Resp: IntoResponse,
     {
-        <span class="self">self</span>.add(path, http_types::Method::HEAD, handler)
+        <span class="self">self</span>.add(path, Method::Head, handler)
     }
 
     <span class="doccomment">/// Register a handler at the path for the HTTP POST method.
-    </span><span class="kw">pub fn </span>post&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
+    </span><span class="kw">pub fn </span>post&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Request, Params) -&gt; <span class="prelude-ty">Result</span>&lt;Response&gt; + <span class="lifetime">&#39;static</span>,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">&#39;static</span>,
+        Req: TryFromRequest,
+        Req::Error: IntoResponse,
+        Resp: IntoResponse,
     {
-        <span class="self">self</span>.add(path, http_types::Method::POST, handler)
+        <span class="self">self</span>.add(path, Method::Post, handler)
     }
 
     <span class="doccomment">/// Register a handler at the path for the HTTP DELETE method.
-    </span><span class="kw">pub fn </span>delete&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
+    </span><span class="kw">pub fn </span>delete&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Request, Params) -&gt; <span class="prelude-ty">Result</span>&lt;Response&gt; + <span class="lifetime">&#39;static</span>,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">&#39;static</span>,
+        Req: TryFromRequest,
+        Req::Error: IntoResponse,
+        Resp: IntoResponse,
     {
-        <span class="self">self</span>.add(path, http_types::Method::DELETE, handler)
+        <span class="self">self</span>.add(path, Method::Delete, handler)
     }
 
     <span class="doccomment">/// Register a handler at the path for the HTTP PUT method.
-    </span><span class="kw">pub fn </span>put&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
+    </span><span class="kw">pub fn </span>put&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Request, Params) -&gt; <span class="prelude-ty">Result</span>&lt;Response&gt; + <span class="lifetime">&#39;static</span>,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">&#39;static</span>,
+        Req: TryFromRequest,
+        Req::Error: IntoResponse,
+        Resp: IntoResponse,
     {
-        <span class="self">self</span>.add(path, http_types::Method::PUT, handler)
+        <span class="self">self</span>.add(path, Method::Put, handler)
     }
 
     <span class="doccomment">/// Register a handler at the path for the HTTP PATCH method.
-    </span><span class="kw">pub fn </span>patch&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
+    </span><span class="kw">pub fn </span>patch&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Request, Params) -&gt; <span class="prelude-ty">Result</span>&lt;Response&gt; + <span class="lifetime">&#39;static</span>,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">&#39;static</span>,
+        Req: TryFromRequest,
+        Req::Error: IntoResponse,
+        Resp: IntoResponse,
     {
-        <span class="self">self</span>.add(path, http_types::Method::PATCH, handler)
+        <span class="self">self</span>.add(path, Method::Patch, handler)
     }
 
     <span class="doccomment">/// Register a handler at the path for the HTTP OPTIONS method.
-    </span><span class="kw">pub fn </span>options&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
+    </span><span class="kw">pub fn </span>options&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Request, Params) -&gt; <span class="prelude-ty">Result</span>&lt;Response&gt; + <span class="lifetime">&#39;static</span>,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">&#39;static</span>,
+        Req: TryFromRequest,
+        Req::Error: IntoResponse,
+        Resp: IntoResponse,
     {
-        <span class="self">self</span>.add(path, http_types::Method::OPTIONS, handler)
+        <span class="self">self</span>.add(path, Method::Options, handler)
     }
 
     <span class="doccomment">/// Construct a new Router.
@@ -568,18 +648,12 @@
     }
 }
 
-<span class="kw">fn </span>not_found(_req: Request, _params: Params) -&gt; <span class="prelude-ty">Result</span>&lt;Response&gt; {
-    <span class="prelude-val">Ok</span>(http_types::Response::builder()
-        .status(http_types::StatusCode::NOT_FOUND)
-        .body(<span class="prelude-val">None</span>)
-        .unwrap())
+<span class="kw">fn </span>not_found(_req: Request, _params: Params) -&gt; Response {
+    responses::not_found()
 }
 
-<span class="kw">fn </span>method_not_allowed(_req: Request, _params: Params) -&gt; <span class="prelude-ty">Result</span>&lt;Response&gt; {
-    <span class="prelude-val">Ok</span>(http_types::Response::builder()
-        .status(http_types::StatusCode::METHOD_NOT_ALLOWED)
-        .body(<span class="prelude-val">None</span>)
-        .unwrap())
+<span class="kw">fn </span>method_not_allowed(_req: Request, _params: Params) -&gt; Response {
+    responses::method_not_allowed()
 }
 
 <span class="doccomment">/// A macro to help with constructing a Router from a stream of tokens.
@@ -624,19 +698,19 @@
 </span><span class="kw">mod </span>tests {
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-    <span class="kw">fn </span>make_request(method: http_types::Method, path: <span class="kw-2">&amp;</span>str) -&gt; Request {
-        http_types::Request::builder()
-            .method(method)
-            .uri(path)
-            .body(<span class="prelude-val">None</span>)
-            .unwrap()
+    <span class="kw">fn </span>make_request(method: Method, path: <span class="kw-2">&amp;</span>str) -&gt; Request {
+        Request {
+            method,
+            uri: path.into(),
+            headers: Vec::new(),
+            params: Vec::new(),
+            body: <span class="prelude-val">None</span>,
+        }
     }
 
-    <span class="kw">fn </span>echo_param(req: Request, params: Params) -&gt; <span class="prelude-ty">Result</span>&lt;Response&gt; {
+    <span class="kw">fn </span>echo_param(req: Request, params: Params) -&gt; Response {
         <span class="kw">match </span>params.get(<span class="string">&quot;x&quot;</span>) {
-            <span class="prelude-val">Some</span>(path) =&gt; <span class="prelude-val">Ok</span>(http_types::Response::builder()
-                .status(http_types::StatusCode::OK)
-                .body(<span class="prelude-val">Some</span>(path.to_string().into()))<span class="question-mark">?</span>),
+            <span class="prelude-val">Some</span>(path) =&gt; Response::new(<span class="number">200</span>, path),
             <span class="prelude-val">None </span>=&gt; not_found(req, params),
         }
     }
@@ -646,42 +720,40 @@
         <span class="kw">let </span><span class="kw-2">mut </span>router = Router::default();
         router.get(<span class="string">&quot;/:x&quot;</span>, echo_param);
 
-        <span class="kw">let </span>req = make_request(http_types::Method::POST, <span class="string">&quot;/foobar&quot;</span>);
-        <span class="kw">let </span>res = router.handle(req).unwrap();
-        <span class="macro">assert_eq!</span>(res.status(), http_types::StatusCode::METHOD_NOT_ALLOWED);
+        <span class="kw">let </span>req = make_request(Method::Post, <span class="string">&quot;/foobar&quot;</span>);
+        <span class="kw">let </span>res = router.handle(req);
+        <span class="macro">assert_eq!</span>(res.status, hyperium::StatusCode::METHOD_NOT_ALLOWED);
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_not_found() {
-        <span class="kw">fn </span>h1(_req: Request, _params: Params) -&gt; <span class="prelude-ty">Result</span>&lt;Response&gt; {
-            <span class="prelude-val">Ok</span>(http_types::Response::builder().status(<span class="number">200</span>).body(<span class="prelude-val">None</span>)<span class="question-mark">?</span>)
+        <span class="kw">fn </span>h1(_req: Request, _params: Params) -&gt; anyhow::Result&lt;Response&gt; {
+            <span class="prelude-val">Ok</span>(Response::new(<span class="number">200</span>, ()))
         }
 
         <span class="kw">let </span><span class="kw-2">mut </span>router = Router::default();
         router.get(<span class="string">&quot;/h1/:param&quot;</span>, h1);
 
-        <span class="kw">let </span>req = make_request(http_types::Method::GET, <span class="string">&quot;/h1/&quot;</span>);
-        <span class="kw">let </span>res = router.handle(req).unwrap();
-        <span class="macro">assert_eq!</span>(res.status(), http_types::StatusCode::NOT_FOUND);
+        <span class="kw">let </span>req = make_request(Method::Get, <span class="string">&quot;/h1/&quot;</span>);
+        <span class="kw">let </span>res = router.handle(req);
+        <span class="macro">assert_eq!</span>(res.status, hyperium::StatusCode::NOT_FOUND);
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_multi_param() {
-        <span class="kw">fn </span>multiply(_req: Request, params: Params) -&gt; <span class="prelude-ty">Result</span>&lt;Response&gt; {
+        <span class="kw">fn </span>multiply(_req: Request, params: Params) -&gt; anyhow::Result&lt;Response&gt; {
             <span class="kw">let </span>x: i64 = params.get(<span class="string">&quot;x&quot;</span>).unwrap().parse()<span class="question-mark">?</span>;
             <span class="kw">let </span>y: i64 = params.get(<span class="string">&quot;y&quot;</span>).unwrap().parse()<span class="question-mark">?</span>;
-            <span class="prelude-val">Ok</span>(http_types::Response::builder()
-                .status(http_types::StatusCode::OK)
-                .body(<span class="prelude-val">Some</span>(<span class="macro">format!</span>(<span class="string">&quot;{result}&quot;</span>, result = x * y).into()))<span class="question-mark">?</span>)
+            <span class="prelude-val">Ok</span>(Response::new(<span class="number">200</span>, <span class="macro">format!</span>(<span class="string">&quot;{result}&quot;</span>, result = x * y)))
         }
 
         <span class="kw">let </span><span class="kw-2">mut </span>router = Router::default();
         router.get(<span class="string">&quot;/multiply/:x/:y&quot;</span>, multiply);
 
-        <span class="kw">let </span>req = make_request(http_types::Method::GET, <span class="string">&quot;/multiply/2/4&quot;</span>);
-        <span class="kw">let </span>res = router.handle(req).unwrap();
+        <span class="kw">let </span>req = make_request(Method::Get, <span class="string">&quot;/multiply/2/4&quot;</span>);
+        <span class="kw">let </span>res = router.handle(req);
 
-        <span class="macro">assert_eq!</span>(res.into_body().unwrap(), <span class="string">&quot;8&quot;</span>.to_string());
+        <span class="macro">assert_eq!</span>(res.body.unwrap(), <span class="string">&quot;8&quot;</span>.to_owned().into_bytes());
     }
 
     <span class="attr">#[test]
@@ -689,19 +761,17 @@
         <span class="kw">let </span><span class="kw-2">mut </span>router = Router::default();
         router.get(<span class="string">&quot;/:x&quot;</span>, echo_param);
 
-        <span class="kw">let </span>req = make_request(http_types::Method::GET, <span class="string">&quot;/y&quot;</span>);
-        <span class="kw">let </span>res = router.handle(req).unwrap();
+        <span class="kw">let </span>req = make_request(Method::Get, <span class="string">&quot;/y&quot;</span>);
+        <span class="kw">let </span>res = router.handle(req);
 
-        <span class="macro">assert_eq!</span>(res.into_body().unwrap(), <span class="string">&quot;y&quot;</span>.to_string());
+        <span class="macro">assert_eq!</span>(res.body.unwrap(), <span class="string">&quot;y&quot;</span>.to_owned().into_bytes());
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_wildcard() {
-        <span class="kw">fn </span>echo_wildcard(req: Request, params: Params) -&gt; <span class="prelude-ty">Result</span>&lt;Response&gt; {
+        <span class="kw">fn </span>echo_wildcard(req: Request, params: Params) -&gt; Response {
             <span class="kw">match </span>params.wildcard() {
-                <span class="prelude-val">Some</span>(path) =&gt; <span class="prelude-val">Ok</span>(http_types::Response::builder()
-                    .status(http_types::StatusCode::OK)
-                    .body(<span class="prelude-val">Some</span>(path.to_string().into()))<span class="question-mark">?</span>),
+                <span class="prelude-val">Some</span>(path) =&gt; Response::new(<span class="number">200</span>, path),
                 <span class="prelude-val">None </span>=&gt; not_found(req, params),
             }
         }
@@ -709,10 +779,10 @@
         <span class="kw">let </span><span class="kw-2">mut </span>router = Router::default();
         router.get(<span class="string">&quot;/*&quot;</span>, echo_wildcard);
 
-        <span class="kw">let </span>req = make_request(http_types::Method::GET, <span class="string">&quot;/foo/bar&quot;</span>);
-        <span class="kw">let </span>res = router.handle(req).unwrap();
-        <span class="macro">assert_eq!</span>(res.status(), http_types::StatusCode::OK);
-        <span class="macro">assert_eq!</span>(res.into_body().unwrap(), <span class="string">&quot;foo/bar&quot;</span>.to_string());
+        <span class="kw">let </span>req = make_request(Method::Get, <span class="string">&quot;/foo/bar&quot;</span>);
+        <span class="kw">let </span>res = router.handle(req);
+        <span class="macro">assert_eq!</span>(res.status, hyperium::StatusCode::OK);
+        <span class="macro">assert_eq!</span>(res.body.unwrap(), <span class="string">&quot;foo/bar&quot;</span>.to_owned().into_bytes());
     }
 
     <span class="attr">#[test]
@@ -720,9 +790,9 @@
         <span class="kw">let </span><span class="kw-2">mut </span>router = Router::default();
         router.get(<span class="string">&quot;/:x/*&quot;</span>, echo_param);
 
-        <span class="kw">let </span>req = make_request(http_types::Method::GET, <span class="string">&quot;/foo/bar&quot;</span>);
-        <span class="kw">let </span>res = router.handle(req).unwrap();
-        <span class="macro">assert_eq!</span>(res.into_body().unwrap(), <span class="string">&quot;foo&quot;</span>.to_string());
+        <span class="kw">let </span>req = make_request(Method::Get, <span class="string">&quot;/foo/bar&quot;</span>);
+        <span class="kw">let </span>res = router.handle(req);
+        <span class="macro">assert_eq!</span>(res.body.unwrap(), <span class="string">&quot;foo&quot;</span>.to_owned().into_bytes());
     }
 
     <span class="attr">#[test]
@@ -738,26 +808,22 @@
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_ambiguous_wildcard_vs_star() {
-        <span class="kw">fn </span>h1(_req: Request, _params: Params) -&gt; <span class="prelude-ty">Result</span>&lt;Response&gt; {
-            <span class="prelude-val">Ok</span>(http_types::Response::builder()
-                .status(http_types::StatusCode::OK)
-                .body(<span class="prelude-val">Some</span>(<span class="string">&quot;one/two&quot;</span>.into()))<span class="question-mark">?</span>)
+        <span class="kw">fn </span>h1(_req: Request, _params: Params) -&gt; anyhow::Result&lt;Response&gt; {
+            <span class="prelude-val">Ok</span>(Response::new(<span class="number">200</span>, <span class="string">&quot;one/two&quot;</span>))
         }
 
-        <span class="kw">fn </span>h2(_req: Request, _params: Params) -&gt; <span class="prelude-ty">Result</span>&lt;Response&gt; {
-            <span class="prelude-val">Ok</span>(http_types::Response::builder()
-                .status(http_types::StatusCode::OK)
-                .body(<span class="prelude-val">Some</span>(<span class="string">&quot;posts/*&quot;</span>.into()))<span class="question-mark">?</span>)
+        <span class="kw">fn </span>h2(_req: Request, _params: Params) -&gt; anyhow::Result&lt;Response&gt; {
+            <span class="prelude-val">Ok</span>(Response::new(<span class="number">200</span>, <span class="string">&quot;posts/*&quot;</span>))
         }
 
         <span class="kw">let </span><span class="kw-2">mut </span>router = Router::default();
         router.get(<span class="string">&quot;/:one/:two&quot;</span>, h1);
         router.get(<span class="string">&quot;/posts/*&quot;</span>, h2);
 
-        <span class="kw">let </span>req = make_request(http_types::Method::GET, <span class="string">&quot;/posts/2&quot;</span>);
-        <span class="kw">let </span>res = router.handle(req).unwrap();
+        <span class="kw">let </span>req = make_request(Method::Get, <span class="string">&quot;/posts/2&quot;</span>);
+        <span class="kw">let </span>res = router.handle(req);
 
-        <span class="macro">assert_eq!</span>(res.into_body().unwrap(), <span class="string">&quot;posts/*&quot;</span>.to_string());
+        <span class="macro">assert_eq!</span>(res.body.unwrap(), <span class="string">&quot;posts/*&quot;</span>.to_owned().into_bytes());
     }
 }
 </code></pre></div></section></main></body></html>

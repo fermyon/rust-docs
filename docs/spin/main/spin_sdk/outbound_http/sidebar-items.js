@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["OutboundHttpError"],"fn":["send_request"]};
