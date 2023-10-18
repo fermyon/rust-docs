@@ -396,33 +396,6 @@
 <a href="#396" id="396">396</a>
 <a href="#397" id="397">397</a>
 <a href="#398" id="398">398</a>
-<a href="#399" id="399">399</a>
-<a href="#400" id="400">400</a>
-<a href="#401" id="401">401</a>
-<a href="#402" id="402">402</a>
-<a href="#403" id="403">403</a>
-<a href="#404" id="404">404</a>
-<a href="#405" id="405">405</a>
-<a href="#406" id="406">406</a>
-<a href="#407" id="407">407</a>
-<a href="#408" id="408">408</a>
-<a href="#409" id="409">409</a>
-<a href="#410" id="410">410</a>
-<a href="#411" id="411">411</a>
-<a href="#412" id="412">412</a>
-<a href="#413" id="413">413</a>
-<a href="#414" id="414">414</a>
-<a href="#415" id="415">415</a>
-<a href="#416" id="416">416</a>
-<a href="#417" id="417">417</a>
-<a href="#418" id="418">418</a>
-<a href="#419" id="419">419</a>
-<a href="#420" id="420">420</a>
-<a href="#421" id="421">421</a>
-<a href="#422" id="422">422</a>
-<a href="#423" id="423">423</a>
-<a href="#424" id="424">424</a>
-<a href="#425" id="425">425</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Spin internal application interfaces
 //!
 //! This crate contains interfaces to Spin application configuration to be used
@@ -432,9 +405,9 @@
 </span><span class="attr">#![deny(missing_docs)]
 
 </span><span class="kw">mod </span>host_component;
-<span class="kw">pub mod </span>locked;
-<span class="kw">mod </span>metadata;
-<span class="kw">pub mod </span>values;
+<span class="kw">pub use </span>spin_locked_app::locked;
+<span class="kw">pub use </span>spin_locked_app::values;
+<span class="kw">pub use </span>spin_locked_app::{Error, MetadataKey, <span class="prelude-ty">Result</span>};
 
 <span class="kw">use </span>ouroboros::self_referencing;
 <span class="kw">use </span>serde::Deserialize;
@@ -442,12 +415,11 @@
 
 <span class="kw">use </span>host_component::DynamicHostComponents;
 <span class="kw">use </span>locked::{ContentPath, LockedApp, LockedComponent, LockedComponentSource, LockedTrigger};
-<span class="kw">use </span>metadata::MetadataExt;
+<span class="kw">use </span>spin_locked_app::MetadataExt;
 
 <span class="kw">pub use </span>async_trait::async_trait;
 <span class="kw">pub use </span>host_component::DynamicHostComponent;
 <span class="kw">pub use </span>locked::Variable;
-<span class="kw">pub use </span>metadata::MetadataKey;
 
 <span class="doccomment">/// MetadataKey for extracting the application name.
 </span><span class="kw">pub const </span>APP_NAME_KEY: MetadataKey = MetadataKey::new(<span class="string">&quot;name&quot;</span>);
@@ -821,31 +793,5 @@
 <span class="attr">#[derive(Deserialize)]
 </span><span class="kw">struct </span>CommonTriggerConfig {
     component: <span class="prelude-ty">Option</span>&lt;String&gt;,
-}
-
-<span class="doccomment">/// Type alias for a [`Result`]s with [`Error`].
-</span><span class="kw">pub type </span><span class="prelude-ty">Result</span>&lt;T&gt; = std::result::Result&lt;T, Error&gt;;
-
-<span class="doccomment">/// Errors returned by methods in this crate.
-</span><span class="attr">#[derive(Debug, thiserror::Error)]
-</span><span class="kw">pub enum </span>Error {
-    <span class="doccomment">/// An error propagated from the [`spin_core`] crate.
-    </span><span class="attr">#[error(<span class="string">&quot;spin core error: {0:#}&quot;</span>)]
-    </span>CoreError(<span class="attr">#[source] </span>anyhow::Error),
-    <span class="doccomment">/// An error from a [`DynamicHostComponent`].
-    </span><span class="attr">#[error(<span class="string">&quot;host component error: {0:#}&quot;</span>)]
-    </span>HostComponentError(<span class="attr">#[source] </span>anyhow::Error),
-    <span class="doccomment">/// An error from a [`Loader`] implementation.
-    </span><span class="attr">#[error(transparent)]
-    </span>LoaderError(anyhow::Error),
-    <span class="doccomment">/// An error indicating missing or unexpected metadata.
-    </span><span class="attr">#[error(<span class="string">&quot;metadata error: {0}&quot;</span>)]
-    </span>MetadataError(String),
-    <span class="doccomment">/// An error indicating failed JSON (de)serialization.
-    </span><span class="attr">#[error(<span class="string">&quot;json error: {0}&quot;</span>)]
-    </span>JsonError(<span class="attr">#[from] </span>serde_json::Error),
-    <span class="doccomment">/// A validation error that can be presented directly to the user.
-    </span><span class="attr">#[error(transparent)]
-    </span>ValidationError(anyhow::Error),
 }
 </code></pre></div></section></main></body></html>
