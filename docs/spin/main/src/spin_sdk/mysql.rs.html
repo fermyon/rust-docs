@@ -276,6 +276,8 @@
 <a href="#276" id="276">276</a>
 <a href="#277" id="277">277</a>
 <a href="#278" id="278">278</a>
+<a href="#279" id="279">279</a>
+<a href="#280" id="280">280</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Conversions between Rust, WIT and **MySQL** types.
 //!
 //! # Types
@@ -296,8 +298,10 @@
 //! | `String`  | str(string)         | VARCHAR, CHAR, TEXT     |
 //! | `Vec&lt;u8&gt;` | binary(list\&lt;u8\&gt;)  | VARBINARY, BINARY, BLOB |
 
-</span><span class="kw">pub use </span><span class="kw">super</span>::wit::v1::mysql::{execute, query, MysqlError};
-<span class="kw">pub use </span><span class="kw">super</span>::wit::v1::rdbms_types::<span class="kw-2">*</span>;
+</span><span class="attr">#[doc(inline)]
+</span><span class="kw">pub use </span><span class="kw">super</span>::wit::v1::rdbms_types::<span class="kw-2">*</span>;
+<span class="attr">#[doc(inline)]
+</span><span class="kw">pub use </span><span class="kw">super</span>::wit::v2::mysql::{Connection, Error <span class="kw">as </span>MysqlError};
 
 <span class="doccomment">/// A MySQL error
 </span><span class="attr">#[derive(Debug, thiserror::Error)]
