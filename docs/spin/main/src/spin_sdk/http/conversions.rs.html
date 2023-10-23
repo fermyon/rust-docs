@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `sdk/rust/src/http/conversions.rs`."><title>conversions.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-deb46770fd761b69.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="spin_sdk" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0-nightly (4578435e1 2023-10-19)" data-channel="nightly" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-5f34af1a0ee6bacd.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `sdk/rust/src/http/conversions.rs`."><title>conversions.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-deb46770fd761b69.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="spin_sdk" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0-nightly (1c05d50c8 2023-10-21)" data-channel="nightly" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-5f34af1a0ee6bacd.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -385,9 +385,225 @@
 <a href="#385" id="385">385</a>
 <a href="#386" id="386">386</a>
 <a href="#387" id="387">387</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::wit::v1::http::{Request, Response};
+<a href="#388" id="388">388</a>
+<a href="#389" id="389">389</a>
+<a href="#390" id="390">390</a>
+<a href="#391" id="391">391</a>
+<a href="#392" id="392">392</a>
+<a href="#393" id="393">393</a>
+<a href="#394" id="394">394</a>
+<a href="#395" id="395">395</a>
+<a href="#396" id="396">396</a>
+<a href="#397" id="397">397</a>
+<a href="#398" id="398">398</a>
+<a href="#399" id="399">399</a>
+<a href="#400" id="400">400</a>
+<a href="#401" id="401">401</a>
+<a href="#402" id="402">402</a>
+<a href="#403" id="403">403</a>
+<a href="#404" id="404">404</a>
+<a href="#405" id="405">405</a>
+<a href="#406" id="406">406</a>
+<a href="#407" id="407">407</a>
+<a href="#408" id="408">408</a>
+<a href="#409" id="409">409</a>
+<a href="#410" id="410">410</a>
+<a href="#411" id="411">411</a>
+<a href="#412" id="412">412</a>
+<a href="#413" id="413">413</a>
+<a href="#414" id="414">414</a>
+<a href="#415" id="415">415</a>
+<a href="#416" id="416">416</a>
+<a href="#417" id="417">417</a>
+<a href="#418" id="418">418</a>
+<a href="#419" id="419">419</a>
+<a href="#420" id="420">420</a>
+<a href="#421" id="421">421</a>
+<a href="#422" id="422">422</a>
+<a href="#423" id="423">423</a>
+<a href="#424" id="424">424</a>
+<a href="#425" id="425">425</a>
+<a href="#426" id="426">426</a>
+<a href="#427" id="427">427</a>
+<a href="#428" id="428">428</a>
+<a href="#429" id="429">429</a>
+<a href="#430" id="430">430</a>
+<a href="#431" id="431">431</a>
+<a href="#432" id="432">432</a>
+<a href="#433" id="433">433</a>
+<a href="#434" id="434">434</a>
+<a href="#435" id="435">435</a>
+<a href="#436" id="436">436</a>
+<a href="#437" id="437">437</a>
+<a href="#438" id="438">438</a>
+<a href="#439" id="439">439</a>
+<a href="#440" id="440">440</a>
+<a href="#441" id="441">441</a>
+<a href="#442" id="442">442</a>
+<a href="#443" id="443">443</a>
+<a href="#444" id="444">444</a>
+<a href="#445" id="445">445</a>
+<a href="#446" id="446">446</a>
+<a href="#447" id="447">447</a>
+<a href="#448" id="448">448</a>
+<a href="#449" id="449">449</a>
+<a href="#450" id="450">450</a>
+<a href="#451" id="451">451</a>
+<a href="#452" id="452">452</a>
+<a href="#453" id="453">453</a>
+<a href="#454" id="454">454</a>
+<a href="#455" id="455">455</a>
+<a href="#456" id="456">456</a>
+<a href="#457" id="457">457</a>
+<a href="#458" id="458">458</a>
+<a href="#459" id="459">459</a>
+<a href="#460" id="460">460</a>
+<a href="#461" id="461">461</a>
+<a href="#462" id="462">462</a>
+<a href="#463" id="463">463</a>
+<a href="#464" id="464">464</a>
+<a href="#465" id="465">465</a>
+<a href="#466" id="466">466</a>
+<a href="#467" id="467">467</a>
+<a href="#468" id="468">468</a>
+<a href="#469" id="469">469</a>
+<a href="#470" id="470">470</a>
+<a href="#471" id="471">471</a>
+<a href="#472" id="472">472</a>
+<a href="#473" id="473">473</a>
+<a href="#474" id="474">474</a>
+<a href="#475" id="475">475</a>
+<a href="#476" id="476">476</a>
+<a href="#477" id="477">477</a>
+<a href="#478" id="478">478</a>
+<a href="#479" id="479">479</a>
+<a href="#480" id="480">480</a>
+<a href="#481" id="481">481</a>
+<a href="#482" id="482">482</a>
+<a href="#483" id="483">483</a>
+<a href="#484" id="484">484</a>
+<a href="#485" id="485">485</a>
+<a href="#486" id="486">486</a>
+<a href="#487" id="487">487</a>
+<a href="#488" id="488">488</a>
+<a href="#489" id="489">489</a>
+<a href="#490" id="490">490</a>
+<a href="#491" id="491">491</a>
+<a href="#492" id="492">492</a>
+<a href="#493" id="493">493</a>
+<a href="#494" id="494">494</a>
+<a href="#495" id="495">495</a>
+<a href="#496" id="496">496</a>
+<a href="#497" id="497">497</a>
+<a href="#498" id="498">498</a>
+<a href="#499" id="499">499</a>
+<a href="#500" id="500">500</a>
+<a href="#501" id="501">501</a>
+<a href="#502" id="502">502</a>
+<a href="#503" id="503">503</a>
+<a href="#504" id="504">504</a>
+<a href="#505" id="505">505</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span>async_trait::async_trait;
 
-<span class="kw">use super</span>::{responses, NonUtf8BodyError};
+<span class="kw">use super</span>::{
+    Fields, Headers, IncomingRequest, IncomingResponse, OutgoingRequest, OutgoingResponse,
+};
+
+<span class="kw">use super</span>::{responses, NonUtf8BodyError, Request, Response};
+
+<span class="kw">impl </span>From&lt;Response&gt; <span class="kw">for </span>OutgoingResponse {
+    <span class="kw">fn </span>from(response: Response) -&gt; <span class="self">Self </span>{
+        OutgoingResponse::new(response.status, <span class="kw-2">&amp;</span>Headers::new(<span class="kw-2">&amp;</span>response.headers))
+    }
+}
+
+<span class="doccomment">/// A trait for trying to convert from an `IncomingRequest` to the implementing type
+</span><span class="attr">#[async_trait]
+</span><span class="kw">pub trait </span>TryFromIncomingRequest {
+    <span class="doccomment">/// The error if conversion fails
+    </span><span class="kw">type </span>Error;
+
+    <span class="doccomment">/// Try to turn the `IncomingRequest` into the implementing type
+    </span><span class="kw">async fn </span>try_from_incoming_request(value: IncomingRequest) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt;
+    <span class="kw">where
+        </span><span class="self">Self</span>: Sized;
+}
+
+<span class="attr">#[async_trait]
+</span><span class="kw">impl </span>TryFromIncomingRequest <span class="kw">for </span>IncomingRequest {
+    <span class="kw">type </span>Error = std::convert::Infallible;
+    <span class="kw">async fn </span>try_from_incoming_request(request: IncomingRequest) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
+        <span class="prelude-val">Ok</span>(request)
+    }
+}
+
+<span class="attr">#[async_trait]
+</span><span class="kw">impl</span>&lt;R&gt; TryFromIncomingRequest <span class="kw">for </span>R
+<span class="kw">where
+    </span>R: TryNonRequestFromRequest,
+{
+    <span class="kw">type </span>Error = IncomingRequestError&lt;R::Error&gt;;
+
+    <span class="kw">async fn </span>try_from_incoming_request(request: IncomingRequest) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
+        <span class="kw">let </span>req = Request::try_from_incoming_request(request)
+            .<span class="kw">await
+            </span>.map_err(convert_error)<span class="question-mark">?</span>;
+        R::try_from_request(req).map_err(IncomingRequestError::ConversionError)
+    }
+}
+
+<span class="attr">#[async_trait]
+</span><span class="kw">impl </span>TryFromIncomingRequest <span class="kw">for </span>Request {
+    <span class="kw">type </span>Error = IncomingRequestError;
+
+    <span class="kw">async fn </span>try_from_incoming_request(request: IncomingRequest) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
+        <span class="kw">let </span>headers = request.headers().entries();
+        <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
+            method: request.method(),
+            path_and_query: request
+                .path_with_query()
+                .unwrap_or_else(|| String::from(<span class="string">&quot;/&quot;</span>)),
+            headers,
+            body: request
+                .into_body()
+                .<span class="kw">await
+                </span>.map_err(IncomingRequestError::BodyConversionError)<span class="question-mark">?</span>,
+        })
+    }
+}
+
+<span class="attr">#[derive(Debug, thiserror::Error)]
+</span><span class="doccomment">/// An error converting an `IncomingRequest`
+</span><span class="kw">pub enum </span>IncomingRequestError&lt;E = std::convert::Infallible&gt; {
+    <span class="doccomment">/// There was an error converting the body to an `Option&lt;Vec&lt;u8&gt;&gt;k`
+    </span><span class="attr">#[error(transparent)]
+    </span>BodyConversionError(anyhow::Error),
+    <span class="doccomment">/// There was an error converting the `Request` into the requested type
+    </span><span class="attr">#[error(transparent)]
+    </span>ConversionError(E),
+}
+
+<span class="doccomment">/// Helper for converting `IncomingRequestError`s that cannot fail due to conversion errors
+/// into ones that can.
+</span><span class="kw">fn </span>convert_error&lt;E&gt;(
+    error: IncomingRequestError&lt;std::convert::Infallible&gt;,
+) -&gt; IncomingRequestError&lt;E&gt; {
+    <span class="kw">match </span>error {
+        IncomingRequestError::BodyConversionError(e) =&gt; {
+            IncomingRequestError::BodyConversionError(e)
+        }
+        IncomingRequestError::ConversionError(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
+    }
+}
+
+<span class="kw">impl</span>&lt;E: IntoResponse&gt; IntoResponse <span class="kw">for </span>IncomingRequestError&lt;E&gt; {
+    <span class="kw">fn </span>into_response(<span class="self">self</span>) -&gt; Response {
+        <span class="kw">match </span><span class="self">self </span>{
+            IncomingRequestError::BodyConversionError(e) =&gt; e.into_response(),
+            IncomingRequestError::ConversionError(e) =&gt; e.into_response(),
+        }
+    }
+}
 
 <span class="doccomment">/// A trait for any type that can be constructor from a `Request`
 </span><span class="kw">pub trait </span>TryFromRequest {
@@ -440,7 +656,9 @@
 </span><span class="kw">impl</span>&lt;B: TryFromBody&gt; TryNonRequestFromRequest <span class="kw">for </span>hyperium::Request&lt;B&gt; {
     <span class="kw">type </span>Error = B::Error;
     <span class="kw">fn </span>try_from_request(req: Request) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
-        <span class="kw">let </span><span class="kw-2">mut </span>builder = hyperium::Request::builder().uri(req.uri).method(req.method);
+        <span class="kw">let </span><span class="kw-2">mut </span>builder = hyperium::Request::builder()
+            .uri(req.path_and_query)
+            .method(req.method);
         <span class="kw">for </span>(n, v) <span class="kw">in </span>req.headers {
             builder = builder.header(n, v);
         }
@@ -459,6 +677,9 @@
             <span class="kw">super</span>::Method::Patch =&gt; hyperium::Method::PATCH,
             <span class="kw">super</span>::Method::Head =&gt; hyperium::Method::HEAD,
             <span class="kw">super</span>::Method::Options =&gt; hyperium::Method::OPTIONS,
+            <span class="kw">super</span>::Method::Connect =&gt; hyperium::Method::CONNECT,
+            <span class="kw">super</span>::Method::Trace =&gt; hyperium::Method::TRACE,
+            <span class="kw">super</span>::Method::Other(o) =&gt; hyperium::Method::from_bytes(o.as_bytes()).expect(<span class="string">&quot;TODO&quot;</span>),
         }
     }
 }
@@ -484,12 +705,7 @@
         <span class="kw">let </span>headers = <span class="self">self
             </span>.headers()
             .into_iter()
-            .map(|(n, v)| {
-                (
-                    n.as_str().to_owned(),
-                    String::from_utf8_lossy(v.as_bytes()).into_owned(),
-                )
-            })
+            .map(|(n, v)| (n.as_str().to_owned(), v.as_bytes().to_owned()))
             .collect();
         Response::new_with_headers(
             <span class="self">self</span>.status().as_u16(),
@@ -519,8 +735,8 @@
         }
         Response {
             status: <span class="number">500</span>,
-            headers: <span class="prelude-val">None</span>,
-            body: <span class="prelude-val">Some</span>(body.as_bytes().to_vec()),
+            headers: Default::default(),
+            body: body.as_bytes().to_vec(),
         }
     }
 }
@@ -536,8 +752,8 @@
         }
         Response {
             status: <span class="number">500</span>,
-            headers: <span class="prelude-val">None</span>,
-            body: <span class="prelude-val">Some</span>(body.as_bytes().to_vec()),
+            headers: Default::default(),
+            body: body.as_bytes().to_vec(),
         }
     }
 }
@@ -585,43 +801,43 @@
 <span class="doccomment">/// A trait for any type that can be turned into a `Response` body
 </span><span class="kw">pub trait </span>IntoBody {
     <span class="doccomment">/// Turn `self` into a `Response` body
-    </span><span class="kw">fn </span>into_body(<span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt;;
+    </span><span class="kw">fn </span>into_body(<span class="self">self</span>) -&gt; Vec&lt;u8&gt;;
 }
 
 <span class="kw">impl</span>&lt;T: IntoBody&gt; IntoBody <span class="kw">for </span><span class="prelude-ty">Option</span>&lt;T&gt; {
-    <span class="kw">fn </span>into_body(<span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt; {
-        <span class="self">self</span>.and_then(|b| IntoBody::into_body(b))
+    <span class="kw">fn </span>into_body(<span class="self">self</span>) -&gt; Vec&lt;u8&gt; {
+        <span class="self">self</span>.map(|b| IntoBody::into_body(b)).unwrap_or_default()
     }
 }
 
 <span class="kw">impl </span>IntoBody <span class="kw">for </span>Vec&lt;u8&gt; {
-    <span class="kw">fn </span>into_body(<span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt; {
-        <span class="prelude-val">Some</span>(<span class="self">self</span>)
-    }
+    <span class="kw">fn </span>into_body(<span class="self">self</span>) -&gt; Vec&lt;u8&gt; {
+        <span class="self">self
+    </span>}
 }
 
 <span class="attr">#[cfg(feature = <span class="string">&quot;http&quot;</span>)]
 </span><span class="kw">impl </span>IntoBody <span class="kw">for </span>bytes::Bytes {
-    <span class="kw">fn </span>into_body(<span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt; {
-        <span class="prelude-val">Some</span>(<span class="self">self</span>.to_vec())
+    <span class="kw">fn </span>into_body(<span class="self">self</span>) -&gt; Vec&lt;u8&gt; {
+        <span class="self">self</span>.to_vec()
     }
 }
 
 <span class="kw">impl </span>IntoBody <span class="kw">for </span>() {
-    <span class="kw">fn </span>into_body(<span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt; {
-        <span class="prelude-val">None
-    </span>}
+    <span class="kw">fn </span>into_body(<span class="self">self</span>) -&gt; Vec&lt;u8&gt; {
+        Default::default()
+    }
 }
 
 <span class="kw">impl </span>IntoBody <span class="kw">for </span><span class="kw-2">&amp;</span>str {
-    <span class="kw">fn </span>into_body(<span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt; {
-        <span class="prelude-val">Some</span>(<span class="self">self</span>.to_owned().into_bytes())
+    <span class="kw">fn </span>into_body(<span class="self">self</span>) -&gt; Vec&lt;u8&gt; {
+        <span class="self">self</span>.to_owned().into_bytes()
     }
 }
 
 <span class="kw">impl </span>IntoBody <span class="kw">for </span>String {
-    <span class="kw">fn </span>into_body(<span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt; {
-        <span class="prelude-val">Some</span>(<span class="self">self</span>.to_owned().into_bytes())
+    <span class="kw">fn </span>into_body(<span class="self">self</span>) -&gt; Vec&lt;u8&gt; {
+        <span class="self">self</span>.to_owned().into_bytes()
     }
 }
 
@@ -630,7 +846,7 @@
     <span class="doccomment">/// The error encountered if conversion fails
     </span><span class="kw">type </span>Error: IntoResponse;
     <span class="doccomment">/// Convert from a body to `Self` or fail
-    </span><span class="kw">fn </span>try_from_body(body: <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt;
+    </span><span class="kw">fn </span>try_from_body(body: Vec&lt;u8&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt;
     <span class="kw">where
         </span><span class="self">Self</span>: Sized;
 }
@@ -638,21 +854,18 @@
 <span class="kw">impl</span>&lt;T: TryFromBody&gt; TryFromBody <span class="kw">for </span><span class="prelude-ty">Option</span>&lt;T&gt; {
     <span class="kw">type </span>Error = T::Error;
 
-    <span class="kw">fn </span>try_from_body(body: <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt;
+    <span class="kw">fn </span>try_from_body(body: Vec&lt;u8&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt;
     <span class="kw">where
         </span><span class="self">Self</span>: Sized,
     {
-        <span class="prelude-val">Ok</span>(<span class="kw">match </span>body {
-            <span class="prelude-val">None </span>=&gt; <span class="prelude-val">None</span>,
-            <span class="prelude-val">Some</span>(v) =&gt; <span class="prelude-val">Some</span>(TryFromBody::try_from_body(<span class="prelude-val">Some</span>(v))<span class="question-mark">?</span>),
-        })
+        <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(TryFromBody::try_from_body(body)<span class="question-mark">?</span>))
     }
 }
 
 <span class="kw">impl</span>&lt;T: FromBody&gt; TryFromBody <span class="kw">for </span>T {
     <span class="kw">type </span>Error = std::convert::Infallible;
 
-    <span class="kw">fn </span>try_from_body(body: <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt;
+    <span class="kw">fn </span>try_from_body(body: Vec&lt;u8&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt;
     <span class="kw">where
         </span><span class="self">Self</span>: Sized,
     {
@@ -663,20 +876,20 @@
 <span class="kw">impl </span>TryFromBody <span class="kw">for </span>String {
     <span class="kw">type </span>Error = NonUtf8BodyError;
 
-    <span class="kw">fn </span>try_from_body(body: <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt;
+    <span class="kw">fn </span>try_from_body(body: Vec&lt;u8&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt;
     <span class="kw">where
         </span><span class="self">Self</span>: Sized,
     {
-        String::from_utf8(body.unwrap_or_default()).map_err(|<span class="kw">_</span>| NonUtf8BodyError)
+        String::from_utf8(body).map_err(|<span class="kw">_</span>| NonUtf8BodyError)
     }
 }
 
 <span class="attr">#[cfg(feature = <span class="string">&quot;json&quot;</span>)]
 </span><span class="kw">impl</span>&lt;T: serde::de::DeserializeOwned&gt; TryFromBody <span class="kw">for </span><span class="kw">super</span>::Json&lt;T&gt; {
     <span class="kw">type </span>Error = <span class="kw">super</span>::JsonBodyError;
-    <span class="kw">fn </span>try_from_body(body: <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
+    <span class="kw">fn </span>try_from_body(body: Vec&lt;u8&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
         <span class="prelude-val">Ok</span>(<span class="kw">super</span>::Json(
-            serde_json::from_slice(<span class="kw-2">&amp;</span>body.unwrap_or_default()).map_err(<span class="kw">super</span>::JsonBodyError)<span class="question-mark">?</span>,
+            serde_json::from_slice(<span class="kw-2">&amp;</span>body).map_err(<span class="kw">super</span>::JsonBodyError)<span class="question-mark">?</span>,
         ))
     }
 }
@@ -684,23 +897,23 @@
 <span class="doccomment">/// A trait from converting from a body
 </span><span class="kw">pub trait </span>FromBody {
     <span class="doccomment">/// Convert from a body into the type
-    </span><span class="kw">fn </span>from_body(body: <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt;) -&gt; <span class="self">Self</span>;
+    </span><span class="kw">fn </span>from_body(body: Vec&lt;u8&gt;) -&gt; <span class="self">Self</span>;
 }
 
 <span class="kw">impl </span>FromBody <span class="kw">for </span>Vec&lt;u8&gt; {
-    <span class="kw">fn </span>from_body(body: <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt;) -&gt; <span class="self">Self </span>{
-        body.unwrap_or_default()
+    <span class="kw">fn </span>from_body(body: Vec&lt;u8&gt;) -&gt; <span class="self">Self </span>{
+        body
     }
 }
 
 <span class="kw">impl </span>FromBody <span class="kw">for </span>() {
-    <span class="kw">fn </span>from_body(_body: <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt;) -&gt; <span class="self">Self </span>{}
+    <span class="kw">fn </span>from_body(_body: Vec&lt;u8&gt;) -&gt; <span class="self">Self </span>{}
 }
 
 <span class="attr">#[cfg(feature = <span class="string">&quot;http&quot;</span>)]
 </span><span class="kw">impl </span>FromBody <span class="kw">for </span>bytes::Bytes {
-    <span class="kw">fn </span>from_body(body: <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt;) -&gt; <span class="self">Self </span>{
-        Into::into(body.unwrap_or_default())
+    <span class="kw">fn </span>from_body(body: Vec&lt;u8&gt;) -&gt; <span class="self">Self </span>{
+        Into::into(body)
     }
 }
 
@@ -709,7 +922,7 @@
     <span class="doccomment">/// The type of error if the conversion fails
     </span><span class="kw">type </span>Error;
     <span class="doccomment">/// Turn `self` into an Error
-    </span><span class="kw">fn </span>try_into_body(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt;, <span class="self">Self</span>::Error&gt;;
+    </span><span class="kw">fn </span>try_into_body(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;u8&gt;, <span class="self">Self</span>::Error&gt;;
 }
 
 <span class="kw">impl</span>&lt;B&gt; TryIntoBody <span class="kw">for </span>B
@@ -718,13 +931,13 @@
 {
     <span class="kw">type </span>Error = std::convert::Infallible;
 
-    <span class="kw">fn </span>try_into_body(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt;, <span class="self">Self</span>::Error&gt; {
+    <span class="kw">fn </span>try_into_body(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;u8&gt;, <span class="self">Self</span>::Error&gt; {
         <span class="prelude-val">Ok</span>(<span class="self">self</span>.into_body())
     }
 }
 
 <span class="attr">#[cfg(feature = <span class="string">&quot;http&quot;</span>)]
-</span><span class="kw">impl</span>&lt;B&gt; TryFrom&lt;hyperium::Request&lt;B&gt;&gt; <span class="kw">for </span>Request
+</span><span class="kw">impl</span>&lt;B&gt; TryFrom&lt;hyperium::Request&lt;B&gt;&gt; <span class="kw">for </span>OutgoingRequest
 <span class="kw">where
     </span>B: TryIntoBody,
     B::Error: std::error::Error + Send + Sync + <span class="lifetime">&#39;static</span>,
@@ -744,32 +957,55 @@
         <span class="kw">let </span>headers = req
             .headers()
             .into_iter()
-            .map(|(n, v)| {
-                (
-                    n.as_str().to_owned(),
-                    String::from_utf8_lossy(v.as_bytes()).into_owned(),
-                )
-            })
-            .collect();
-        <span class="prelude-val">Ok</span>(Request {
-            method,
-            uri: req.uri().to_string(),
-            headers,
-            params: Vec::new(),
-            body: B::try_into_body(req.into_body())<span class="question-mark">?</span>,
-        })
+            .map(|(n, v)| (n.as_str().to_owned(), v.as_bytes().to_owned()))
+            .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+        <span class="prelude-val">Ok</span>(OutgoingRequest::new(
+            <span class="kw-2">&amp;</span>method,
+            req.uri().path_and_query().map(|p| p.as_str()),
+            req.uri()
+                .scheme()
+                .map(|s| <span class="kw">match </span>s.as_str() {
+                    <span class="string">&quot;http&quot; </span>=&gt; <span class="kw">super</span>::Scheme::Http,
+                    <span class="string">&quot;https&quot; </span>=&gt; <span class="kw">super</span>::Scheme::Https,
+                    s =&gt; <span class="kw">super</span>::Scheme::Other(s.to_owned()),
+                })
+                .as_ref(),
+            req.uri().authority().map(|a| a.as_str()),
+            <span class="kw-2">&amp;</span>Fields::new(<span class="kw-2">&amp;</span>headers),
+        ))
+    }
+}
+
+<span class="attr">#[async_trait]
+</span><span class="doccomment">/// TODO
+</span><span class="kw">pub trait </span>TryFromIncomingResponse {
+    <span class="doccomment">/// TODO
+    </span><span class="kw">type </span>Error;
+    <span class="doccomment">/// TODO
+    </span><span class="kw">async fn </span>try_from_incoming_response(resp: IncomingResponse) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt;
+    <span class="kw">where
+        </span><span class="self">Self</span>: Sized;
+}
+
+<span class="attr">#[async_trait]
+</span><span class="kw">impl </span>TryFromIncomingResponse <span class="kw">for </span>IncomingResponse {
+    <span class="kw">type </span>Error = std::convert::Infallible;
+    <span class="kw">async fn </span>try_from_incoming_response(resp: IncomingResponse) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
+        <span class="prelude-val">Ok</span>(resp)
     }
 }
 
 <span class="attr">#[cfg(feature = <span class="string">&quot;http&quot;</span>)]
-</span><span class="kw">impl</span>&lt;B: TryFromBody&gt; TryFrom&lt;Response&gt; <span class="kw">for </span>hyperium::Response&lt;B&gt; {
+#[async_trait]
+</span><span class="kw">impl</span>&lt;B: TryFromBody&gt; TryFromIncomingResponse <span class="kw">for </span>hyperium::Response&lt;B&gt; {
     <span class="kw">type </span>Error = B::Error;
-    <span class="kw">fn </span>try_from(resp: Response) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
-        <span class="kw">let </span><span class="kw-2">mut </span>builder = hyperium::Response::builder().status(resp.status);
-        <span class="kw">for </span>(n, v) <span class="kw">in </span>resp.headers.unwrap_or_default() {
+    <span class="kw">async fn </span>try_from_incoming_response(resp: IncomingResponse) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>builder = hyperium::Response::builder().status(resp.status());
+        <span class="kw">for </span>(n, v) <span class="kw">in </span>resp.headers().entries() {
             builder = builder.header(n, v);
         }
-        <span class="prelude-val">Ok</span>(builder.body(B::try_from_body(resp.body)<span class="question-mark">?</span>).unwrap())
+        <span class="kw">let </span>body = resp.into_body().<span class="kw">await</span>.expect(<span class="string">&quot;TODO&quot;</span>);
+        <span class="prelude-val">Ok</span>(builder.body(B::try_from_body(body)<span class="question-mark">?</span>).unwrap())
     }
 }
 </code></pre></div></section></main></body></html>

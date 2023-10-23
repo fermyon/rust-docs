@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"trait":["FromBody","IntoBody","IntoResponse","IntoStatusCode","TryFromBody","TryFromRequest","TryIntoBody","TryNonRequestFromRequest"]};
+window.SIDEBAR_ITEMS = {"enum":["IncomingRequestError"],"trait":["FromBody","IntoBody","IntoResponse","IntoStatusCode","TryFromBody","TryFromIncomingRequest","TryFromIncomingResponse","TryFromRequest","TryIntoBody","TryNonRequestFromRequest"]};
