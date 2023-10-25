@@ -615,6 +615,25 @@
 <a href="#615" id="615">615</a>
 <a href="#616" id="616">616</a>
 <a href="#617" id="617">617</a>
+<a href="#618" id="618">618</a>
+<a href="#619" id="619">619</a>
+<a href="#620" id="620">620</a>
+<a href="#621" id="621">621</a>
+<a href="#622" id="622">622</a>
+<a href="#623" id="623">623</a>
+<a href="#624" id="624">624</a>
+<a href="#625" id="625">625</a>
+<a href="#626" id="626">626</a>
+<a href="#627" id="627">627</a>
+<a href="#628" id="628">628</a>
+<a href="#629" id="629">629</a>
+<a href="#630" id="630">630</a>
+<a href="#631" id="631">631</a>
+<a href="#632" id="632">632</a>
+<a href="#633" id="633">633</a>
+<a href="#634" id="634">634</a>
+<a href="#635" id="635">635</a>
+<a href="#636" id="636">636</a>
 </pre></div><pre class="rust"><code><span class="doccomment">/// Traits for converting between the various types
 </span><span class="kw">pub mod </span>conversions;
 
@@ -625,8 +644,12 @@
 
 <span class="kw">use </span><span class="self">self</span>::conversions::TryFromIncomingResponse;
 
+<span class="kw">use </span><span class="kw">super</span>::wit::wasi::http::types;
 <span class="attr">#[doc(inline)]
-</span><span class="kw">pub use </span><span class="kw">super</span>::wit::wasi::http::types::<span class="kw-2">*</span>;
+</span><span class="kw">pub use </span>types::{
+    Error, Fields, Headers, IncomingRequest, IncomingResponse, Method, OutgoingBody,
+    OutgoingRequest, OutgoingResponse, Scheme, StatusCode, Trailers,
+};
 
 <span class="doccomment">/// A unified request object that can represent both incoming and outgoing requests.
 ///
@@ -1072,7 +1095,22 @@
     }
 }
 
+<span class="doccomment">/// The out param for setting an `OutgoingResponse`
+</span><span class="kw">pub struct </span>ResponseOutparam(types::ResponseOutparam);
+
 <span class="kw">impl </span>ResponseOutparam {
+    <span class="attr">#[doc(hidden)]
+    </span><span class="comment">// This is needed for the macro so we can transfrom the macro&#39;s
+    // `ResponseOutparam` to this `ResponseOutparam`
+    </span><span class="kw">pub unsafe fn </span>from_handle(handle: u32) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>(types::ResponseOutparam::from_handle(handle))
+    }
+
+    <span class="doccomment">/// Set the outgoing response
+    </span><span class="kw">pub fn </span>set(<span class="self">self</span>, response: OutgoingResponse) {
+        types::ResponseOutparam::set(<span class="self">self</span>.<span class="number">0</span>, <span class="prelude-val">Ok</span>(response));
+    }
+
     <span class="doccomment">/// Set with the outgoing response and the supplied buffer
     ///
     /// Will panic if response body has already been taken
@@ -1083,7 +1121,7 @@
     ) -&gt; anyhow::Result&lt;()&gt; {
         <span class="kw">use </span>futures::SinkExt;
         <span class="kw">let </span><span class="kw-2">mut </span>body = response.take_body();
-        ResponseOutparam::set(<span class="self">self</span>, <span class="prelude-val">Ok</span>(response));
+        <span class="self">self</span>.set(response);
         body.send(buffer).<span class="kw">await
     </span>}
 }
