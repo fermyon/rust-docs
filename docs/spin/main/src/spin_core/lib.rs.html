@@ -595,7 +595,7 @@
             </span>.max_component_instance_size(
                 env(<span class="string">&quot;SPIN_WASMTIME_INSTANCE_SIZE&quot;</span>, (<span class="number">10 </span>* MB) <span class="kw">as </span>u32) <span class="kw">as </span>usize
             )
-            .max_tables_per_component(env(<span class="string">&quot;SPIN_WASMTIME_INSTANCE_TABLES&quot;</span>, <span class="number">2</span>))
+            .max_tables_per_component(env(<span class="string">&quot;SPIN_WASMTIME_INSTANCE_TABLES&quot;</span>, <span class="number">20</span>))
             .table_elements(env(<span class="string">&quot;SPIN_WASMTIME_INSTANCE_TABLE_ELEMENTS&quot;</span>, <span class="number">30_000</span>))
             <span class="comment">// The number of memories an instance can have effectively limits the number of inner components
             // a composed component can have (since each inner component has its own memory). We default to 32 for now, and
