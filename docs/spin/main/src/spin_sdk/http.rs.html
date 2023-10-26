@@ -634,6 +634,11 @@
 <a href="#634" id="634">634</a>
 <a href="#635" id="635">635</a>
 <a href="#636" id="636">636</a>
+<a href="#637" id="637">637</a>
+<a href="#638" id="638">638</a>
+<a href="#639" id="639">639</a>
+<a href="#640" id="640">640</a>
+<a href="#641" id="641">641</a>
 </pre></div><pre class="rust"><code><span class="doccomment">/// Traits for converting between the various types
 </span><span class="kw">pub mod </span>conversions;
 
@@ -1123,6 +1128,11 @@
         <span class="kw">let </span><span class="kw-2">mut </span>body = response.take_body();
         <span class="self">self</span>.set(response);
         body.send(buffer).<span class="kw">await
+    </span>}
+
+    <span class="doccomment">/// Return the inner, `wit-bindgen`-generated instance
+    </span><span class="kw">pub fn </span>into_inner(<span class="self">self</span>) -&gt; types::ResponseOutparam {
+        <span class="self">self</span>.<span class="number">0
     </span>}
 }
 
