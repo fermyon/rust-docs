@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["DbDataType","DbValue","Error","MysqlError","ParameterValue"],"struct":["Column","Connection","RowSet"],"trait":["Decode"],"type":["Row"]};
+window.SIDEBAR_ITEMS = {"enum":["DbDataType","DbValue","Error","ParameterValue"],"struct":["Column","Connection","RowSet"],"trait":["Decode"],"type":["MysqlError","Row"]};
