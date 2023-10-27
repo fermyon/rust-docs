@@ -31,9 +31,11 @@
 <a href="#31" id="31">31</a>
 <a href="#32" id="32">32</a>
 <a href="#33" id="33">33</a>
+<a href="#34" id="34">34</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>wasmtime_wasi::preview2::{pipe::MemoryOutputPipe, HostOutputStream};
 
 <span class="doccomment">/// An in-memory stdio output buffer.
+</span><span class="attr">#[derive(Clone)]
 </span><span class="kw">pub struct </span>OutputBuffer(MemoryOutputPipe);
 
 <span class="kw">impl </span>OutputBuffer {
