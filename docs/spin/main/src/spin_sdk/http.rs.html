@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `sdk/rust/src/http.rs`."><title>http.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-9ee3a5e31a2afa3e.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_sdk" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0-nightly (aa1a71e9e 2023-10-26)" data-channel="nightly" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f34af1a0ee6bacd.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `sdk/rust/src/http.rs`."><title>http.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-9ee3a5e31a2afa3e.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_sdk" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0-nightly (2f1bd0729 2023-10-27)" data-channel="nightly" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f34af1a0ee6bacd.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -639,6 +639,68 @@
 <a href="#639" id="639">639</a>
 <a href="#640" id="640">640</a>
 <a href="#641" id="641">641</a>
+<a href="#642" id="642">642</a>
+<a href="#643" id="643">643</a>
+<a href="#644" id="644">644</a>
+<a href="#645" id="645">645</a>
+<a href="#646" id="646">646</a>
+<a href="#647" id="647">647</a>
+<a href="#648" id="648">648</a>
+<a href="#649" id="649">649</a>
+<a href="#650" id="650">650</a>
+<a href="#651" id="651">651</a>
+<a href="#652" id="652">652</a>
+<a href="#653" id="653">653</a>
+<a href="#654" id="654">654</a>
+<a href="#655" id="655">655</a>
+<a href="#656" id="656">656</a>
+<a href="#657" id="657">657</a>
+<a href="#658" id="658">658</a>
+<a href="#659" id="659">659</a>
+<a href="#660" id="660">660</a>
+<a href="#661" id="661">661</a>
+<a href="#662" id="662">662</a>
+<a href="#663" id="663">663</a>
+<a href="#664" id="664">664</a>
+<a href="#665" id="665">665</a>
+<a href="#666" id="666">666</a>
+<a href="#667" id="667">667</a>
+<a href="#668" id="668">668</a>
+<a href="#669" id="669">669</a>
+<a href="#670" id="670">670</a>
+<a href="#671" id="671">671</a>
+<a href="#672" id="672">672</a>
+<a href="#673" id="673">673</a>
+<a href="#674" id="674">674</a>
+<a href="#675" id="675">675</a>
+<a href="#676" id="676">676</a>
+<a href="#677" id="677">677</a>
+<a href="#678" id="678">678</a>
+<a href="#679" id="679">679</a>
+<a href="#680" id="680">680</a>
+<a href="#681" id="681">681</a>
+<a href="#682" id="682">682</a>
+<a href="#683" id="683">683</a>
+<a href="#684" id="684">684</a>
+<a href="#685" id="685">685</a>
+<a href="#686" id="686">686</a>
+<a href="#687" id="687">687</a>
+<a href="#688" id="688">688</a>
+<a href="#689" id="689">689</a>
+<a href="#690" id="690">690</a>
+<a href="#691" id="691">691</a>
+<a href="#692" id="692">692</a>
+<a href="#693" id="693">693</a>
+<a href="#694" id="694">694</a>
+<a href="#695" id="695">695</a>
+<a href="#696" id="696">696</a>
+<a href="#697" id="697">697</a>
+<a href="#698" id="698">698</a>
+<a href="#699" id="699">699</a>
+<a href="#700" id="700">700</a>
+<a href="#701" id="701">701</a>
+<a href="#702" id="702">702</a>
+<a href="#703" id="703">703</a>
 </pre></div><pre class="rust"><code><span class="doccomment">/// Traits for converting between the various types
 </span><span class="kw">pub mod </span>conversions;
 
@@ -646,15 +708,16 @@
 
 <span class="attr">#[doc(inline)]
 </span><span class="kw">pub use </span>conversions::IntoResponse;
-
-<span class="kw">use </span><span class="self">self</span>::conversions::TryFromIncomingResponse;
-
-<span class="kw">use </span><span class="kw">super</span>::wit::wasi::http::types;
 <span class="attr">#[doc(inline)]
 </span><span class="kw">pub use </span>types::{
     Error, Fields, Headers, IncomingRequest, IncomingResponse, Method, OutgoingBody,
     OutgoingRequest, OutgoingResponse, Scheme, StatusCode, Trailers,
 };
+
+<span class="kw">use </span><span class="self">self</span>::conversions::{TryFromIncomingResponse, TryIntoOutgoingRequest};
+<span class="kw">use </span><span class="kw">super</span>::wit::wasi::http::types;
+<span class="kw">use </span><span class="kw">crate</span>::wit::wasi::io::streams;
+<span class="kw">use </span>futures::SinkExt;
 
 <span class="doccomment">/// A unified request object that can represent both incoming and outgoing requests.
 ///
@@ -747,6 +810,34 @@
                 .ok(),
             uri,
         )
+    }
+
+    <span class="doccomment">/// Whether the request is an HTTPS request
+    </span><span class="kw">fn </span>is_https(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="self">self</span>.uri
+            .<span class="number">0
+            </span>.as_ref()
+            .and_then(|u| u.scheme())
+            .map(|s| s == <span class="kw-2">&amp;</span>hyperium::uri::Scheme::HTTPS)
+            .unwrap_or(<span class="bool-val">true</span>)
+    }
+
+    <span class="doccomment">/// The URI&#39;s authority
+    </span><span class="kw">fn </span>authority(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
+        <span class="self">self</span>.uri
+            .<span class="number">0
+            </span>.as_ref()
+            .and_then(|u| u.authority())
+            .map(|a| a.as_str())
+    }
+
+    <span class="doccomment">/// The request path and query combined
+    </span><span class="kw">pub fn </span>path_and_query(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
+        <span class="self">self</span>.uri
+            .<span class="number">0
+            </span>.as_ref()
+            .and_then(|u| u.path_and_query())
+            .map(|s| s.as_str())
     }
 }
 
@@ -1051,12 +1142,12 @@
     /// # Panics
     ///
     /// Panics if the body was already consumed.
-    </span><span class="kw">pub fn </span>into_body_stream(<span class="self">self</span>) -&gt; <span class="kw">impl </span>futures::Stream&lt;Item = anyhow::Result&lt;Vec&lt;u8&gt;&gt;&gt; {
+    </span><span class="kw">pub fn </span>into_body_stream(<span class="self">self</span>) -&gt; <span class="kw">impl </span>futures::Stream&lt;Item = <span class="prelude-ty">Result</span>&lt;Vec&lt;u8&gt;, streams::Error&gt;&gt; {
         executor::incoming_body(<span class="self">self</span>.consume().expect(<span class="string">&quot;request body was already consumed&quot;</span>))
     }
 
     <span class="doccomment">/// Return a `Vec&lt;u8&gt;` of the body or fails
-    </span><span class="kw">pub async fn </span>into_body(<span class="self">self</span>) -&gt; anyhow::Result&lt;Vec&lt;u8&gt;&gt; {
+    </span><span class="kw">pub async fn </span>into_body(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;u8&gt;, streams::Error&gt; {
         <span class="kw">use </span>futures::TryStreamExt;
         <span class="kw">let </span><span class="kw-2">mut </span>stream = <span class="self">self</span>.into_body_stream();
         <span class="kw">let </span><span class="kw-2">mut </span>body = Vec::new();
@@ -1073,12 +1164,12 @@
     /// # Panics
     ///
     /// Panics if the body was already consumed.
-    </span><span class="kw">pub fn </span>into_body_stream(<span class="self">self</span>) -&gt; <span class="kw">impl </span>futures::Stream&lt;Item = anyhow::Result&lt;Vec&lt;u8&gt;&gt;&gt; {
+    </span><span class="kw">pub fn </span>into_body_stream(<span class="self">self</span>) -&gt; <span class="kw">impl </span>futures::Stream&lt;Item = <span class="prelude-ty">Result</span>&lt;Vec&lt;u8&gt;, streams::Error&gt;&gt; {
         executor::incoming_body(<span class="self">self</span>.consume().expect(<span class="string">&quot;response body was already consumed&quot;</span>))
     }
 
     <span class="doccomment">/// Return a `Vec&lt;u8&gt;` of the body or fails
-    </span><span class="kw">pub async fn </span>into_body(<span class="self">self</span>) -&gt; anyhow::Result&lt;Vec&lt;u8&gt;&gt; {
+    </span><span class="kw">pub async fn </span>into_body(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;u8&gt;, streams::Error&gt; {
         <span class="kw">use </span>futures::TryStreamExt;
         <span class="kw">let </span><span class="kw-2">mut </span>stream = <span class="self">self</span>.into_body_stream();
         <span class="kw">let </span><span class="kw-2">mut </span>body = Vec::new();
@@ -1095,8 +1186,19 @@
     /// # Panics
     ///
     /// Panics if the body was already taken.
-    </span><span class="kw">pub fn </span>take_body(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>futures::Sink&lt;Vec&lt;u8&gt;, Error = anyhow::Error&gt; {
+    </span><span class="kw">pub fn </span>take_body(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>futures::Sink&lt;Vec&lt;u8&gt;, Error = Error&gt; {
         executor::outgoing_body(<span class="self">self</span>.write().expect(<span class="string">&quot;response body was already taken&quot;</span>))
+    }
+}
+
+<span class="kw">impl </span>OutgoingRequest {
+    <span class="doccomment">/// Construct a `Sink` which writes chunks to the body of the specified response.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the body was already taken.
+    </span><span class="kw">pub fn </span>take_body(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>futures::Sink&lt;Vec&lt;u8&gt;, Error = Error&gt; {
+        executor::outgoing_body(<span class="self">self</span>.write().expect(<span class="string">&quot;request body was already taken&quot;</span>))
     }
 }
 
@@ -1123,8 +1225,7 @@
         <span class="self">self</span>,
         response: OutgoingResponse,
         buffer: Vec&lt;u8&gt;,
-    ) -&gt; anyhow::Result&lt;()&gt; {
-        <span class="kw">use </span>futures::SinkExt;
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>body = response.take_body();
         <span class="self">self</span>.set(response);
         body.send(buffer).<span class="kw">await
@@ -1137,20 +1238,35 @@
 }
 
 <span class="doccomment">/// Send an outgoing request
+///
+/// If `request`` is an `OutgoingRequest` and you are streaming the body to the
+/// outgoing request body sink, you need to ensure it is dropped before awaiting this function.
 </span><span class="kw">pub async fn </span>send&lt;I, O&gt;(request: I) -&gt; <span class="prelude-ty">Result</span>&lt;O, SendError&gt;
 <span class="kw">where
-    </span>I: TryInto&lt;OutgoingRequest&gt;,
+    </span>I: TryIntoOutgoingRequest,
     I::Error: Into&lt;Box&lt;<span class="kw">dyn </span>std::error::Error + Send + Sync&gt;&gt; + <span class="lifetime">&#39;static</span>,
     O: TryFromIncomingResponse,
     O::Error: Into&lt;Box&lt;<span class="kw">dyn </span>std::error::Error + Send + Sync&gt;&gt; + <span class="lifetime">&#39;static</span>,
 {
-    <span class="kw">let </span>response = executor::outgoing_request_send(
-        request
-            .try_into()
-            .map_err(|e| SendError::RequestConversion(e.into()))<span class="question-mark">?</span>,
-    )
-    .<span class="kw">await
-    </span>.map_err(SendError::Http)<span class="question-mark">?</span>;
+    <span class="kw">let </span>(request, body_buffer) = I::try_into_outgoing_request(request)
+        .map_err(|e| SendError::RequestConversion(e.into()))<span class="question-mark">?</span>;
+    <span class="kw">let </span>response = <span class="kw">if let </span><span class="prelude-val">Some</span>(body_buffer) = body_buffer {
+        <span class="comment">// It is part of the contract of the trait that implementors of `TryIntoOutgoingRequest`
+        // do not call `OutgoingRequest::write`` if they return a buffered body.
+        </span><span class="kw">let </span><span class="kw-2">mut </span>body_sink = request.take_body();
+        <span class="kw">let </span>response = executor::outgoing_request_send(request);
+        body_sink
+            .send(body_buffer)
+            .<span class="kw">await
+            </span>.map_err(|e| SendError::Http(Error::UnexpectedError(e.to_string())))<span class="question-mark">?</span>;
+        <span class="comment">// The body sink needs to be dropped before we await the response, otherwise we deadlock
+        </span>drop(body_sink);
+        response.<span class="kw">await
+    </span>} <span class="kw">else </span>{
+        executor::outgoing_request_send(request).<span class="kw">await
+    </span>}
+    .map_err(SendError::Http)<span class="question-mark">?</span>;
+
     TryFromIncomingResponse::try_from_incoming_response(response)
         .<span class="kw">await
         </span>.map_err(|e: O::Error| SendError::ResponseConversion(e.into()))
@@ -1254,6 +1370,14 @@
         Response::new(<span class="number">400</span>, msg.map(|m| m.into_bytes()))
     }
 }
+
+<span class="kw">impl </span>std::fmt::Display <span class="kw">for </span>streams::Error {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
+        f.write_str(<span class="kw-2">&amp;</span><span class="self">self</span>.to_debug_string())
+    }
+}
+
+<span class="kw">impl </span>std::error::Error <span class="kw">for </span>streams::Error {}
 
 <span class="attr">#[cfg(test)]
 </span><span class="kw">mod </span>tests {
