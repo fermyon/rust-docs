@@ -626,6 +626,24 @@
 <a href="#626" id="626">626</a>
 <a href="#627" id="627">627</a>
 <a href="#628" id="628">628</a>
+<a href="#629" id="629">629</a>
+<a href="#630" id="630">630</a>
+<a href="#631" id="631">631</a>
+<a href="#632" id="632">632</a>
+<a href="#633" id="633">633</a>
+<a href="#634" id="634">634</a>
+<a href="#635" id="635">635</a>
+<a href="#636" id="636">636</a>
+<a href="#637" id="637">637</a>
+<a href="#638" id="638">638</a>
+<a href="#639" id="639">639</a>
+<a href="#640" id="640">640</a>
+<a href="#641" id="641">641</a>
+<a href="#642" id="642">642</a>
+<a href="#643" id="643">643</a>
+<a href="#644" id="644">644</a>
+<a href="#645" id="645">645</a>
+<a href="#646" id="646">646</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::collections::HashMap;
 
 <span class="kw">use </span>async_trait::async_trait;
@@ -811,6 +829,22 @@
             <span class="kw">super</span>::Method::Connect =&gt; hyperium::Method::CONNECT,
             <span class="kw">super</span>::Method::Trace =&gt; hyperium::Method::TRACE,
             <span class="kw">super</span>::Method::Other(o) =&gt; hyperium::Method::from_bytes(o.as_bytes()).expect(<span class="string">&quot;TODO&quot;</span>),
+        }
+    }
+}
+<span class="kw">impl </span>From&lt;hyperium::Method&gt; <span class="kw">for </span><span class="kw">super</span>::Method {
+    <span class="kw">fn </span>from(method: hyperium::Method) -&gt; <span class="self">Self </span>{
+        <span class="kw">match </span>method {
+            hyperium::Method::GET =&gt; <span class="kw">super</span>::Method::Get,
+            hyperium::Method::POST =&gt; <span class="kw">super</span>::Method::Post,
+            hyperium::Method::PUT =&gt; <span class="kw">super</span>::Method::Put,
+            hyperium::Method::DELETE =&gt; <span class="kw">super</span>::Method::Delete,
+            hyperium::Method::PATCH =&gt; <span class="kw">super</span>::Method::Patch,
+            hyperium::Method::HEAD =&gt; <span class="kw">super</span>::Method::Head,
+            hyperium::Method::OPTIONS =&gt; <span class="kw">super</span>::Method::Options,
+            hyperium::Method::CONNECT =&gt; <span class="kw">super</span>::Method::Connect,
+            hyperium::Method::TRACE =&gt; <span class="kw">super</span>::Method::Trace,
+            m =&gt; <span class="kw">super</span>::Method::Other(m.as_str().into()),
         }
     }
 }
@@ -1176,23 +1210,13 @@
 {
     <span class="kw">type </span>Error = anyhow::Error;
     <span class="kw">fn </span>try_into_outgoing_request(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;(OutgoingRequest, <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt;), <span class="self">Self</span>::Error&gt; {
-        <span class="kw">let </span>method = <span class="kw">match </span><span class="self">self</span>.method() {
-            <span class="kw-2">&amp;</span>hyperium::Method::GET =&gt; <span class="kw">super</span>::Method::Get,
-            <span class="kw-2">&amp;</span>hyperium::Method::POST =&gt; <span class="kw">super</span>::Method::Post,
-            <span class="kw-2">&amp;</span>hyperium::Method::PUT =&gt; <span class="kw">super</span>::Method::Put,
-            <span class="kw-2">&amp;</span>hyperium::Method::DELETE =&gt; <span class="kw">super</span>::Method::Delete,
-            <span class="kw-2">&amp;</span>hyperium::Method::PATCH =&gt; <span class="kw">super</span>::Method::Patch,
-            <span class="kw-2">&amp;</span>hyperium::Method::HEAD =&gt; <span class="kw">super</span>::Method::Head,
-            <span class="kw-2">&amp;</span>hyperium::Method::OPTIONS =&gt; <span class="kw">super</span>::Method::Options,
-            m =&gt; <span class="macro">anyhow::bail!</span>(<span class="string">&quot;Unsupported method: {m}&quot;</span>),
-        };
         <span class="kw">let </span>headers = <span class="self">self
             </span>.headers()
             .into_iter()
             .map(|(n, v)| (n.as_str().to_owned(), v.as_bytes().to_owned()))
             .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
         <span class="kw">let </span>request = OutgoingRequest::new(
-            <span class="kw-2">&amp;</span>method,
+            <span class="kw-2">&amp;</span><span class="self">self</span>.method().clone().into(),
             <span class="self">self</span>.uri().path_and_query().map(|p| p.as_str()),
             <span class="self">self</span>.uri()
                 .scheme()
@@ -1252,6 +1276,18 @@
         }
         <span class="kw">let </span>body = resp.into_body().<span class="kw">await</span>.expect(<span class="string">&quot;TODO&quot;</span>);
         <span class="prelude-val">Ok</span>(builder.body(B::try_from_body(body)<span class="question-mark">?</span>).unwrap())
+    }
+}
+
+<span class="attr">#[cfg(feature = <span class="string">&quot;http&quot;</span>)]
+</span><span class="kw">impl</span>&lt;B: IntoBody&gt; From&lt;hyperium::Request&lt;B&gt;&gt; <span class="kw">for </span>Request {
+    <span class="kw">fn </span>from(value: hyperium::Request&lt;B&gt;) -&gt; <span class="self">Self </span>{
+        Request::builder()
+            .method(value.method().clone().into())
+            .uri(value.uri().to_string())
+            .headers(value.headers())
+            .body(value.into_body())
+            .build()
     }
 }
 </code></pre></div></section></main></body></html>
