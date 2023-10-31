@@ -730,6 +730,14 @@
 <a href="#730" id="730">730</a>
 <a href="#731" id="731">731</a>
 <a href="#732" id="732">732</a>
+<a href="#733" id="733">733</a>
+<a href="#734" id="734">734</a>
+<a href="#735" id="735">735</a>
+<a href="#736" id="736">736</a>
+<a href="#737" id="737">737</a>
+<a href="#738" id="738">738</a>
+<a href="#739" id="739">739</a>
+<a href="#740" id="740">740</a>
 </pre></div><pre class="rust"><code><span class="doccomment">/// Traits for converting between the various types
 </span><span class="kw">pub mod </span>conversions;
 
@@ -1222,14 +1230,24 @@
     /// # Panics
     ///
     /// Panics if the body was already consumed.
-    </span><span class="kw">pub fn </span>into_body_stream(<span class="self">self</span>) -&gt; <span class="kw">impl </span>futures::Stream&lt;Item = <span class="prelude-ty">Result</span>&lt;Vec&lt;u8&gt;, streams::Error&gt;&gt; {
+    </span><span class="comment">// TODO: This should ideally take ownership of `self` and be called `into_body_stream` (i.e. symmetric with
+    // `IncomingRequest::into_body_stream`).  However, as of this writing, `wasmtime-wasi-http` is implemented in
+    // such a way that dropping an `IncomingResponse` will cause the request to be cancelled, meaning the caller
+    // won&#39;t necessarily have a chance to send the request body if they haven&#39;t started doing so yet (or, if they
+    // have started, they might not be able to finish before the connection is closed).  See
+    // https://github.com/bytecodealliance/wasmtime/issues/7413 for details.
+    </span><span class="kw">pub fn </span>take_body_stream(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>futures::Stream&lt;Item = <span class="prelude-ty">Result</span>&lt;Vec&lt;u8&gt;, streams::Error&gt;&gt; {
         executor::incoming_body(<span class="self">self</span>.consume().expect(<span class="string">&quot;response body was already consumed&quot;</span>))
     }
 
     <span class="doccomment">/// Return a `Vec&lt;u8&gt;` of the body or fails
+    ///
+    /// # Panics
+    ///
+    /// Panics if the body was already consumed.
     </span><span class="kw">pub async fn </span>into_body(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;u8&gt;, streams::Error&gt; {
         <span class="kw">use </span>futures::TryStreamExt;
-        <span class="kw">let </span><span class="kw-2">mut </span>stream = <span class="self">self</span>.into_body_stream();
+        <span class="kw">let </span><span class="kw-2">mut </span>stream = <span class="self">self</span>.take_body_stream();
         <span class="kw">let </span><span class="kw-2">mut </span>body = Vec::new();
         <span class="kw">while let </span><span class="prelude-val">Some</span>(chunk) = stream.try_next().<span class="kw">await</span><span class="question-mark">? </span>{
             body.extend(chunk);
@@ -1296,9 +1314,6 @@
 }
 
 <span class="doccomment">/// Send an outgoing request
-///
-/// If `request`` is an `OutgoingRequest` and you are streaming the body to the
-/// outgoing request body sink, you need to ensure it is dropped before awaiting this function.
 </span><span class="kw">pub async fn </span>send&lt;I, O&gt;(request: I) -&gt; <span class="prelude-ty">Result</span>&lt;O, SendError&gt;
 <span class="kw">where
     </span>I: TryIntoOutgoingRequest,
@@ -1312,18 +1327,19 @@
         <span class="comment">// It is part of the contract of the trait that implementors of `TryIntoOutgoingRequest`
         // do not call `OutgoingRequest::write`` if they return a buffered body.
         </span><span class="kw">let </span><span class="kw-2">mut </span>body_sink = request.take_body();
-        <span class="kw">let </span>response = executor::outgoing_request_send(request);
+        <span class="kw">let </span>response = executor::outgoing_request_send(request)
+            .<span class="kw">await
+            </span>.map_err(SendError::Http)<span class="question-mark">?</span>;
         body_sink
             .send(body_buffer)
             .<span class="kw">await
             </span>.map_err(|e| SendError::Http(Error::UnexpectedError(e.to_string())))<span class="question-mark">?</span>;
-        <span class="comment">// The body sink needs to be dropped before we await the response, otherwise we deadlock
-        </span>drop(body_sink);
-        response.<span class="kw">await
-    </span>} <span class="kw">else </span>{
-        executor::outgoing_request_send(request).<span class="kw">await
-    </span>}
-    .map_err(SendError::Http)<span class="question-mark">?</span>;
+        response
+    } <span class="kw">else </span>{
+        executor::outgoing_request_send(request)
+            .<span class="kw">await
+            </span>.map_err(SendError::Http)<span class="question-mark">?
+    </span>};
 
     TryFromIncomingResponse::try_from_incoming_response(response)
         .<span class="kw">await
