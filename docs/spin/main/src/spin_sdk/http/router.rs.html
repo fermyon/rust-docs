@@ -406,7 +406,14 @@
 <a href="#406" id="406">406</a>
 <a href="#407" id="407">407</a>
 <a href="#408" id="408">408</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">super</span>::conversions::{IntoResponse, TryFromRequest};
+<a href="#409" id="409">409</a>
+<a href="#410" id="410">410</a>
+<a href="#411" id="411">411</a>
+<a href="#412" id="412">412</a>
+<a href="#413" id="413">413</a>
+<a href="#414" id="414">414</a>
+<a href="#415" id="415">415</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">super</span>::conversions::{IntoResponse, TryFromRequest, TryIntoRequest};
 <span class="kw">use super</span>::{responses, Method, Request, Response};
 <span class="kw">use </span>routefinder::{Captures, Router <span class="kw">as </span>MethodRouter};
 <span class="kw">use </span>std::{collections::HashMap, fmt::Display};
@@ -447,8 +454,15 @@
 
 <span class="kw">impl </span>Router {
     <span class="doccomment">/// Dispatches a request to the appropriate handler along with the URI parameters.
-    </span><span class="kw">pub fn </span>handle&lt;R: Into&lt;Request&gt;&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, request: R) -&gt; Response {
-        <span class="kw">let </span>request = request.into();
+    </span><span class="kw">pub fn </span>handle&lt;R&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, request: R) -&gt; Response
+    <span class="kw">where
+        </span>R: TryIntoRequest,
+        R::Error: IntoResponse,
+    {
+        <span class="kw">let </span>request = <span class="kw">match </span>R::try_into_request(request) {
+            <span class="prelude-val">Ok</span>(r) =&gt; r,
+            <span class="prelude-val">Err</span>(e) =&gt; <span class="kw">return </span>e.into_response(),
+        };
         <span class="kw">let </span>method = request.method.clone();
         <span class="kw">let </span>path = <span class="kw-2">&amp;</span>request.path();
         <span class="kw">let </span>RouteMatch { params, handler } = <span class="self">self</span>.find(path, method);
