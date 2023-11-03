@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Error"],"fn":["generate_embeddings","infer"],"struct":["EmbeddingsResult","EmbeddingsUsage","InferencingParams","InferencingResult","InferencingUsage"],"type":["EmbeddingModel","InferencingModel"]};

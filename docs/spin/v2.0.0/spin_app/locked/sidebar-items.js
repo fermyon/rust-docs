@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["ContentPath","ContentRef","LockedApp","LockedComponent","LockedComponentSource","LockedTrigger","Variable"],"type":["LockedMap"]};
