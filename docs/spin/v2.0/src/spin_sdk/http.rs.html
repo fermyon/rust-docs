@@ -737,7 +737,6 @@
 <a href="#737" id="737">737</a>
 <a href="#738" id="738">738</a>
 <a href="#739" id="739">739</a>
-<a href="#740" id="740">740</a>
 </pre></div><pre class="rust"><code><span class="doccomment">/// Traits for converting between the various types
 </span><span class="kw">pub mod </span>conversions;
 
@@ -1103,7 +1102,7 @@
     </span><span class="kw">pub fn </span>as_str(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
         <span class="kw">match </span><span class="kw-2">&amp;</span><span class="self">self</span>.inner {
             HeaderValueRep::String(s) =&gt; <span class="prelude-val">Some</span>(s),
-            HeaderValueRep::Bytes(<span class="kw">_</span>) =&gt; <span class="prelude-val">None</span>,
+            HeaderValueRep::Bytes(b) =&gt; std::str::from_utf8(b).ok(),
         }
     }
 
@@ -1327,15 +1326,14 @@
         <span class="comment">// It is part of the contract of the trait that implementors of `TryIntoOutgoingRequest`
         // do not call `OutgoingRequest::write`` if they return a buffered body.
         </span><span class="kw">let </span><span class="kw-2">mut </span>body_sink = request.take_body();
-        <span class="kw">let </span>response = executor::outgoing_request_send(request)
-            .<span class="kw">await
-            </span>.map_err(SendError::Http)<span class="question-mark">?</span>;
+        <span class="kw">let </span>response = executor::outgoing_request_send(request);
         body_sink
             .send(body_buffer)
             .<span class="kw">await
             </span>.map_err(|e| SendError::Http(Error::UnexpectedError(e.to_string())))<span class="question-mark">?</span>;
-        response
-    } <span class="kw">else </span>{
+        drop(body_sink);
+        response.<span class="kw">await</span>.map_err(SendError::Http)<span class="question-mark">?
+    </span>} <span class="kw">else </span>{
         executor::outgoing_request_send(request)
             .<span class="kw">await
             </span>.map_err(SendError::Http)<span class="question-mark">?
