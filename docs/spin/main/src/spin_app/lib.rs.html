@@ -386,16 +386,6 @@
 <a href="#386" id="386">386</a>
 <a href="#387" id="387">387</a>
 <a href="#388" id="388">388</a>
-<a href="#389" id="389">389</a>
-<a href="#390" id="390">390</a>
-<a href="#391" id="391">391</a>
-<a href="#392" id="392">392</a>
-<a href="#393" id="393">393</a>
-<a href="#394" id="394">394</a>
-<a href="#395" id="395">395</a>
-<a href="#396" id="396">396</a>
-<a href="#397" id="397">397</a>
-<a href="#398" id="398">398</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Spin internal application interfaces
 //!
 //! This crate contains interfaces to Spin application configuration to be used
@@ -542,26 +532,18 @@
     }
 }
 
-<span class="comment">// Implementation detail of [`App::inert`]; &quot;sealed&quot; to prevent external impls.
-</span><span class="kw">mod </span>private {
-    <span class="kw">pub trait </span>MaybeLoader {}
-}
-<span class="kw">use </span>private::MaybeLoader;
-
-<span class="kw">impl </span>MaybeLoader <span class="kw">for </span>AppLoader {}
-
 <span class="doccomment">/// An `App` holds loaded configuration for a Spin application.
 ///
-/// Note: The `L: MaybeLoader` param is an implementation detail to support the
+/// Note: The `L` param is an implementation detail to support the
 /// [`App::inert`] constructor.
 </span><span class="attr">#[derive(Debug)]
-</span><span class="kw">pub struct </span>App&lt;<span class="lifetime">&#39;a</span>, L: MaybeLoader = AppLoader&gt; {
+</span><span class="kw">pub struct </span>App&lt;<span class="lifetime">&#39;a</span>, L = AppLoader&gt; {
     loader: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>L,
     uri: String,
     locked: LockedApp,
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, L: MaybeLoader&gt; App&lt;<span class="lifetime">&#39;a</span>, L&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, L&gt; App&lt;<span class="lifetime">&#39;a</span>, L&gt; {
     <span class="doccomment">/// Deserializes typed metadata for this app.
     ///
     /// Returns `Ok(None)` if there is no metadata for the given `key` and an
@@ -631,15 +613,13 @@
     }
 }
 
-<span class="doccomment">/// Used in the return type of [`App::inert`] to prevent the use of methods
-/// that require an [`AppLoader`].
+<span class="attr">#[doc(hidden)]
 </span><span class="kw">pub struct </span>InertLoader;
-<span class="kw">impl </span>MaybeLoader <span class="kw">for </span>InertLoader {}
 
 <span class="kw">impl </span>App&lt;<span class="lifetime">&#39;static</span>, InertLoader&gt; {
     <span class="doccomment">/// Return an &quot;inert&quot; App which does not have an associated [`AppLoader`]
     /// and cannot be used to instantiate components.
-    </span><span class="kw">pub fn </span>inert(locked: LockedApp) -&gt; App&lt;<span class="lifetime">&#39;static</span>, InertLoader&gt; {
+    </span><span class="kw">pub fn </span>inert(locked: LockedApp) -&gt; <span class="self">Self </span>{
         App {
             loader: <span class="kw-2">&amp;</span>InertLoader,
             uri: <span class="string">&quot;&quot;</span>.into(),
@@ -649,13 +629,13 @@
 }
 
 <span class="doccomment">/// An `AppComponent` holds configuration for a Spin application component.
-</span><span class="kw">pub struct </span>AppComponent&lt;<span class="lifetime">&#39;a</span>, L: MaybeLoader = AppLoader&gt; {
+</span><span class="kw">pub struct </span>AppComponent&lt;<span class="lifetime">&#39;a</span>, L = AppLoader&gt; {
     <span class="doccomment">/// The app this component belongs to.
     </span><span class="kw">pub </span>app: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>App&lt;<span class="lifetime">&#39;a</span>, L&gt;,
     locked: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>LockedComponent,
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, L: MaybeLoader&gt; AppComponent&lt;<span class="lifetime">&#39;a</span>, L&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, L&gt; AppComponent&lt;<span class="lifetime">&#39;a</span>, L&gt; {
     <span class="doccomment">/// Returns this component&#39;s app-unique ID.
     </span><span class="kw">pub fn </span>id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>str {
         <span class="kw-2">&amp;</span><span class="self">self</span>.locked.id
@@ -750,13 +730,13 @@
 }
 
 <span class="doccomment">/// An `AppTrigger` holds configuration for a Spin application trigger.
-</span><span class="kw">pub struct </span>AppTrigger&lt;<span class="lifetime">&#39;a</span>, L: MaybeLoader = AppLoader&gt; {
+</span><span class="kw">pub struct </span>AppTrigger&lt;<span class="lifetime">&#39;a</span>, L = AppLoader&gt; {
     <span class="doccomment">/// The app this trigger belongs to.
     </span><span class="kw">pub </span>app: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>App&lt;<span class="lifetime">&#39;a</span>, L&gt;,
     locked: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>LockedTrigger,
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, L: MaybeLoader&gt; AppTrigger&lt;<span class="lifetime">&#39;a</span>, L&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, L&gt; AppTrigger&lt;<span class="lifetime">&#39;a</span>, L&gt; {
     <span class="doccomment">/// Returns this trigger&#39;s app-unique ID.
     </span><span class="kw">pub fn </span>id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>str {
         <span class="kw-2">&amp;</span><span class="self">self</span>.locked.id
