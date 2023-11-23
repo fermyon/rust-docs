@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `sdk/rust/src/http/conversions.rs`."><title>conversions.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-9ee3a5e31a2afa3e.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="spin_sdk" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (2f8d81f9d 2023-11-21)" data-channel="nightly" data-search-js="search-21db098bdc95be9e.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-f06f02fd918e3bb3.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `sdk/rust/src/http/conversions.rs`."><title>conversions.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-9ee3a5e31a2afa3e.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="spin_sdk" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (1e9dda77b 2023-11-22)" data-channel="nightly" data-search-js="search-f4028ef4dd0903c7.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-f06f02fd918e3bb3.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -661,15 +661,6 @@
 <a href="#661" id="661">661</a>
 <a href="#662" id="662">662</a>
 <a href="#663" id="663">663</a>
-<a href="#664" id="664">664</a>
-<a href="#665" id="665">665</a>
-<a href="#666" id="666">666</a>
-<a href="#667" id="667">667</a>
-<a href="#668" id="668">668</a>
-<a href="#669" id="669">669</a>
-<a href="#670" id="670">670</a>
-<a href="#671" id="671">671</a>
-<a href="#672" id="672">672</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::collections::HashMap;
 
 <span class="kw">use </span>async_trait::async_trait;
@@ -828,8 +819,7 @@
         </span><span class="self">Self</span>: Sized;
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;http&quot;</span>)]
-</span><span class="kw">impl</span>&lt;B: TryFromBody&gt; TryNonRequestFromRequest <span class="kw">for </span>hyperium::Request&lt;B&gt; {
+<span class="kw">impl</span>&lt;B: TryFromBody&gt; TryNonRequestFromRequest <span class="kw">for </span>hyperium::Request&lt;B&gt; {
     <span class="kw">type </span>Error = B::Error;
     <span class="kw">fn </span>try_from_request(req: Request) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>builder = hyperium::Request::builder()
@@ -842,8 +832,7 @@
     }
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;http&quot;</span>)]
-</span><span class="kw">impl </span>From&lt;<span class="kw">super</span>::Method&gt; <span class="kw">for </span>hyperium::Method {
+<span class="kw">impl </span>From&lt;<span class="kw">super</span>::Method&gt; <span class="kw">for </span>hyperium::Method {
     <span class="kw">fn </span>from(method: <span class="kw">super</span>::Method) -&gt; <span class="self">Self </span>{
         <span class="kw">match </span>method {
             <span class="kw">super</span>::Method::Get =&gt; hyperium::Method::GET,
@@ -888,8 +877,7 @@
     </span>}
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;http&quot;</span>)]
-</span><span class="kw">impl</span>&lt;B&gt; IntoResponse <span class="kw">for </span>hyperium::Response&lt;B&gt;
+<span class="kw">impl</span>&lt;B&gt; IntoResponse <span class="kw">for </span>hyperium::Response&lt;B&gt;
 <span class="kw">where
     </span>B: IntoBody,
 {
@@ -978,8 +966,7 @@
     </span>}
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;http&quot;</span>)]
-</span><span class="kw">impl </span>IntoStatusCode <span class="kw">for </span>hyperium::StatusCode {
+<span class="kw">impl </span>IntoStatusCode <span class="kw">for </span>hyperium::StatusCode {
     <span class="kw">fn </span>into_status_code(<span class="self">self</span>) -&gt; u16 {
         <span class="self">self</span>.as_u16()
     }
@@ -1055,8 +1042,7 @@
     </span>}
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;http&quot;</span>)]
-</span><span class="kw">impl </span>IntoBody <span class="kw">for </span>bytes::Bytes {
+<span class="kw">impl </span>IntoBody <span class="kw">for </span>bytes::Bytes {
     <span class="kw">fn </span>into_body(<span class="self">self</span>) -&gt; Vec&lt;u8&gt; {
         <span class="self">self</span>.to_vec()
     }
@@ -1147,8 +1133,7 @@
     <span class="kw">fn </span>from_body(_body: Vec&lt;u8&gt;) -&gt; <span class="self">Self </span>{}
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;http&quot;</span>)]
-</span><span class="kw">impl </span>FromBody <span class="kw">for </span>bytes::Bytes {
+<span class="kw">impl </span>FromBody <span class="kw">for </span>bytes::Bytes {
     <span class="kw">fn </span>from_body(body: Vec&lt;u8&gt;) -&gt; <span class="self">Self </span>{
         Into::into(body)
     }
@@ -1236,8 +1221,7 @@
     }
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;http&quot;</span>)]
-</span><span class="kw">impl</span>&lt;B&gt; TryIntoOutgoingRequest <span class="kw">for </span>hyperium::Request&lt;B&gt;
+<span class="kw">impl</span>&lt;B&gt; TryIntoOutgoingRequest <span class="kw">for </span>hyperium::Request&lt;B&gt;
 <span class="kw">where
     </span>B: TryIntoBody,
     B::Error: std::error::Error + Send + Sync + <span class="lifetime">&#39;static</span>,
@@ -1299,8 +1283,7 @@
     }
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;http&quot;</span>)]
-#[async_trait]
+<span class="attr">#[async_trait]
 </span><span class="kw">impl</span>&lt;B: TryFromBody&gt; TryFromIncomingResponse <span class="kw">for </span>hyperium::Response&lt;B&gt; {
     <span class="kw">type </span>Error = B::Error;
     <span class="kw">async fn </span>try_from_incoming_response(resp: IncomingResponse) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
@@ -1330,8 +1313,7 @@
     }
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;http&quot;</span>)]
-</span><span class="kw">impl</span>&lt;B: TryIntoBody&gt; TryIntoRequest <span class="kw">for </span>hyperium::Request&lt;B&gt; {
+<span class="kw">impl</span>&lt;B: TryIntoBody&gt; TryIntoRequest <span class="kw">for </span>hyperium::Request&lt;B&gt; {
     <span class="kw">type </span>Error = B::Error;
     <span class="kw">fn </span>try_into_request(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Request, <span class="self">Self</span>::Error&gt; {
         <span class="prelude-val">Ok</span>(Request::builder()
