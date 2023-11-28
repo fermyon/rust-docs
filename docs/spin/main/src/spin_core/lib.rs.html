@@ -484,6 +484,8 @@
 <a href="#484" id="484">484</a>
 <a href="#485" id="485">485</a>
 <a href="#486" id="486">486</a>
+<a href="#487" id="487">487</a>
+<a href="#488" id="488">488</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Spin core execution engine
 //!
 //! This crate provides low-level Wasm and WASI functionality required by Spin.
@@ -498,6 +500,7 @@
 <span class="kw">mod </span>limits;
 <span class="kw">mod </span>preview1;
 <span class="kw">mod </span>store;
+<span class="kw">pub mod </span>wasi_2023_10_18;
 
 <span class="kw">use </span>std::{path::PathBuf, sync::Arc, time::Duration};
 
@@ -752,6 +755,7 @@
         <span class="kw">let </span>engine = wasmtime::Engine::new(<span class="kw-2">&amp;</span>config.inner)<span class="question-mark">?</span>;
         <span class="kw">let </span>linker: Linker&lt;T&gt; = Linker::new(<span class="kw-2">&amp;</span>engine);
         <span class="kw">let </span><span class="kw-2">mut </span>module_linker = ModuleLinker::new(<span class="kw-2">&amp;</span>engine);
+
         wasmtime_wasi::tokio::add_to_linker(<span class="kw-2">&amp;mut </span>module_linker, |data| <span class="kw">match </span><span class="kw-2">&amp;mut </span>data.wasi {
             Wasi::Preview1(ctx) =&gt; ctx,
             Wasi::Preview2 { .. } =&gt; <span class="macro">panic!</span>(<span class="string">&quot;using WASI Preview 2 functions with Preview 1 store&quot;</span>),
