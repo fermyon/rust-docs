@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `sdk/rust/src/http/router.rs`."><title>router.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-c67e44d78ab2db17.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="spin_sdk" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (0e2dac837 2023-12-04)" data-channel="nightly" data-search-js="search-5a66c239c06b3a66.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `sdk/rust/src/http/router.rs`."><title>router.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-c67e44d78ab2db17.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="spin_sdk" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (e9013ac0e 2023-12-05)" data-channel="nightly" data-search-js="search-5a66c239c06b3a66.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -612,8 +612,8 @@
 <span class="attr">#[async_trait]
 </span><span class="kw">impl</span>&lt;F, Fut&gt; Handler <span class="kw">for </span>F
 <span class="kw">where
-    </span>F: Fn(Request, Params) -&gt; Fut + Send + Sync + <span class="lifetime">&#39;static</span>,
-    Fut: Future&lt;Output = Response&gt; + Send + <span class="lifetime">&#39;static</span>,
+    </span>F: Fn(Request, Params) -&gt; Fut + Send + Sync + <span class="lifetime">'static</span>,
+    Fut: Future&lt;Output = Response&gt; + Send + <span class="lifetime">'static</span>,
 {
     <span class="kw">async fn </span>handle(<span class="kw-2">&amp;</span><span class="self">self</span>, req: Request, params: Params) -&gt; Response {
         <span class="kw">let </span>fut = (<span class="self">self</span>)(req, params);
@@ -622,7 +622,7 @@
 }
 
 <span class="doccomment">/// Route parameters extracted from a URI that match a route pattern.
-</span><span class="kw">pub type </span>Params = Captures&lt;<span class="lifetime">&#39;static</span>, <span class="lifetime">&#39;static</span>&gt;;
+</span><span class="kw">pub type </span>Params = Captures&lt;<span class="lifetime">'static</span>, <span class="lifetime">'static</span>&gt;;
 
 <span class="doccomment">/// The Spin SDK HTTP router.
 </span><span class="kw">pub struct </span>Router {
@@ -637,20 +637,20 @@
 }
 
 <span class="kw">impl </span>Display <span class="kw">for </span>Router {
-    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
-        <span class="macro">writeln!</span>(f, <span class="string">&quot;Registered routes:&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; std::fmt::Result {
+        <span class="macro">writeln!</span>(f, <span class="string">"Registered routes:"</span>)<span class="question-mark">?</span>;
         <span class="kw">for </span>(method, router) <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.methods_map {
             <span class="kw">for </span>route <span class="kw">in </span>router.iter() {
-                <span class="macro">writeln!</span>(f, <span class="string">&quot;- {}: {}&quot;</span>, method, route.<span class="number">0</span>)<span class="question-mark">?</span>;
+                <span class="macro">writeln!</span>(f, <span class="string">"- {}: {}"</span>, method, route.<span class="number">0</span>)<span class="question-mark">?</span>;
             }
         }
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="kw">struct </span>RouteMatch&lt;<span class="lifetime">&#39;a</span>&gt; {
-    params: Captures&lt;<span class="lifetime">&#39;static</span>, <span class="lifetime">&#39;static</span>&gt;,
-    handler: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw">dyn </span>Handler,
+<span class="kw">struct </span>RouteMatch&lt;<span class="lifetime">'a</span>&gt; {
+    params: Captures&lt;<span class="lifetime">'static</span>, <span class="lifetime">'static</span>&gt;,
+    handler: <span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw">dyn </span>Handler,
 }
 
 <span class="kw">impl </span>Router {
@@ -679,7 +679,7 @@
         handler.handle(request, params).<span class="kw">await
     </span>}
 
-    <span class="kw">fn </span>find(<span class="kw-2">&amp;</span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, method: Method) -&gt; RouteMatch&lt;<span class="lifetime">&#39;_</span>&gt; {
+    <span class="kw">fn </span>find(<span class="kw-2">&amp;</span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, method: Method) -&gt; RouteMatch&lt;<span class="lifetime">'_</span>&gt; {
         <span class="kw">let </span>best_match = <span class="self">self
             </span>.methods_map
             .get(<span class="kw-2">&amp;</span>method)
@@ -711,8 +711,8 @@
         }
     }
 
-    <span class="comment">// Helper function to handle the case where a best match couldn&#39;t be resolved.
-    </span><span class="kw">fn </span>fail(<span class="kw-2">&amp;</span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, method: Method) -&gt; RouteMatch&lt;<span class="lifetime">&#39;_</span>&gt; {
+    <span class="comment">// Helper function to handle the case where a best match couldn't be resolved.
+    </span><span class="kw">fn </span>fail(<span class="kw-2">&amp;</span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, method: Method) -&gt; RouteMatch&lt;<span class="lifetime">'_</span>&gt; {
         <span class="comment">// First, filter all routers to determine if the path can match but the provided method is not allowed.
         </span><span class="kw">let </span>is_method_not_allowed = <span class="self">self
             </span>.methods_map
@@ -739,10 +739,10 @@
     <span class="doccomment">/// Register a handler at the path for all methods.
     </span><span class="kw">pub fn </span>any&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">&#39;static </span>+ Send + Sync,
-        Req: TryFromRequest + <span class="lifetime">&#39;static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">&#39;static</span>,
-        Resp: IntoResponse + <span class="lifetime">&#39;static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static </span>+ Send + Sync,
+        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
+        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
     {
         <span class="kw">let </span>handler = <span class="kw">move </span>|req, params| {
             <span class="kw">let </span>res = TryFromRequest::try_from_request(req).map(|r| handler(r, params));
@@ -760,11 +760,11 @@
     <span class="doccomment">/// Register an async handler at the path for all methods.
     </span><span class="kw">pub fn </span>any_async&lt;F, Fut, I, O&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(I, Params) -&gt; Fut + <span class="lifetime">&#39;static </span>+ Send + Sync,
-        Fut: Future&lt;Output = O&gt; + Send + <span class="lifetime">&#39;static</span>,
-        I: TryFromRequest + <span class="lifetime">&#39;static </span>+ Send,
-        I::Error: IntoResponse + Send + <span class="lifetime">&#39;static</span>,
-        O: IntoResponse + <span class="lifetime">&#39;static </span>+ Send,
+        </span>F: Fn(I, Params) -&gt; Fut + <span class="lifetime">'static </span>+ Send + Sync,
+        Fut: Future&lt;Output = O&gt; + Send + <span class="lifetime">'static</span>,
+        I: TryFromRequest + <span class="lifetime">'static </span>+ Send,
+        I::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
+        O: IntoResponse + <span class="lifetime">'static </span>+ Send,
     {
         <span class="kw">let </span>handler = <span class="kw">move </span>|req, params| {
             <span class="kw">let </span>res = TryFromRequest::try_from_request(req).map(|r| handler(r, params));
@@ -782,10 +782,10 @@
     <span class="doccomment">/// Register a handler at the path for the specified HTTP method.
     </span><span class="kw">pub fn </span>add&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, method: Method, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">&#39;static </span>+ Send + Sync,
-        Req: TryFromRequest + <span class="lifetime">&#39;static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">&#39;static</span>,
-        Resp: IntoResponse + <span class="lifetime">&#39;static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static </span>+ Send + Sync,
+        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
+        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
     {
         <span class="kw">let </span>handler = <span class="kw">move </span>|req, params| {
             <span class="kw">let </span>res = TryFromRequest::try_from_request(req).map(|r| handler(r, params));
@@ -803,11 +803,11 @@
     <span class="doccomment">/// Register an async handler at the path for the specified HTTP method.
     </span><span class="kw">pub fn </span>add_async&lt;F, Fut, I, O&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, method: Method, handler: F)
     <span class="kw">where
-        </span>F: Fn(I, Params) -&gt; Fut + <span class="lifetime">&#39;static </span>+ Send + Sync,
-        Fut: Future&lt;Output = O&gt; + Send + <span class="lifetime">&#39;static</span>,
-        I: TryFromRequest + <span class="lifetime">&#39;static </span>+ Send,
-        I::Error: IntoResponse + Send + <span class="lifetime">&#39;static</span>,
-        O: IntoResponse + <span class="lifetime">&#39;static </span>+ Send,
+        </span>F: Fn(I, Params) -&gt; Fut + <span class="lifetime">'static </span>+ Send + Sync,
+        Fut: Future&lt;Output = O&gt; + Send + <span class="lifetime">'static</span>,
+        I: TryFromRequest + <span class="lifetime">'static </span>+ Send,
+        I::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
+        O: IntoResponse + <span class="lifetime">'static </span>+ Send,
     {
         <span class="kw">let </span>handler = <span class="kw">move </span>|req, params| {
             <span class="kw">let </span>res = TryFromRequest::try_from_request(req).map(|r| handler(r, params));
@@ -829,10 +829,10 @@
     <span class="doccomment">/// Register a handler at the path for the HTTP GET method.
     </span><span class="kw">pub fn </span>get&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">&#39;static </span>+ Send + Sync,
-        Req: TryFromRequest + <span class="lifetime">&#39;static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">&#39;static</span>,
-        Resp: IntoResponse + <span class="lifetime">&#39;static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static </span>+ Send + Sync,
+        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
+        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
     {
         <span class="self">self</span>.add(path, Method::Get, handler)
     }
@@ -840,11 +840,11 @@
     <span class="doccomment">/// Register an async handler at the path for the HTTP GET method.
     </span><span class="kw">pub fn </span>get_async&lt;F, Fut, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">&#39;static </span>+ Send + Sync,
-        Fut: Future&lt;Output = Resp&gt; + Send + <span class="lifetime">&#39;static</span>,
-        Req: TryFromRequest + <span class="lifetime">&#39;static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">&#39;static</span>,
-        Resp: IntoResponse + <span class="lifetime">&#39;static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">'static </span>+ Send + Sync,
+        Fut: Future&lt;Output = Resp&gt; + Send + <span class="lifetime">'static</span>,
+        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
+        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
     {
         <span class="self">self</span>.add_async(path, Method::Get, handler)
     }
@@ -852,10 +852,10 @@
     <span class="doccomment">/// Register a handler at the path for the HTTP HEAD method.
     </span><span class="kw">pub fn </span>head&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">&#39;static </span>+ Send + Sync,
-        Req: TryFromRequest + <span class="lifetime">&#39;static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">&#39;static</span>,
-        Resp: IntoResponse + <span class="lifetime">&#39;static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static </span>+ Send + Sync,
+        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
+        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
     {
         <span class="self">self</span>.add(path, Method::Head, handler)
     }
@@ -863,11 +863,11 @@
     <span class="doccomment">/// Register an async handler at the path for the HTTP HEAD method.
     </span><span class="kw">pub fn </span>head_async&lt;F, Fut, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">&#39;static </span>+ Send + Sync,
-        Fut: Future&lt;Output = Resp&gt; + Send + <span class="lifetime">&#39;static</span>,
-        Req: TryFromRequest + <span class="lifetime">&#39;static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">&#39;static</span>,
-        Resp: IntoResponse + <span class="lifetime">&#39;static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">'static </span>+ Send + Sync,
+        Fut: Future&lt;Output = Resp&gt; + Send + <span class="lifetime">'static</span>,
+        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
+        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
     {
         <span class="self">self</span>.add_async(path, Method::Head, handler)
     }
@@ -875,10 +875,10 @@
     <span class="doccomment">/// Register a handler at the path for the HTTP POST method.
     </span><span class="kw">pub fn </span>post&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">&#39;static </span>+ Send + Sync,
-        Req: TryFromRequest + <span class="lifetime">&#39;static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">&#39;static</span>,
-        Resp: IntoResponse + <span class="lifetime">&#39;static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static </span>+ Send + Sync,
+        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
+        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
     {
         <span class="self">self</span>.add(path, Method::Post, handler)
     }
@@ -886,11 +886,11 @@
     <span class="doccomment">/// Register an async handler at the path for the HTTP POST method.
     </span><span class="kw">pub fn </span>post_async&lt;F, Fut, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">&#39;static </span>+ Send + Sync,
-        Fut: Future&lt;Output = Resp&gt; + Send + <span class="lifetime">&#39;static</span>,
-        Req: TryFromRequest + <span class="lifetime">&#39;static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">&#39;static</span>,
-        Resp: IntoResponse + <span class="lifetime">&#39;static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">'static </span>+ Send + Sync,
+        Fut: Future&lt;Output = Resp&gt; + Send + <span class="lifetime">'static</span>,
+        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
+        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
     {
         <span class="self">self</span>.add_async(path, Method::Post, handler)
     }
@@ -898,10 +898,10 @@
     <span class="doccomment">/// Register a handler at the path for the HTTP DELETE method.
     </span><span class="kw">pub fn </span>delete&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">&#39;static </span>+ Send + Sync,
-        Req: TryFromRequest + <span class="lifetime">&#39;static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">&#39;static</span>,
-        Resp: IntoResponse + <span class="lifetime">&#39;static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static </span>+ Send + Sync,
+        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
+        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
     {
         <span class="self">self</span>.add(path, Method::Delete, handler)
     }
@@ -909,11 +909,11 @@
     <span class="doccomment">/// Register an async handler at the path for the HTTP DELETE method.
     </span><span class="kw">pub fn </span>delete_async&lt;F, Fut, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">&#39;static </span>+ Send + Sync,
-        Fut: Future&lt;Output = Resp&gt; + Send + <span class="lifetime">&#39;static</span>,
-        Req: TryFromRequest + <span class="lifetime">&#39;static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">&#39;static</span>,
-        Resp: IntoResponse + <span class="lifetime">&#39;static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">'static </span>+ Send + Sync,
+        Fut: Future&lt;Output = Resp&gt; + Send + <span class="lifetime">'static</span>,
+        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
+        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
     {
         <span class="self">self</span>.add_async(path, Method::Delete, handler)
     }
@@ -921,10 +921,10 @@
     <span class="doccomment">/// Register a handler at the path for the HTTP PUT method.
     </span><span class="kw">pub fn </span>put&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">&#39;static </span>+ Send + Sync,
-        Req: TryFromRequest + <span class="lifetime">&#39;static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">&#39;static</span>,
-        Resp: IntoResponse + <span class="lifetime">&#39;static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static </span>+ Send + Sync,
+        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
+        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
     {
         <span class="self">self</span>.add(path, Method::Put, handler)
     }
@@ -932,11 +932,11 @@
     <span class="doccomment">/// Register an async handler at the path for the HTTP PUT method.
     </span><span class="kw">pub fn </span>put_async&lt;F, Fut, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">&#39;static </span>+ Send + Sync,
-        Fut: Future&lt;Output = Resp&gt; + Send + <span class="lifetime">&#39;static</span>,
-        Req: TryFromRequest + <span class="lifetime">&#39;static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">&#39;static</span>,
-        Resp: IntoResponse + <span class="lifetime">&#39;static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">'static </span>+ Send + Sync,
+        Fut: Future&lt;Output = Resp&gt; + Send + <span class="lifetime">'static</span>,
+        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
+        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
     {
         <span class="self">self</span>.add_async(path, Method::Put, handler)
     }
@@ -944,10 +944,10 @@
     <span class="doccomment">/// Register a handler at the path for the HTTP PATCH method.
     </span><span class="kw">pub fn </span>patch&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">&#39;static </span>+ Send + Sync,
-        Req: TryFromRequest + <span class="lifetime">&#39;static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">&#39;static</span>,
-        Resp: IntoResponse + <span class="lifetime">&#39;static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static </span>+ Send + Sync,
+        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
+        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
     {
         <span class="self">self</span>.add(path, Method::Patch, handler)
     }
@@ -955,11 +955,11 @@
     <span class="doccomment">/// Register an async handler at the path for the HTTP PATCH method.
     </span><span class="kw">pub fn </span>patch_async&lt;F, Fut, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">&#39;static </span>+ Send + Sync,
-        Fut: Future&lt;Output = Resp&gt; + Send + <span class="lifetime">&#39;static</span>,
-        Req: TryFromRequest + <span class="lifetime">&#39;static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">&#39;static</span>,
-        Resp: IntoResponse + <span class="lifetime">&#39;static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">'static </span>+ Send + Sync,
+        Fut: Future&lt;Output = Resp&gt; + Send + <span class="lifetime">'static</span>,
+        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
+        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
     {
         <span class="self">self</span>.add_async(path, Method::Patch, handler)
     }
@@ -967,10 +967,10 @@
     <span class="doccomment">/// Register a handler at the path for the HTTP OPTIONS method.
     </span><span class="kw">pub fn </span>options&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">&#39;static </span>+ Send + Sync,
-        Req: TryFromRequest + <span class="lifetime">&#39;static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">&#39;static</span>,
-        Resp: IntoResponse + <span class="lifetime">&#39;static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static </span>+ Send + Sync,
+        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
+        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
     {
         <span class="self">self</span>.add(path, Method::Options, handler)
     }
@@ -978,11 +978,11 @@
     <span class="doccomment">/// Register an async handler at the path for the HTTP OPTIONS method.
     </span><span class="kw">pub fn </span>options_async&lt;F, Fut, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">&#39;static </span>+ Send + Sync,
-        Fut: Future&lt;Output = Resp&gt; + Send + <span class="lifetime">&#39;static</span>,
-        Req: TryFromRequest + <span class="lifetime">&#39;static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">&#39;static</span>,
-        Resp: IntoResponse + <span class="lifetime">&#39;static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">'static </span>+ Send + Sync,
+        Fut: Future&lt;Output = Resp&gt; + Send + <span class="lifetime">'static</span>,
+        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
+        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
     {
         <span class="self">self</span>.add_async(path, Method::Options, handler)
     }
@@ -1051,7 +1051,7 @@
     }
 
     <span class="kw">fn </span>echo_param(_req: Request, params: Params) -&gt; Response {
-        <span class="kw">match </span>params.get(<span class="string">&quot;x&quot;</span>) {
+        <span class="kw">match </span>params.get(<span class="string">"x"</span>) {
             <span class="prelude-val">Some</span>(path) =&gt; Response::new(<span class="number">200</span>, path),
             <span class="prelude-val">None </span>=&gt; responses::not_found(),
         }
@@ -1060,9 +1060,9 @@
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_method_not_allowed() {
         <span class="kw">let </span><span class="kw-2">mut </span>router = Router::default();
-        router.get(<span class="string">&quot;/:x&quot;</span>, echo_param);
+        router.get(<span class="string">"/:x"</span>, echo_param);
 
-        <span class="kw">let </span>req = make_request(Method::Post, <span class="string">&quot;/foobar&quot;</span>);
+        <span class="kw">let </span>req = make_request(Method::Post, <span class="string">"/foobar"</span>);
         <span class="kw">let </span>res = router.handle(req);
         <span class="macro">assert_eq!</span>(res.status, hyperium::StatusCode::METHOD_NOT_ALLOWED);
     }
@@ -1074,9 +1074,9 @@
         }
 
         <span class="kw">let </span><span class="kw-2">mut </span>router = Router::default();
-        router.get(<span class="string">&quot;/h1/:param&quot;</span>, h1);
+        router.get(<span class="string">"/h1/:param"</span>, h1);
 
-        <span class="kw">let </span>req = make_request(Method::Get, <span class="string">&quot;/h1/&quot;</span>);
+        <span class="kw">let </span>req = make_request(Method::Get, <span class="string">"/h1/"</span>);
         <span class="kw">let </span>res = router.handle(req);
         <span class="macro">assert_eq!</span>(res.status, hyperium::StatusCode::NOT_FOUND);
     }
@@ -1084,29 +1084,29 @@
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_multi_param() {
         <span class="kw">fn </span>multiply(_req: Request, params: Params) -&gt; anyhow::Result&lt;Response&gt; {
-            <span class="kw">let </span>x: i64 = params.get(<span class="string">&quot;x&quot;</span>).unwrap().parse()<span class="question-mark">?</span>;
-            <span class="kw">let </span>y: i64 = params.get(<span class="string">&quot;y&quot;</span>).unwrap().parse()<span class="question-mark">?</span>;
-            <span class="prelude-val">Ok</span>(Response::new(<span class="number">200</span>, <span class="macro">format!</span>(<span class="string">&quot;{result}&quot;</span>, result = x * y)))
+            <span class="kw">let </span>x: i64 = params.get(<span class="string">"x"</span>).unwrap().parse()<span class="question-mark">?</span>;
+            <span class="kw">let </span>y: i64 = params.get(<span class="string">"y"</span>).unwrap().parse()<span class="question-mark">?</span>;
+            <span class="prelude-val">Ok</span>(Response::new(<span class="number">200</span>, <span class="macro">format!</span>(<span class="string">"{result}"</span>, result = x * y)))
         }
 
         <span class="kw">let </span><span class="kw-2">mut </span>router = Router::default();
-        router.get(<span class="string">&quot;/multiply/:x/:y&quot;</span>, multiply);
+        router.get(<span class="string">"/multiply/:x/:y"</span>, multiply);
 
-        <span class="kw">let </span>req = make_request(Method::Get, <span class="string">&quot;/multiply/2/4&quot;</span>);
+        <span class="kw">let </span>req = make_request(Method::Get, <span class="string">"/multiply/2/4"</span>);
         <span class="kw">let </span>res = router.handle(req);
 
-        <span class="macro">assert_eq!</span>(res.body, <span class="string">&quot;8&quot;</span>.to_owned().into_bytes());
+        <span class="macro">assert_eq!</span>(res.body, <span class="string">"8"</span>.to_owned().into_bytes());
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_param() {
         <span class="kw">let </span><span class="kw-2">mut </span>router = Router::default();
-        router.get(<span class="string">&quot;/:x&quot;</span>, echo_param);
+        router.get(<span class="string">"/:x"</span>, echo_param);
 
-        <span class="kw">let </span>req = make_request(Method::Get, <span class="string">&quot;/y&quot;</span>);
+        <span class="kw">let </span>req = make_request(Method::Get, <span class="string">"/y"</span>);
         <span class="kw">let </span>res = router.handle(req);
 
-        <span class="macro">assert_eq!</span>(res.body, <span class="string">&quot;y&quot;</span>.to_owned().into_bytes());
+        <span class="macro">assert_eq!</span>(res.body, <span class="string">"y"</span>.to_owned().into_bytes());
     }
 
     <span class="attr">#[test]
@@ -1119,31 +1119,31 @@
         }
 
         <span class="kw">let </span><span class="kw-2">mut </span>router = Router::default();
-        router.get(<span class="string">&quot;/*&quot;</span>, echo_wildcard);
+        router.get(<span class="string">"/*"</span>, echo_wildcard);
 
-        <span class="kw">let </span>req = make_request(Method::Get, <span class="string">&quot;/foo/bar&quot;</span>);
+        <span class="kw">let </span>req = make_request(Method::Get, <span class="string">"/foo/bar"</span>);
         <span class="kw">let </span>res = router.handle(req);
         <span class="macro">assert_eq!</span>(res.status, hyperium::StatusCode::OK);
-        <span class="macro">assert_eq!</span>(res.body, <span class="string">&quot;foo/bar&quot;</span>.to_owned().into_bytes());
+        <span class="macro">assert_eq!</span>(res.body, <span class="string">"foo/bar"</span>.to_owned().into_bytes());
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_wildcard_last_segment() {
         <span class="kw">let </span><span class="kw-2">mut </span>router = Router::default();
-        router.get(<span class="string">&quot;/:x/*&quot;</span>, echo_param);
+        router.get(<span class="string">"/:x/*"</span>, echo_param);
 
-        <span class="kw">let </span>req = make_request(Method::Get, <span class="string">&quot;/foo/bar&quot;</span>);
+        <span class="kw">let </span>req = make_request(Method::Get, <span class="string">"/foo/bar"</span>);
         <span class="kw">let </span>res = router.handle(req);
-        <span class="macro">assert_eq!</span>(res.body, <span class="string">&quot;foo&quot;</span>.to_owned().into_bytes());
+        <span class="macro">assert_eq!</span>(res.body, <span class="string">"foo"</span>.to_owned().into_bytes());
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_router_display() {
         <span class="kw">let </span><span class="kw-2">mut </span>router = Router::default();
-        router.get(<span class="string">&quot;/:x&quot;</span>, echo_param);
+        router.get(<span class="string">"/:x"</span>, echo_param);
 
-        <span class="kw">let </span>expected = <span class="string">&quot;Registered routes:\n- GET: /:x\n&quot;</span>;
-        <span class="kw">let </span>actual = <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, router);
+        <span class="kw">let </span>expected = <span class="string">"Registered routes:\n- GET: /:x\n"</span>;
+        <span class="kw">let </span>actual = <span class="macro">format!</span>(<span class="string">"{}"</span>, router);
 
         <span class="macro">assert_eq!</span>(actual.as_str(), expected);
     }
@@ -1151,21 +1151,21 @@
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_ambiguous_wildcard_vs_star() {
         <span class="kw">fn </span>h1(_req: Request, _params: Params) -&gt; anyhow::Result&lt;Response&gt; {
-            <span class="prelude-val">Ok</span>(Response::new(<span class="number">200</span>, <span class="string">&quot;one/two&quot;</span>))
+            <span class="prelude-val">Ok</span>(Response::new(<span class="number">200</span>, <span class="string">"one/two"</span>))
         }
 
         <span class="kw">fn </span>h2(_req: Request, _params: Params) -&gt; anyhow::Result&lt;Response&gt; {
-            <span class="prelude-val">Ok</span>(Response::new(<span class="number">200</span>, <span class="string">&quot;posts/*&quot;</span>))
+            <span class="prelude-val">Ok</span>(Response::new(<span class="number">200</span>, <span class="string">"posts/*"</span>))
         }
 
         <span class="kw">let </span><span class="kw-2">mut </span>router = Router::default();
-        router.get(<span class="string">&quot;/:one/:two&quot;</span>, h1);
-        router.get(<span class="string">&quot;/posts/*&quot;</span>, h2);
+        router.get(<span class="string">"/:one/:two"</span>, h1);
+        router.get(<span class="string">"/posts/*"</span>, h2);
 
-        <span class="kw">let </span>req = make_request(Method::Get, <span class="string">&quot;/posts/2&quot;</span>);
+        <span class="kw">let </span>req = make_request(Method::Get, <span class="string">"/posts/2"</span>);
         <span class="kw">let </span>res = router.handle(req);
 
-        <span class="macro">assert_eq!</span>(res.body, <span class="string">&quot;posts/*&quot;</span>.to_owned().into_bytes());
+        <span class="macro">assert_eq!</span>(res.body, <span class="string">"posts/*"</span>.to_owned().into_bytes());
     }
 }
 </code></pre></div></section></main></body></html>

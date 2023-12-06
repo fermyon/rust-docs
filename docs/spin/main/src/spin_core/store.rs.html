@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/core/src/store.rs`."><title>store.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-c67e44d78ab2db17.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (0e2dac837 2023-12-04)" data-channel="nightly" data-search-js="search-5a66c239c06b3a66.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/core/src/store.rs`."><title>store.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-c67e44d78ab2db17.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (e9013ac0e 2023-12-05)" data-channel="nightly" data-search-js="search-5a66c239c06b3a66.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -600,18 +600,18 @@
 <span class="doccomment">/// Wrapper for the Preview 1 and Preview 2 versions of `WasiCtx`.
 ///
 /// Currently, only WAGI uses Preview 1, while everything else uses Preview 2 (possibly via an adapter).  WAGI is
-/// stuck on Preview 1 and modules because there&#39;s no reliable way to wrap an arbitrary Preview 1 command in a
+/// stuck on Preview 1 and modules because there's no reliable way to wrap an arbitrary Preview 1 command in a
 /// component -- the Preview 1 -&gt; 2 adapter only works with modules that either export `canonical_abi_realloc`
 /// (e.g. native Spin apps) or use a recent version of `wasi-sdk`, which contains patches to allow the adapter to
 /// safely allocate memory via `memory.grow`.
 ///
 /// In theory, someone could build a WAGI app using a new-enough version of `wasi-sdk` and wrap it in a component
-/// using the adapter, but that wouldn&#39;t add any value beyond leaving it as a module, and any toolchain capable of
-/// natively producing components will be capable enough to produce native Spin apps, so we probably won&#39;t ever
+/// using the adapter, but that wouldn't add any value beyond leaving it as a module, and any toolchain capable of
+/// natively producing components will be capable enough to produce native Spin apps, so we probably won't ever
 /// support WAGI components.
 ///
 </span><span class="comment">// TODO: As of this writing, the plan is to merge the WASI Preview 1 and Preview 2 implementations together, at
-// which point we&#39;ll be able to avoid all the duplication here and below.
+// which point we'll be able to avoid all the duplication here and below.
 </span><span class="kw">pub enum </span>Wasi {
     <span class="doccomment">/// Preview 1 `WasiCtx`
     </span>Preview1(wasi_preview1::WasiCtx),
@@ -653,14 +653,14 @@
     ///
     /// This is a rough deadline; an instance will trap some time after this
     /// deadline, determined by [`EngineBuilder::epoch_tick_interval`] and
-    /// details of the system&#39;s thread scheduler.
+    /// details of the system's thread scheduler.
     ///
     /// See [`wasmtime::Store::set_epoch_deadline`](https://docs.rs/wasmtime/latest/wasmtime/struct.Store.html#method.set_epoch_deadline).
     </span><span class="kw">pub fn </span>set_deadline(<span class="kw-2">&amp;mut </span><span class="self">self</span>, deadline: Instant) {
         <span class="kw">let </span>now = Instant::now();
         <span class="kw">let </span>duration = deadline - now;
         <span class="kw">let </span>ticks = <span class="kw">if </span>duration.is_zero() {
-            <span class="macro">tracing::warn!</span>(<span class="string">&quot;Execution deadline set in past: {deadline:?} &lt; {now:?}&quot;</span>);
+            <span class="macro">tracing::warn!</span>(<span class="string">"Execution deadline set in past: {deadline:?} &lt; {now:?}"</span>);
             <span class="number">0
         </span>} <span class="kw">else </span>{
             <span class="kw">let </span>ticks = duration.as_micros() / <span class="self">self</span>.epoch_tick_interval.as_micros();
@@ -686,13 +686,13 @@
 <span class="kw">impl</span>&lt;T&gt; wasmtime::AsContext <span class="kw">for </span>Store&lt;T&gt; {
     <span class="kw">type </span>Data = Data&lt;T&gt;;
 
-    <span class="kw">fn </span>as_context(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; wasmtime::StoreContext&lt;<span class="lifetime">&#39;_</span>, <span class="self">Self</span>::Data&gt; {
+    <span class="kw">fn </span>as_context(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; wasmtime::StoreContext&lt;<span class="lifetime">'_</span>, <span class="self">Self</span>::Data&gt; {
         <span class="self">self</span>.inner.as_context()
     }
 }
 
 <span class="kw">impl</span>&lt;T&gt; wasmtime::AsContextMut <span class="kw">for </span>Store&lt;T&gt; {
-    <span class="kw">fn </span>as_context_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; wasmtime::StoreContextMut&lt;<span class="lifetime">&#39;_</span>, <span class="self">Self</span>::Data&gt; {
+    <span class="kw">fn </span>as_context_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; wasmtime::StoreContextMut&lt;<span class="lifetime">'_</span>, <span class="self">Self</span>::Data&gt; {
         <span class="self">self</span>.inner.as_context_mut()
     }
 }
@@ -748,7 +748,7 @@
     <span class="doccomment">/// Sets the WASI `stdin` descriptor to the given [`Read`]er.
     </span><span class="kw">pub fn </span>stdin_pipe(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
-        r: <span class="kw">impl </span>AsyncRead + Read + ReadReady + Send + Sync + Unpin + <span class="lifetime">&#39;static</span>,
+        r: <span class="kw">impl </span>AsyncRead + Read + ReadReady + Send + Sync + Unpin + <span class="lifetime">'static</span>,
     ) {
         <span class="self">self</span>.with_wasi(|wasi| <span class="kw">match </span>wasi {
             WasiCtxBuilder::Preview1(ctx) =&gt; {
@@ -780,13 +780,13 @@
                 <span class="prelude-val">Ok</span>(())
             }
             WasiCtxBuilder::Preview2(<span class="kw">_</span>) =&gt; <span class="prelude-val">Err</span>(<span class="macro">anyhow!</span>(
-                <span class="string">&quot;`Store::stdout` only supported with WASI Preview 1&quot;
+                <span class="string">"`Store::stdout` only supported with WASI Preview 1"
             </span>)),
         })
     }
 
     <span class="doccomment">/// Sets the WASI `stdout` descriptor to the given [`Write`]er.
-    </span><span class="kw">pub fn </span>stdout_pipe(<span class="kw-2">&amp;mut </span><span class="self">self</span>, w: <span class="kw">impl </span>AsyncWrite + Write + Send + Sync + Unpin + <span class="lifetime">&#39;static</span>) {
+    </span><span class="kw">pub fn </span>stdout_pipe(<span class="kw-2">&amp;mut </span><span class="self">self</span>, w: <span class="kw">impl </span>AsyncWrite + Write + Send + Sync + Unpin + <span class="lifetime">'static</span>) {
         <span class="self">self</span>.with_wasi(|wasi| <span class="kw">match </span>wasi {
             WasiCtxBuilder::Preview1(ctx) =&gt; {
                 ctx.set_stdout(Box::new(wasi_preview1::pipe::WritePipe::new(w)))
@@ -804,7 +804,7 @@
         <span class="comment">// This only needs to work with Preview 2 since WAGI does its own thing with Preview 1:
         </span><span class="self">self</span>.try_with_wasi(|wasi| <span class="kw">match </span>wasi {
             WasiCtxBuilder::Preview1(<span class="kw">_</span>) =&gt; <span class="prelude-val">Err</span>(<span class="macro">anyhow!</span>(
-                <span class="string">&quot;`Store::stdout_buffered` only supported with WASI Preview 2&quot;
+                <span class="string">"`Store::stdout_buffered` only supported with WASI Preview 2"
             </span>)),
             WasiCtxBuilder::Preview2(ctx) =&gt; {
                 ctx.stdout(BufferStdoutStream(buffer.clone()));
@@ -827,7 +827,7 @@
     }
 
     <span class="doccomment">/// Sets the WASI `stderr` descriptor to the given [`Write`]er.
-    </span><span class="kw">pub fn </span>stderr_pipe(<span class="kw-2">&amp;mut </span><span class="self">self</span>, w: <span class="kw">impl </span>AsyncWrite + Write + Send + Sync + Unpin + <span class="lifetime">&#39;static</span>) {
+    </span><span class="kw">pub fn </span>stderr_pipe(<span class="kw-2">&amp;mut </span><span class="self">self</span>, w: <span class="kw">impl </span>AsyncWrite + Write + Send + Sync + Unpin + <span class="lifetime">'static</span>) {
         <span class="self">self</span>.with_wasi(|wasi| <span class="kw">match </span>wasi {
             WasiCtxBuilder::Preview1(ctx) =&gt; {
                 ctx.set_stderr(Box::new(wasi_preview1::pipe::WritePipe::new(w)))
@@ -838,8 +838,8 @@
         })
     }
 
-    <span class="doccomment">/// Appends the given strings to the the WASI &#39;args&#39;.
-    </span><span class="kw">pub fn </span>args&lt;<span class="lifetime">&#39;b</span>&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, args: <span class="kw">impl </span>IntoIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;b </span>str&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="doccomment">/// Appends the given strings to the the WASI 'args'.
+    </span><span class="kw">pub fn </span>args&lt;<span class="lifetime">'b</span>&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, args: <span class="kw">impl </span>IntoIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">'b </span>str&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="self">self</span>.try_with_wasi(|wasi| {
             <span class="kw">for </span>arg <span class="kw">in </span>args {
                 <span class="kw">match </span>wasi {
@@ -853,7 +853,7 @@
         })
     }
 
-    <span class="doccomment">/// Sets the given key/value string entries on the the WASI &#39;env&#39;.
+    <span class="doccomment">/// Sets the given key/value string entries on the the WASI 'env'.
     </span><span class="kw">pub fn </span>env(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         vars: <span class="kw">impl </span>IntoIterator&lt;Item = (<span class="kw">impl </span>AsRef&lt;str&gt;, <span class="kw">impl </span>AsRef&lt;str&gt;)&gt;,
@@ -872,7 +872,7 @@
         })
     }
 
-    <span class="doccomment">/// &quot;Mounts&quot; the given `host_path` into the WASI filesystem at the given
+    <span class="doccomment">/// "Mounts" the given `host_path` into the WASI filesystem at the given
     /// `guest_path` with read-only capabilities.
     </span><span class="kw">pub fn </span>read_only_preopened_dir(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
@@ -882,7 +882,7 @@
         <span class="self">self</span>.preopened_dir_impl(host_path, guest_path, <span class="bool-val">false</span>)
     }
 
-    <span class="doccomment">/// &quot;Mounts&quot; the given `host_path` into the WASI filesystem at the given
+    <span class="doccomment">/// "Mounts" the given `host_path` into the WASI filesystem at the given
     /// `guest_path` with read and write capabilities.
     </span><span class="kw">pub fn </span>read_write_preopened_dir(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
@@ -902,7 +902,7 @@
             cap_std::fs::Dir::open_ambient_dir(host_path.as_ref(), cap_std::ambient_authority())<span class="question-mark">?</span>;
         <span class="kw">let </span>path = guest_path
             .to_str()
-            .ok_or_else(|| <span class="macro">anyhow!</span>(<span class="string">&quot;non-utf8 path: {}&quot;</span>, guest_path.display()))<span class="question-mark">?</span>;
+            .ok_or_else(|| <span class="macro">anyhow!</span>(<span class="string">"non-utf8 path: {}"</span>, guest_path.display()))<span class="question-mark">?</span>;
 
         <span class="self">self</span>.try_with_wasi(|wasi| {
             <span class="kw">match </span>wasi {
@@ -955,8 +955,8 @@
 
         <span class="comment">// With epoch interruption enabled, there must be _some_ deadline set
         // or execution will trap immediately. Since this is a delta, we need
-        // to avoid overflow so we&#39;ll use 2^63 which is still &quot;practically
-        // forever&quot; for any plausible tick interval.
+        // to avoid overflow so we'll use 2^63 which is still "practically
+        // forever" for any plausible tick interval.
         </span>inner.set_epoch_deadline(u64::MAX / <span class="number">2</span>);
 
         <span class="prelude-val">Ok</span>(Store {
@@ -981,7 +981,7 @@
         <span class="kw">let </span>wasi = <span class="self">self
             </span>.wasi
             .as_mut()
-            .map_err(|err| <span class="macro">anyhow!</span>(<span class="string">&quot;StoreBuilder already failed: {}&quot;</span>, err))<span class="question-mark">?</span>;
+            .map_err(|err| <span class="macro">anyhow!</span>(<span class="string">"StoreBuilder already failed: {}"</span>, err))<span class="question-mark">?</span>;
 
         <span class="kw">match </span>f(wasi) {
             <span class="prelude-val">Ok</span>(()) =&gt; <span class="prelude-val">Ok</span>(()),
@@ -1016,7 +1016,7 @@
     }
 }
 
-<span class="kw">impl</span>&lt;T: Read + Send + Sync + <span class="lifetime">&#39;static</span>&gt; HostInputStream <span class="kw">for </span>PipeStdinStream&lt;T&gt; {
+<span class="kw">impl</span>&lt;T: Read + Send + Sync + <span class="lifetime">'static</span>&gt; HostInputStream <span class="kw">for </span>PipeStdinStream&lt;T&gt; {
     <span class="kw">fn </span>read(<span class="kw-2">&amp;mut </span><span class="self">self</span>, size: usize) -&gt; StreamResult&lt;Bytes&gt; {
         <span class="kw">let </span>size = size.min(<span class="self">self</span>.buffer.len());
 
@@ -1032,11 +1032,11 @@
 }
 
 <span class="attr">#[async_trait]
-</span><span class="kw">impl</span>&lt;T: Read + Send + Sync + <span class="lifetime">&#39;static</span>&gt; Subscribe <span class="kw">for </span>PipeStdinStream&lt;T&gt; {
+</span><span class="kw">impl</span>&lt;T: Read + Send + Sync + <span class="lifetime">'static</span>&gt; Subscribe <span class="kw">for </span>PipeStdinStream&lt;T&gt; {
     <span class="kw">async fn </span>ready(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {}
 }
 
-<span class="kw">impl</span>&lt;T: Read + Send + Sync + <span class="lifetime">&#39;static</span>&gt; StdinStream <span class="kw">for </span>PipeStdinStream&lt;T&gt; {
+<span class="kw">impl</span>&lt;T: Read + Send + Sync + <span class="lifetime">'static</span>&gt; StdinStream <span class="kw">for </span>PipeStdinStream&lt;T&gt; {
     <span class="kw">fn </span>stream(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Box&lt;<span class="kw">dyn </span>HostInputStream&gt; {
         Box::new(<span class="self">self</span>.clone())
     }
@@ -1060,7 +1060,7 @@
     }
 }
 
-<span class="kw">impl</span>&lt;T: Write + Send + Sync + <span class="lifetime">&#39;static</span>&gt; HostOutputStream <span class="kw">for </span>PipeStdoutStream&lt;T&gt; {
+<span class="kw">impl</span>&lt;T: Write + Send + Sync + <span class="lifetime">'static</span>&gt; HostOutputStream <span class="kw">for </span>PipeStdoutStream&lt;T&gt; {
     <span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, bytes: Bytes) -&gt; <span class="prelude-ty">Result</span>&lt;(), StreamError&gt; {
         <span class="self">self</span>.<span class="number">0
             </span>.lock()
@@ -1082,7 +1082,7 @@
     }
 }
 
-<span class="kw">impl</span>&lt;T: Write + Send + Sync + <span class="lifetime">&#39;static</span>&gt; StdoutStream <span class="kw">for </span>PipeStdoutStream&lt;T&gt; {
+<span class="kw">impl</span>&lt;T: Write + Send + Sync + <span class="lifetime">'static</span>&gt; StdoutStream <span class="kw">for </span>PipeStdoutStream&lt;T&gt; {
     <span class="kw">fn </span>stream(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Box&lt;<span class="kw">dyn </span>HostOutputStream&gt; {
         Box::new(<span class="self">self</span>.clone())
     }
@@ -1093,7 +1093,7 @@
 }
 
 <span class="attr">#[async_trait]
-</span><span class="kw">impl</span>&lt;T: Write + Send + Sync + <span class="lifetime">&#39;static</span>&gt; Subscribe <span class="kw">for </span>PipeStdoutStream&lt;T&gt; {
+</span><span class="kw">impl</span>&lt;T: Write + Send + Sync + <span class="lifetime">'static</span>&gt; Subscribe <span class="kw">for </span>PipeStdoutStream&lt;T&gt; {
     <span class="kw">async fn </span>ready(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {}
 }
 

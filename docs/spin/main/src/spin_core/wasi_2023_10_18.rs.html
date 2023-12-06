@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/core/src/wasi_2023_10_18.rs`."><title>wasi_2023_10_18.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-c67e44d78ab2db17.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (0e2dac837 2023-12-04)" data-channel="nightly" data-search-js="search-5a66c239c06b3a66.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/core/src/wasi_2023_10_18.rs`."><title>wasi_2023_10_18.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-c67e44d78ab2db17.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (e9013ac0e 2023-12-05)" data-channel="nightly" data-search-js="search-5a66c239c06b3a66.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -2455,88 +2455,88 @@
 }
 
 <span class="macro">wasmtime::component::bindgen!</span>({
-    path: <span class="string">&quot;../../wit&quot;</span>,
-    interfaces: <span class="string">r#&quot;
+    path: <span class="string">"../../wit"</span>,
+    interfaces: <span class="string">r#"
         include wasi:http/proxy@0.2.0-rc-2023-10-18;
 
         // NB: this is handling the historical behavior where Spin supported
-        // more than &quot;just&quot; this snaphsot of the proxy world but additionally
+        // more than "just" this snaphsot of the proxy world but additionally
         // other CLI-related interfaces.
         include wasi:cli/reactor@0.2.0-rc-2023-10-18;
-    &quot;#</span>,
+    "#</span>,
     <span class="kw">async</span>: {
         only_imports: [
-            <span class="string">&quot;[method]descriptor.access-at&quot;</span>,
-            <span class="string">&quot;[method]descriptor.advise&quot;</span>,
-            <span class="string">&quot;[method]descriptor.change-directory-permissions-at&quot;</span>,
-            <span class="string">&quot;[method]descriptor.change-file-permissions-at&quot;</span>,
-            <span class="string">&quot;[method]descriptor.create-directory-at&quot;</span>,
-            <span class="string">&quot;[method]descriptor.get-flags&quot;</span>,
-            <span class="string">&quot;[method]descriptor.get-type&quot;</span>,
-            <span class="string">&quot;[method]descriptor.is-same-object&quot;</span>,
-            <span class="string">&quot;[method]descriptor.link-at&quot;</span>,
-            <span class="string">&quot;[method]descriptor.lock-exclusive&quot;</span>,
-            <span class="string">&quot;[method]descriptor.lock-shared&quot;</span>,
-            <span class="string">&quot;[method]descriptor.metadata-hash&quot;</span>,
-            <span class="string">&quot;[method]descriptor.metadata-hash-at&quot;</span>,
-            <span class="string">&quot;[method]descriptor.open-at&quot;</span>,
-            <span class="string">&quot;[method]descriptor.read&quot;</span>,
-            <span class="string">&quot;[method]descriptor.read-directory&quot;</span>,
-            <span class="string">&quot;[method]descriptor.readlink-at&quot;</span>,
-            <span class="string">&quot;[method]descriptor.remove-directory-at&quot;</span>,
-            <span class="string">&quot;[method]descriptor.rename-at&quot;</span>,
-            <span class="string">&quot;[method]descriptor.set-size&quot;</span>,
-            <span class="string">&quot;[method]descriptor.set-times&quot;</span>,
-            <span class="string">&quot;[method]descriptor.set-times-at&quot;</span>,
-            <span class="string">&quot;[method]descriptor.stat&quot;</span>,
-            <span class="string">&quot;[method]descriptor.stat-at&quot;</span>,
-            <span class="string">&quot;[method]descriptor.symlink-at&quot;</span>,
-            <span class="string">&quot;[method]descriptor.sync&quot;</span>,
-            <span class="string">&quot;[method]descriptor.sync-data&quot;</span>,
-            <span class="string">&quot;[method]descriptor.try-lock-exclusive&quot;</span>,
-            <span class="string">&quot;[method]descriptor.try-lock-shared&quot;</span>,
-            <span class="string">&quot;[method]descriptor.unlink-file-at&quot;</span>,
-            <span class="string">&quot;[method]descriptor.unlock&quot;</span>,
-            <span class="string">&quot;[method]descriptor.write&quot;</span>,
-            <span class="string">&quot;[method]input-stream.read&quot;</span>,
-            <span class="string">&quot;[method]input-stream.blocking-read&quot;</span>,
-            <span class="string">&quot;[method]input-stream.blocking-skip&quot;</span>,
-            <span class="string">&quot;[method]input-stream.skip&quot;</span>,
-            <span class="string">&quot;[method]output-stream.forward&quot;</span>,
-            <span class="string">&quot;[method]output-stream.splice&quot;</span>,
-            <span class="string">&quot;[method]output-stream.blocking-splice&quot;</span>,
-            <span class="string">&quot;[method]output-stream.blocking-flush&quot;</span>,
-            <span class="string">&quot;[method]output-stream.blocking-write&quot;</span>,
-            <span class="string">&quot;[method]output-stream.blocking-write-and-flush&quot;</span>,
-            <span class="string">&quot;[method]output-stream.blocking-write-zeroes-and-flush&quot;</span>,
-            <span class="string">&quot;[method]directory-entry-stream.read-directory-entry&quot;</span>,
-            <span class="string">&quot;poll-list&quot;</span>,
-            <span class="string">&quot;poll-one&quot;</span>,
+            <span class="string">"[method]descriptor.access-at"</span>,
+            <span class="string">"[method]descriptor.advise"</span>,
+            <span class="string">"[method]descriptor.change-directory-permissions-at"</span>,
+            <span class="string">"[method]descriptor.change-file-permissions-at"</span>,
+            <span class="string">"[method]descriptor.create-directory-at"</span>,
+            <span class="string">"[method]descriptor.get-flags"</span>,
+            <span class="string">"[method]descriptor.get-type"</span>,
+            <span class="string">"[method]descriptor.is-same-object"</span>,
+            <span class="string">"[method]descriptor.link-at"</span>,
+            <span class="string">"[method]descriptor.lock-exclusive"</span>,
+            <span class="string">"[method]descriptor.lock-shared"</span>,
+            <span class="string">"[method]descriptor.metadata-hash"</span>,
+            <span class="string">"[method]descriptor.metadata-hash-at"</span>,
+            <span class="string">"[method]descriptor.open-at"</span>,
+            <span class="string">"[method]descriptor.read"</span>,
+            <span class="string">"[method]descriptor.read-directory"</span>,
+            <span class="string">"[method]descriptor.readlink-at"</span>,
+            <span class="string">"[method]descriptor.remove-directory-at"</span>,
+            <span class="string">"[method]descriptor.rename-at"</span>,
+            <span class="string">"[method]descriptor.set-size"</span>,
+            <span class="string">"[method]descriptor.set-times"</span>,
+            <span class="string">"[method]descriptor.set-times-at"</span>,
+            <span class="string">"[method]descriptor.stat"</span>,
+            <span class="string">"[method]descriptor.stat-at"</span>,
+            <span class="string">"[method]descriptor.symlink-at"</span>,
+            <span class="string">"[method]descriptor.sync"</span>,
+            <span class="string">"[method]descriptor.sync-data"</span>,
+            <span class="string">"[method]descriptor.try-lock-exclusive"</span>,
+            <span class="string">"[method]descriptor.try-lock-shared"</span>,
+            <span class="string">"[method]descriptor.unlink-file-at"</span>,
+            <span class="string">"[method]descriptor.unlock"</span>,
+            <span class="string">"[method]descriptor.write"</span>,
+            <span class="string">"[method]input-stream.read"</span>,
+            <span class="string">"[method]input-stream.blocking-read"</span>,
+            <span class="string">"[method]input-stream.blocking-skip"</span>,
+            <span class="string">"[method]input-stream.skip"</span>,
+            <span class="string">"[method]output-stream.forward"</span>,
+            <span class="string">"[method]output-stream.splice"</span>,
+            <span class="string">"[method]output-stream.blocking-splice"</span>,
+            <span class="string">"[method]output-stream.blocking-flush"</span>,
+            <span class="string">"[method]output-stream.blocking-write"</span>,
+            <span class="string">"[method]output-stream.blocking-write-and-flush"</span>,
+            <span class="string">"[method]output-stream.blocking-write-zeroes-and-flush"</span>,
+            <span class="string">"[method]directory-entry-stream.read-directory-entry"</span>,
+            <span class="string">"poll-list"</span>,
+            <span class="string">"poll-one"</span>,
         ],
     },
     with: {
-        <span class="string">&quot;wasi:io/poll/pollable&quot;</span>: latest::io::poll::Pollable,
-        <span class="string">&quot;wasi:io/streams/input-stream&quot;</span>: latest::io::streams::InputStream,
-        <span class="string">&quot;wasi:io/streams/output-stream&quot;</span>: latest::io::streams::OutputStream,
-        <span class="string">&quot;wasi:io/streams/error&quot;</span>: latest::io::streams::Error,
-        <span class="string">&quot;wasi:filesystem/types/directory-entry-stream&quot;</span>: latest::filesystem::types::DirectoryEntryStream,
-        <span class="string">&quot;wasi:filesystem/types/descriptor&quot;</span>: latest::filesystem::types::Descriptor,
-        <span class="string">&quot;wasi:cli/terminal-input/terminal-input&quot;</span>: latest::cli::terminal_input::TerminalInput,
-        <span class="string">&quot;wasi:cli/terminal-output/terminal-output&quot;</span>: latest::cli::terminal_output::TerminalOutput,
-        <span class="string">&quot;wasi:sockets/tcp/tcp-socket&quot;</span>: latest::sockets::tcp::TcpSocket,
-        <span class="string">&quot;wasi:sockets/udp/udp-socket&quot;</span>: UdpSocket,
-        <span class="string">&quot;wasi:sockets/network/network&quot;</span>: latest::sockets::network::Network,
-        <span class="string">&quot;wasi:sockets/ip-name-lookup/resolve-address-stream&quot;</span>: latest::sockets::ip_name_lookup::ResolveAddressStream,
-        <span class="string">&quot;wasi:http/types/incoming-response&quot;</span>: latest::http::types::IncomingResponse,
-        <span class="string">&quot;wasi:http/types/incoming-request&quot;</span>: latest::http::types::IncomingRequest,
-        <span class="string">&quot;wasi:http/types/incoming-body&quot;</span>: latest::http::types::IncomingBody,
-        <span class="string">&quot;wasi:http/types/outgoing-response&quot;</span>: latest::http::types::OutgoingResponse,
-        <span class="string">&quot;wasi:http/types/outgoing-request&quot;</span>: latest::http::types::OutgoingRequest,
-        <span class="string">&quot;wasi:http/types/outgoing-body&quot;</span>: latest::http::types::OutgoingBody,
-        <span class="string">&quot;wasi:http/types/fields&quot;</span>: latest::http::types::Fields,
-        <span class="string">&quot;wasi:http/types/response-outparam&quot;</span>: latest::http::types::ResponseOutparam,
-        <span class="string">&quot;wasi:http/types/future-incoming-response&quot;</span>: latest::http::types::FutureIncomingResponse,
-        <span class="string">&quot;wasi:http/types/future-trailers&quot;</span>: latest::http::types::FutureTrailers,
+        <span class="string">"wasi:io/poll/pollable"</span>: latest::io::poll::Pollable,
+        <span class="string">"wasi:io/streams/input-stream"</span>: latest::io::streams::InputStream,
+        <span class="string">"wasi:io/streams/output-stream"</span>: latest::io::streams::OutputStream,
+        <span class="string">"wasi:io/streams/error"</span>: latest::io::streams::Error,
+        <span class="string">"wasi:filesystem/types/directory-entry-stream"</span>: latest::filesystem::types::DirectoryEntryStream,
+        <span class="string">"wasi:filesystem/types/descriptor"</span>: latest::filesystem::types::Descriptor,
+        <span class="string">"wasi:cli/terminal-input/terminal-input"</span>: latest::cli::terminal_input::TerminalInput,
+        <span class="string">"wasi:cli/terminal-output/terminal-output"</span>: latest::cli::terminal_output::TerminalOutput,
+        <span class="string">"wasi:sockets/tcp/tcp-socket"</span>: latest::sockets::tcp::TcpSocket,
+        <span class="string">"wasi:sockets/udp/udp-socket"</span>: UdpSocket,
+        <span class="string">"wasi:sockets/network/network"</span>: latest::sockets::network::Network,
+        <span class="string">"wasi:sockets/ip-name-lookup/resolve-address-stream"</span>: latest::sockets::ip_name_lookup::ResolveAddressStream,
+        <span class="string">"wasi:http/types/incoming-response"</span>: latest::http::types::IncomingResponse,
+        <span class="string">"wasi:http/types/incoming-request"</span>: latest::http::types::IncomingRequest,
+        <span class="string">"wasi:http/types/incoming-body"</span>: latest::http::types::IncomingBody,
+        <span class="string">"wasi:http/types/outgoing-response"</span>: latest::http::types::OutgoingResponse,
+        <span class="string">"wasi:http/types/outgoing-request"</span>: latest::http::types::OutgoingRequest,
+        <span class="string">"wasi:http/types/outgoing-body"</span>: latest::http::types::OutgoingBody,
+        <span class="string">"wasi:http/types/fields"</span>: latest::http::types::Fields,
+        <span class="string">"wasi:http/types/response-outparam"</span>: latest::http::types::ResponseOutparam,
+        <span class="string">"wasi:http/types/future-incoming-response"</span>: latest::http::types::FutureIncomingResponse,
+        <span class="string">"wasi:http/types/future-trailers"</span>: latest::http::types::FutureTrailers,
     },
 });
 
@@ -2568,7 +2568,7 @@
 <span class="kw">where
     </span>T: WasiView + WasiHttpView,
 {
-    <span class="comment">// interfaces from the &quot;command&quot; world
+    <span class="comment">// interfaces from the "command" world
     </span>wasi::clocks::monotonic_clock::add_to_linker(linker, |t| t)<span class="question-mark">?</span>;
     wasi::clocks::wall_clock::add_to_linker(linker, |t| t)<span class="question-mark">?</span>;
     wasi::filesystem::types::add_to_linker(linker, |t| t)<span class="question-mark">?</span>;
@@ -2959,7 +2959,7 @@
         _path: String,
         _type_: AccessType,
     ) -&gt; wasmtime::Result&lt;<span class="prelude-ty">Result</span>&lt;(), FsErrorCode&gt;&gt; {
-        <span class="macro">anyhow::bail!</span>(<span class="string">&quot;access-at API is no longer supported in the latest snapshot&quot;</span>)
+        <span class="macro">anyhow::bail!</span>(<span class="string">"access-at API is no longer supported in the latest snapshot"</span>)
     }
 
     <span class="kw">async fn </span>unlink_file_at(
@@ -2981,7 +2981,7 @@
         _modes: Modes,
     ) -&gt; wasmtime::Result&lt;<span class="prelude-ty">Result</span>&lt;(), FsErrorCode&gt;&gt; {
         <span class="macro">anyhow::bail!</span>(
-            <span class="string">&quot;change-file-permissions-at API is no longer supported in the latest snapshot&quot;
+            <span class="string">"change-file-permissions-at API is no longer supported in the latest snapshot"
         </span>)
     }
 
@@ -2993,7 +2993,7 @@
         _modes: Modes,
     ) -&gt; wasmtime::Result&lt;<span class="prelude-ty">Result</span>&lt;(), FsErrorCode&gt;&gt; {
         <span class="macro">anyhow::bail!</span>(
-            <span class="string">&quot;change-directory-permissions-at API is no longer supported in the latest snapshot&quot;
+            <span class="string">"change-directory-permissions-at API is no longer supported in the latest snapshot"
         </span>)
     }
 
@@ -3001,35 +3001,35 @@
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         _self_: Resource&lt;Descriptor&gt;,
     ) -&gt; wasmtime::Result&lt;<span class="prelude-ty">Result</span>&lt;(), FsErrorCode&gt;&gt; {
-        <span class="macro">anyhow::bail!</span>(<span class="string">&quot;lock-shared API is no longer supported in the latest snapshot&quot;</span>)
+        <span class="macro">anyhow::bail!</span>(<span class="string">"lock-shared API is no longer supported in the latest snapshot"</span>)
     }
 
     <span class="kw">async fn </span>lock_exclusive(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         _self_: Resource&lt;Descriptor&gt;,
     ) -&gt; wasmtime::Result&lt;<span class="prelude-ty">Result</span>&lt;(), FsErrorCode&gt;&gt; {
-        <span class="macro">anyhow::bail!</span>(<span class="string">&quot;lock-exclusive API is no longer supported in the latest snapshot&quot;</span>)
+        <span class="macro">anyhow::bail!</span>(<span class="string">"lock-exclusive API is no longer supported in the latest snapshot"</span>)
     }
 
     <span class="kw">async fn </span>try_lock_shared(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         _self_: Resource&lt;Descriptor&gt;,
     ) -&gt; wasmtime::Result&lt;<span class="prelude-ty">Result</span>&lt;(), FsErrorCode&gt;&gt; {
-        <span class="macro">anyhow::bail!</span>(<span class="string">&quot;try-lock-shared API is no longer supported in the latest snapshot&quot;</span>)
+        <span class="macro">anyhow::bail!</span>(<span class="string">"try-lock-shared API is no longer supported in the latest snapshot"</span>)
     }
 
     <span class="kw">async fn </span>try_lock_exclusive(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         _self_: Resource&lt;Descriptor&gt;,
     ) -&gt; wasmtime::Result&lt;<span class="prelude-ty">Result</span>&lt;(), FsErrorCode&gt;&gt; {
-        <span class="macro">anyhow::bail!</span>(<span class="string">&quot;try-lock-exclusive API is no longer supported in the latest snapshot&quot;</span>)
+        <span class="macro">anyhow::bail!</span>(<span class="string">"try-lock-exclusive API is no longer supported in the latest snapshot"</span>)
     }
 
     <span class="kw">async fn </span>unlock(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         _self_: Resource&lt;Descriptor&gt;,
     ) -&gt; wasmtime::Result&lt;<span class="prelude-ty">Result</span>&lt;(), FsErrorCode&gt;&gt; {
-        <span class="macro">anyhow::bail!</span>(<span class="string">&quot;unlock API is no longer supported in the latest snapshot&quot;</span>)
+        <span class="macro">anyhow::bail!</span>(<span class="string">"unlock API is no longer supported in the latest snapshot"</span>)
     }
 
     <span class="kw">async fn </span>is_same_object(
@@ -3297,7 +3297,7 @@
         _self_: Resource&lt;OutputStream&gt;,
         _src: Resource&lt;InputStream&gt;,
     ) -&gt; wasmtime::Result&lt;<span class="prelude-ty">Result</span>&lt;u64, StreamError&gt;&gt; {
-        <span class="macro">anyhow::bail!</span>(<span class="string">&quot;forward API no longer supported&quot;</span>)
+        <span class="macro">anyhow::bail!</span>(<span class="string">"forward API no longer supported"</span>)
     }
 
     <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rep: Resource&lt;OutputStream&gt;) -&gt; wasmtime::Result&lt;()&gt; {
@@ -3581,7 +3581,7 @@
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         _self_: Resource&lt;TcpSocket&gt;,
     ) -&gt; wasmtime::Result&lt;<span class="prelude-ty">Result</span>&lt;bool, SocketErrorCode&gt;&gt; {
-        <span class="macro">anyhow::bail!</span>(<span class="string">&quot;no-delay API no longer supported&quot;</span>)
+        <span class="macro">anyhow::bail!</span>(<span class="string">"no-delay API no longer supported"</span>)
     }
 
     <span class="kw">fn </span>set_no_delay(
@@ -3589,7 +3589,7 @@
         _self_: Resource&lt;TcpSocket&gt;,
         _value: bool,
     ) -&gt; wasmtime::Result&lt;<span class="prelude-ty">Result</span>&lt;(), SocketErrorCode&gt;&gt; {
-        <span class="macro">anyhow::bail!</span>(<span class="string">&quot;set-no-delay API no longer supported&quot;</span>)
+        <span class="macro">anyhow::bail!</span>(<span class="string">"set-no-delay API no longer supported"</span>)
     }
 
     <span class="kw">fn </span>unicast_hop_limit(
@@ -3688,8 +3688,8 @@
 <span class="doccomment">/// Between the snapshot of WASI that this file is implementing and the current
 /// implementation of WASI UDP sockets were redesigned slightly to deal with
 /// a different way of managing incoming and outgoing datagrams. This means
-/// that this snapshot&#39;s `{start,finish}_connect`, `send`, and `receive`
-/// methods are no longer natively implemented, so they&#39;re polyfilled by this
+/// that this snapshot's `{start,finish}_connect`, `send`, and `receive`
+/// methods are no longer natively implemented, so they're polyfilled by this
 /// implementation.
 </span><span class="kw">pub enum </span>UdpSocket {
     Initial(Resource&lt;latest::sockets::udp::UdpSocket&gt;),
@@ -3713,7 +3713,7 @@
             <span class="comment">// Implicit finishes will call `stream` for sockets in the initial
             // state.
             </span>UdpSocket::Initial(socket) <span class="kw">if </span>!explicit =&gt; (socket, <span class="prelude-val">None</span>),
-            <span class="comment">// Implicit finishes won&#39;t try to reconnect a socket.
+            <span class="comment">// Implicit finishes won't try to reconnect a socket.
             </span>UdpSocket::Connected { .. } <span class="kw">if </span>!explicit =&gt; <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="prelude-val">Ok</span>(())),
             <span class="comment">// Only explicit finishes can transition from the `Connecting` state.
             </span>UdpSocket::Connecting(socket, addr) <span class="kw">if </span>explicit =&gt; (socket, <span class="prelude-val">Some</span>(addr)),
@@ -3742,7 +3742,7 @@
             UdpSocket::Initial(r) =&gt; r,
             UdpSocket::Connecting(r, <span class="kw">_</span>) =&gt; r,
             UdpSocket::Connected { socket, .. } =&gt; socket,
-            UdpSocket::Dummy =&gt; <span class="macro">anyhow::bail!</span>(<span class="string">&quot;invalid udp socket state&quot;</span>),
+            UdpSocket::Dummy =&gt; <span class="macro">anyhow::bail!</span>(<span class="string">"invalid udp socket state"</span>),
         };
         <span class="prelude-val">Ok</span>(Resource::new_borrow(r.rep()))
     }
@@ -3805,7 +3805,7 @@
         max_results: u64,
     ) -&gt; wasmtime::Result&lt;<span class="prelude-ty">Result</span>&lt;Vec&lt;Datagram&gt;, SocketErrorCode&gt;&gt; {
         <span class="comment">// If the socket is in the `initial` state then complete the connect,
-        // otherwise verify we&#39;re connected.
+        // otherwise verify we're connected.
         </span><span class="kw">if let </span><span class="prelude-val">Err</span>(e) = UdpSocket::finish_connect(<span class="self">self</span>, <span class="kw-2">&amp;</span>self_, <span class="bool-val">true</span>)<span class="question-mark">? </span>{
             <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="prelude-val">Err</span>(e));
         }
@@ -3838,7 +3838,7 @@
         <span class="kw-2">mut </span>datagrams: Vec&lt;Datagram&gt;,
     ) -&gt; wasmtime::Result&lt;<span class="prelude-ty">Result</span>&lt;u64, SocketErrorCode&gt;&gt; {
         <span class="comment">// If the socket is in the `initial` state then complete the connect,
-        // otherwise verify we&#39;re connected.
+        // otherwise verify we're connected.
         </span><span class="kw">if let </span><span class="prelude-val">Err</span>(e) = UdpSocket::finish_connect(<span class="self">self</span>, <span class="kw-2">&amp;</span>self_, <span class="bool-val">true</span>)<span class="question-mark">? </span>{
             <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="prelude-val">Err</span>(e));
         }
@@ -4305,7 +4305,7 @@
             method.into(),
         )<span class="question-mark">? </span>{
             &lt;T <span class="kw">as </span>latest::http::types::HostOutgoingRequest&gt;::drop(<span class="self">self</span>, request)<span class="question-mark">?</span>;
-            <span class="macro">anyhow::bail!</span>(<span class="string">&quot;invalid method supplied&quot;</span>);
+            <span class="macro">anyhow::bail!</span>(<span class="string">"invalid method supplied"</span>);
         }
 
         <span class="kw">if let </span><span class="prelude-val">Err</span>(()) = &lt;T <span class="kw">as </span>latest::http::types::HostOutgoingRequest&gt;::set_path_with_query(
@@ -4314,15 +4314,15 @@
             path_with_query,
         )<span class="question-mark">? </span>{
             &lt;T <span class="kw">as </span>latest::http::types::HostOutgoingRequest&gt;::drop(<span class="self">self</span>, request)<span class="question-mark">?</span>;
-            <span class="macro">anyhow::bail!</span>(<span class="string">&quot;invalid path-with-query supplied&quot;</span>);
+            <span class="macro">anyhow::bail!</span>(<span class="string">"invalid path-with-query supplied"</span>);
         }
 
         <span class="comment">// Historical WASI would fill in an empty authority with a port which
         // got just enough working to get things through. Current WASI requires
         // the authority, though, so perform the translation manually here.
         </span><span class="kw">let </span>authority = authority.unwrap_or_else(|| <span class="kw">match </span><span class="kw-2">&amp;</span>scheme {
-            <span class="prelude-val">Some</span>(Scheme::Http) | <span class="prelude-val">Some</span>(Scheme::Other(<span class="kw">_</span>)) =&gt; <span class="string">&quot;:80&quot;</span>.to_string(),
-            <span class="prelude-val">Some</span>(Scheme::Https) | <span class="prelude-val">None </span>=&gt; <span class="string">&quot;:443&quot;</span>.to_string(),
+            <span class="prelude-val">Some</span>(Scheme::Http) | <span class="prelude-val">Some</span>(Scheme::Other(<span class="kw">_</span>)) =&gt; <span class="string">":80"</span>.to_string(),
+            <span class="prelude-val">Some</span>(Scheme::Https) | <span class="prelude-val">None </span>=&gt; <span class="string">":443"</span>.to_string(),
         });
         <span class="kw">if let </span><span class="prelude-val">Err</span>(()) = &lt;T <span class="kw">as </span>latest::http::types::HostOutgoingRequest&gt;::set_scheme(
             <span class="self">self</span>,
@@ -4330,7 +4330,7 @@
             scheme.map(|s| s.into()),
         )<span class="question-mark">? </span>{
             &lt;T <span class="kw">as </span>latest::http::types::HostOutgoingRequest&gt;::drop(<span class="self">self</span>, request)<span class="question-mark">?</span>;
-            <span class="macro">anyhow::bail!</span>(<span class="string">&quot;invalid scheme supplied&quot;</span>);
+            <span class="macro">anyhow::bail!</span>(<span class="string">"invalid scheme supplied"</span>);
         }
 
         <span class="kw">if let </span><span class="prelude-val">Err</span>(()) = &lt;T <span class="kw">as </span>latest::http::types::HostOutgoingRequest&gt;::set_authority(
@@ -4339,7 +4339,7 @@
             <span class="prelude-val">Some</span>(authority),
         )<span class="question-mark">? </span>{
             &lt;T <span class="kw">as </span>latest::http::types::HostOutgoingRequest&gt;::drop(<span class="self">self</span>, request)<span class="question-mark">?</span>;
-            <span class="macro">anyhow::bail!</span>(<span class="string">&quot;invalid authority supplied&quot;</span>);
+            <span class="macro">anyhow::bail!</span>(<span class="string">"invalid authority supplied"</span>);
         }
 
         <span class="prelude-val">Ok</span>(request)
@@ -4379,7 +4379,7 @@
             status_code,
         )<span class="question-mark">? </span>{
             &lt;T <span class="kw">as </span>latest::http::types::HostOutgoingResponse&gt;::drop(<span class="self">self</span>, response)<span class="question-mark">?</span>;
-            <span class="macro">anyhow::bail!</span>(<span class="string">&quot;invalid status code supplied&quot;</span>);
+            <span class="macro">anyhow::bail!</span>(<span class="string">"invalid status code supplied"</span>);
         }
 
         <span class="prelude-val">Ok</span>(response)
@@ -4439,10 +4439,10 @@
             // errors, but that seems like it would require string matching,
             // which also seems not great.
             </span><span class="kw">let </span>msg = <span class="kw">match </span>err {
-                HttpError::InvalidUrl(s) =&gt; <span class="macro">format!</span>(<span class="string">&quot;invalid url: {s}&quot;</span>),
-                HttpError::TimeoutError(s) =&gt; <span class="macro">format!</span>(<span class="string">&quot;timeout: {s}&quot;</span>),
-                HttpError::ProtocolError(s) =&gt; <span class="macro">format!</span>(<span class="string">&quot;protocol error: {s}&quot;</span>),
-                HttpError::UnexpectedError(s) =&gt; <span class="macro">format!</span>(<span class="string">&quot;unexpected error: {s}&quot;</span>),
+                HttpError::InvalidUrl(s) =&gt; <span class="macro">format!</span>(<span class="string">"invalid url: {s}"</span>),
+                HttpError::TimeoutError(s) =&gt; <span class="macro">format!</span>(<span class="string">"timeout: {s}"</span>),
+                HttpError::ProtocolError(s) =&gt; <span class="macro">format!</span>(<span class="string">"protocol error: {s}"</span>),
+                HttpError::UnexpectedError(s) =&gt; <span class="macro">format!</span>(<span class="string">"unexpected error: {s}"</span>),
             };
             latest::http::types::ErrorCode::InternalError(<span class="prelude-val">Some</span>(msg))
         });
@@ -4475,7 +4475,7 @@
         <span class="kw">match </span>&lt;T <span class="kw">as </span>latest::http::types::HostFutureTrailers&gt;::get(<span class="self">self</span>, self_)<span class="question-mark">? </span>{
             <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(trailers))) =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(trailers))),
             <span class="comment">// Return an empty trailers if no trailers popped out since this
-            // version of WASI couldn&#39;t represent the lack of trailers.
+            // version of WASI couldn't represent the lack of trailers.
             </span><span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>)) =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(&lt;T <span class="kw">as </span>latest::http::types::HostFields&gt;::new(<span class="self">self</span>)<span class="question-mark">?</span>))),
             <span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(e)) =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(e.into()))),
             <span class="prelude-val">None </span>=&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
@@ -4548,7 +4548,7 @@
                         )<span class="question-mark">?
                     </span>{
                         &lt;T <span class="kw">as </span>latest::http::types::HostRequestOptions&gt;::drop(<span class="self">self</span>, options)<span class="question-mark">?</span>;
-                        <span class="macro">anyhow::bail!</span>(<span class="string">&quot;invalid connect timeout supplied&quot;</span>);
+                        <span class="macro">anyhow::bail!</span>(<span class="string">"invalid connect timeout supplied"</span>);
                     }
                 }
 
@@ -4561,7 +4561,7 @@
                         )<span class="question-mark">?
                     </span>{
                         &lt;T <span class="kw">as </span>latest::http::types::HostRequestOptions&gt;::drop(<span class="self">self</span>, options)<span class="question-mark">?</span>;
-                        <span class="macro">anyhow::bail!</span>(<span class="string">&quot;invalid first byte timeout supplied&quot;</span>);
+                        <span class="macro">anyhow::bail!</span>(<span class="string">"invalid first byte timeout supplied"</span>);
                     }
                 }
 
@@ -4574,7 +4574,7 @@
                         )<span class="question-mark">?
                     </span>{
                         &lt;T <span class="kw">as </span>latest::http::types::HostRequestOptions&gt;::drop(<span class="self">self</span>, options)<span class="question-mark">?</span>;
-                        <span class="macro">anyhow::bail!</span>(<span class="string">&quot;invalid between bytes timeout supplied&quot;</span>);
+                        <span class="macro">anyhow::bail!</span>(<span class="string">"invalid between bytes timeout supplied"</span>);
                     }
                 }
 
@@ -4594,7 +4594,7 @@
 ) -&gt; wasmtime::Result&lt;<span class="prelude-ty">Result</span>&lt;T2, E2&gt;&gt;
 <span class="kw">where
     </span>T2: From&lt;T&gt;,
-    E: std::error::Error + Send + Sync + <span class="lifetime">&#39;static</span>,
+    E: std::error::Error + Send + Sync + <span class="lifetime">'static</span>,
     E2: From&lt;E&gt;,
 {
     <span class="kw">match </span>result {

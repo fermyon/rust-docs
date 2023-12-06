@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/app/src/lib.rs`."><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-c67e44d78ab2db17.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (0e2dac837 2023-12-04)" data-channel="nightly" data-search-js="search-5a66c239c06b3a66.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/app/src/lib.rs`."><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-c67e44d78ab2db17.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (e9013ac0e 2023-12-05)" data-channel="nightly" data-search-js="search-5a66c239c06b3a66.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -412,13 +412,13 @@
 <span class="kw">pub use </span>locked::Variable;
 
 <span class="doccomment">/// MetadataKey for extracting the application name.
-</span><span class="kw">pub const </span>APP_NAME_KEY: MetadataKey = MetadataKey::new(<span class="string">&quot;name&quot;</span>);
+</span><span class="kw">pub const </span>APP_NAME_KEY: MetadataKey = MetadataKey::new(<span class="string">"name"</span>);
 <span class="doccomment">/// MetadataKey for extracting the application version.
-</span><span class="kw">pub const </span>APP_VERSION_KEY: MetadataKey = MetadataKey::new(<span class="string">&quot;version&quot;</span>);
+</span><span class="kw">pub const </span>APP_VERSION_KEY: MetadataKey = MetadataKey::new(<span class="string">"version"</span>);
 <span class="doccomment">/// MetadataKey for extracting the application description.
-</span><span class="kw">pub const </span>APP_DESCRIPTION_KEY: MetadataKey = MetadataKey::new(<span class="string">&quot;description&quot;</span>);
+</span><span class="kw">pub const </span>APP_DESCRIPTION_KEY: MetadataKey = MetadataKey::new(<span class="string">"description"</span>);
 <span class="doccomment">/// MetadataKey for extracting the OCI image digest.
-</span><span class="kw">pub const </span>OCI_IMAGE_DIGEST_KEY: MetadataKey = MetadataKey::new(<span class="string">&quot;oci_image_digest&quot;</span>);
+</span><span class="kw">pub const </span>OCI_IMAGE_DIGEST_KEY: MetadataKey = MetadataKey::new(<span class="string">"oci_image_digest"</span>);
 
 <span class="doccomment">/// A trait for implementing the low-level operations needed to load an [`App`].
 </span><span class="comment">// TODO(lann): Should this migrate to spin-loader?
@@ -445,7 +445,7 @@
     ) -&gt; anyhow::Result&lt;spin_core::Module&gt;;
 
     <span class="doccomment">/// Called with an [`AppComponent`]; any `files` configured with the
-    /// component should be &quot;mounted&quot; into the `store_builder`, via e.g.
+    /// component should be "mounted" into the `store_builder`, via e.g.
     /// [`StoreBuilder::read_only_preopened_dir`].
     </span><span class="kw">async fn </span>mount_files(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
@@ -463,7 +463,7 @@
 
 <span class="kw">impl </span>AppLoader {
     <span class="doccomment">/// Creates a new [`AppLoader`].
-    </span><span class="kw">pub fn </span>new(loader: <span class="kw">impl </span>Loader + Send + Sync + <span class="lifetime">&#39;static</span>) -&gt; <span class="self">Self </span>{
+    </span><span class="kw">pub fn </span>new(loader: <span class="kw">impl </span>Loader + Send + Sync + <span class="lifetime">'static</span>) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             inner: Box::new(loader),
             dynamic_host_components: Default::default(),
@@ -510,8 +510,8 @@
 }
 
 <span class="kw">impl </span>std::fmt::Debug <span class="kw">for </span>AppLoader {
-    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
-        f.debug_struct(<span class="string">&quot;AppLoader&quot;</span>).finish()
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; std::fmt::Result {
+        f.debug_struct(<span class="string">"AppLoader"</span>).finish()
     }
 }
 
@@ -522,7 +522,7 @@
 
     <span class="attr">#[borrows(loader)]
     #[covariant]
-    </span>app: App&lt;<span class="lifetime">&#39;this</span>&gt;,
+    </span>app: App&lt;<span class="lifetime">'this</span>&gt;,
 }
 
 <span class="kw">impl </span>OwnedApp {
@@ -537,20 +537,20 @@
 /// Note: The `L` param is an implementation detail to support the
 /// [`App::inert`] constructor.
 </span><span class="attr">#[derive(Debug)]
-</span><span class="kw">pub struct </span>App&lt;<span class="lifetime">&#39;a</span>, L = AppLoader&gt; {
-    loader: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>L,
+</span><span class="kw">pub struct </span>App&lt;<span class="lifetime">'a</span>, L = AppLoader&gt; {
+    loader: <span class="kw-2">&amp;</span><span class="lifetime">'a </span>L,
     uri: String,
     locked: LockedApp,
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, L&gt; App&lt;<span class="lifetime">&#39;a</span>, L&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, L&gt; App&lt;<span class="lifetime">'a</span>, L&gt; {
     <span class="doccomment">/// Deserializes typed metadata for this app.
     ///
     /// Returns `Ok(None)` if there is no metadata for the given `key` and an
     /// `Err` only if there _is_ a value for the `key` but the typed
     /// deserialization failed.
-    </span><span class="kw">pub fn </span>get_metadata&lt;<span class="lifetime">&#39;this</span>, T: Deserialize&lt;<span class="lifetime">&#39;this</span>&gt;&gt;(
-        <span class="kw-2">&amp;</span><span class="lifetime">&#39;this </span><span class="self">self</span>,
+    </span><span class="kw">pub fn </span>get_metadata&lt;<span class="lifetime">'this</span>, T: Deserialize&lt;<span class="lifetime">'this</span>&gt;&gt;(
+        <span class="kw-2">&amp;</span><span class="lifetime">'this </span><span class="self">self</span>,
         key: MetadataKey&lt;T&gt;,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;T&gt;&gt; {
         <span class="self">self</span>.locked.get_metadata(key)
@@ -560,8 +560,8 @@
     ///
     /// Like [`App::get_metadata`], but returns an error if there is
     /// no metadata for the given `key`.
-    </span><span class="kw">pub fn </span>require_metadata&lt;<span class="lifetime">&#39;this</span>, T: Deserialize&lt;<span class="lifetime">&#39;this</span>&gt;&gt;(
-        <span class="kw-2">&amp;</span><span class="lifetime">&#39;this </span><span class="self">self</span>,
+    </span><span class="kw">pub fn </span>require_metadata&lt;<span class="lifetime">'this</span>, T: Deserialize&lt;<span class="lifetime">'this</span>&gt;&gt;(
+        <span class="kw-2">&amp;</span><span class="lifetime">'this </span><span class="self">self</span>,
         key: MetadataKey&lt;T&gt;,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;T&gt; {
         <span class="self">self</span>.locked.require_metadata(key)
@@ -573,7 +573,7 @@
     }
 
     <span class="doccomment">/// Returns an iterator of [`AppComponent`]s defined for this app.
-    </span><span class="kw">pub fn </span>components(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = AppComponent&lt;<span class="lifetime">&#39;_</span>, L&gt;&gt; {
+    </span><span class="kw">pub fn </span>components(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = AppComponent&lt;<span class="lifetime">'_</span>, L&gt;&gt; {
         <span class="self">self</span>.locked
             .components
             .iter()
@@ -581,14 +581,14 @@
     }
 
     <span class="doccomment">/// Returns the [`AppComponent`] with the given `component_id`, or `None`
-    /// if it doesn&#39;t exist.
-    </span><span class="kw">pub fn </span>get_component(<span class="kw-2">&amp;</span><span class="self">self</span>, component_id: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;AppComponent&lt;<span class="lifetime">&#39;_</span>, L&gt;&gt; {
+    /// if it doesn't exist.
+    </span><span class="kw">pub fn </span>get_component(<span class="kw-2">&amp;</span><span class="self">self</span>, component_id: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;AppComponent&lt;<span class="lifetime">'_</span>, L&gt;&gt; {
         <span class="self">self</span>.components()
             .find(|component| component.locked.id == component_id)
     }
 
     <span class="doccomment">/// Returns an iterator of [`AppTrigger`]s defined for this app.
-    </span><span class="kw">pub fn </span>triggers(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = AppTrigger&lt;<span class="lifetime">&#39;_</span>, L&gt;&gt; {
+    </span><span class="kw">pub fn </span>triggers(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = AppTrigger&lt;<span class="lifetime">'_</span>, L&gt;&gt; {
         <span class="self">self</span>.locked
             .triggers
             .iter()
@@ -598,15 +598,15 @@
     <span class="doccomment">/// Returns an iterator of [`AppTrigger`]s defined for this app with
     /// the given `trigger_type`.
     </span><span class="kw">pub fn </span>triggers_with_type(
-        <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="self">self</span>,
-        trigger_type: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str,
-    ) -&gt; <span class="kw">impl </span>Iterator&lt;Item = AppTrigger&lt;<span class="lifetime">&#39;_</span>, L&gt;&gt; {
+        <span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="self">self</span>,
+        trigger_type: <span class="kw-2">&amp;</span><span class="lifetime">'a </span>str,
+    ) -&gt; <span class="kw">impl </span>Iterator&lt;Item = AppTrigger&lt;<span class="lifetime">'_</span>, L&gt;&gt; {
         <span class="self">self</span>.triggers()
             .filter(<span class="kw">move </span>|trigger| trigger.locked.trigger_type == trigger_type)
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; App&lt;<span class="lifetime">&#39;a</span>&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>&gt; App&lt;<span class="lifetime">'a</span>&gt; {
     <span class="doccomment">/// Returns a [`Loader`]-implementation-specific URI for this app.
     </span><span class="kw">pub fn </span>uri(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>str {
         <span class="kw-2">&amp;</span><span class="self">self</span>.uri
@@ -616,38 +616,38 @@
 <span class="attr">#[doc(hidden)]
 </span><span class="kw">pub struct </span>InertLoader;
 
-<span class="kw">impl </span>App&lt;<span class="lifetime">&#39;static</span>, InertLoader&gt; {
-    <span class="doccomment">/// Return an &quot;inert&quot; App which does not have an associated [`AppLoader`]
+<span class="kw">impl </span>App&lt;<span class="lifetime">'static</span>, InertLoader&gt; {
+    <span class="doccomment">/// Return an "inert" App which does not have an associated [`AppLoader`]
     /// and cannot be used to instantiate components.
     </span><span class="kw">pub fn </span>inert(locked: LockedApp) -&gt; <span class="self">Self </span>{
         App {
             loader: <span class="kw-2">&amp;</span>InertLoader,
-            uri: <span class="string">&quot;&quot;</span>.into(),
+            uri: <span class="string">""</span>.into(),
             locked,
         }
     }
 }
 
 <span class="doccomment">/// An `AppComponent` holds configuration for a Spin application component.
-</span><span class="kw">pub struct </span>AppComponent&lt;<span class="lifetime">&#39;a</span>, L = AppLoader&gt; {
+</span><span class="kw">pub struct </span>AppComponent&lt;<span class="lifetime">'a</span>, L = AppLoader&gt; {
     <span class="doccomment">/// The app this component belongs to.
-    </span><span class="kw">pub </span>app: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>App&lt;<span class="lifetime">&#39;a</span>, L&gt;,
-    locked: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>LockedComponent,
+    </span><span class="kw">pub </span>app: <span class="kw-2">&amp;</span><span class="lifetime">'a </span>App&lt;<span class="lifetime">'a</span>, L&gt;,
+    locked: <span class="kw-2">&amp;</span><span class="lifetime">'a </span>LockedComponent,
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, L&gt; AppComponent&lt;<span class="lifetime">&#39;a</span>, L&gt; {
-    <span class="doccomment">/// Returns this component&#39;s app-unique ID.
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, L&gt; AppComponent&lt;<span class="lifetime">'a</span>, L&gt; {
+    <span class="doccomment">/// Returns this component's app-unique ID.
     </span><span class="kw">pub fn </span>id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>str {
         <span class="kw-2">&amp;</span><span class="self">self</span>.locked.id
     }
 
-    <span class="doccomment">/// Returns this component&#39;s Wasm component or module source.
+    <span class="doccomment">/// Returns this component's Wasm component or module source.
     </span><span class="kw">pub fn </span>source(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>LockedComponentSource {
         <span class="kw-2">&amp;</span><span class="self">self</span>.locked.source
     }
 
-    <span class="doccomment">/// Returns an iterator of [`ContentPath`]s for this component&#39;s configured
-    /// &quot;directory mounts&quot;.
+    <span class="doccomment">/// Returns an iterator of [`ContentPath`]s for this component's configured
+    /// "directory mounts".
     </span><span class="kw">pub fn </span>files(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; std::slice::Iter&lt;ContentPath&gt; {
         <span class="self">self</span>.locked.files.iter()
     }
@@ -657,7 +657,7 @@
     /// Returns `Ok(None)` if there is no metadata for the given `key` and an
     /// `Err` only if there _is_ a value for the `key` but the typed
     /// deserialization failed.
-    </span><span class="kw">pub fn </span>get_metadata&lt;T: Deserialize&lt;<span class="lifetime">&#39;a</span>&gt;&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, key: MetadataKey&lt;T&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;T&gt;&gt; {
+    </span><span class="kw">pub fn </span>get_metadata&lt;T: Deserialize&lt;<span class="lifetime">'a</span>&gt;&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, key: MetadataKey&lt;T&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;T&gt;&gt; {
         <span class="self">self</span>.locked.metadata.get_typed(key)
     }
 
@@ -665,8 +665,8 @@
     ///
     /// Like [`AppComponent::get_metadata`], but returns an error if there is
     /// no metadata for the given `key`.
-    </span><span class="kw">pub fn </span>require_metadata&lt;<span class="lifetime">&#39;this</span>, T: Deserialize&lt;<span class="lifetime">&#39;this</span>&gt;&gt;(
-        <span class="kw-2">&amp;</span><span class="lifetime">&#39;this </span><span class="self">self</span>,
+    </span><span class="kw">pub fn </span>require_metadata&lt;<span class="lifetime">'this</span>, T: Deserialize&lt;<span class="lifetime">'this</span>&gt;&gt;(
+        <span class="kw-2">&amp;</span><span class="lifetime">'this </span><span class="self">self</span>,
         key: MetadataKey&lt;T&gt;,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;T&gt; {
         <span class="self">self</span>.locked.metadata.require_typed(key)
@@ -678,7 +678,7 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; AppComponent&lt;<span class="lifetime">&#39;a</span>&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>&gt; AppComponent&lt;<span class="lifetime">'a</span>&gt; {
     <span class="doccomment">/// Loads and returns the [`spin_core::Component`] for this component.
     </span><span class="kw">pub async fn </span>load_component&lt;T: Send + Sync&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
@@ -707,7 +707,7 @@
 
     <span class="doccomment">/// Updates the given [`StoreBuilder`] with configuration for this component.
     ///
-    /// In particular, the WASI &#39;env&#39; and &quot;preloaded dirs&quot; are set up, and any
+    /// In particular, the WASI 'env' and "preloaded dirs" are set up, and any
     /// [`DynamicHostComponent`]s associated with the source [`AppLoader`] are
     /// configured.
     </span><span class="kw">pub async fn </span>apply_store_config(<span class="kw-2">&amp;</span><span class="self">self</span>, builder: <span class="kw-2">&amp;mut </span>StoreBuilder) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
@@ -730,41 +730,41 @@
 }
 
 <span class="doccomment">/// An `AppTrigger` holds configuration for a Spin application trigger.
-</span><span class="kw">pub struct </span>AppTrigger&lt;<span class="lifetime">&#39;a</span>, L = AppLoader&gt; {
+</span><span class="kw">pub struct </span>AppTrigger&lt;<span class="lifetime">'a</span>, L = AppLoader&gt; {
     <span class="doccomment">/// The app this trigger belongs to.
-    </span><span class="kw">pub </span>app: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>App&lt;<span class="lifetime">&#39;a</span>, L&gt;,
-    locked: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>LockedTrigger,
+    </span><span class="kw">pub </span>app: <span class="kw-2">&amp;</span><span class="lifetime">'a </span>App&lt;<span class="lifetime">'a</span>, L&gt;,
+    locked: <span class="kw-2">&amp;</span><span class="lifetime">'a </span>LockedTrigger,
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, L&gt; AppTrigger&lt;<span class="lifetime">&#39;a</span>, L&gt; {
-    <span class="doccomment">/// Returns this trigger&#39;s app-unique ID.
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, L&gt; AppTrigger&lt;<span class="lifetime">'a</span>, L&gt; {
+    <span class="doccomment">/// Returns this trigger's app-unique ID.
     </span><span class="kw">pub fn </span>id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>str {
         <span class="kw-2">&amp;</span><span class="self">self</span>.locked.id
     }
 
-    <span class="doccomment">/// Returns the Trigger&#39;s type.
+    <span class="doccomment">/// Returns the Trigger's type.
     </span><span class="kw">pub fn </span>trigger_type(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>str {
         <span class="kw-2">&amp;</span><span class="self">self</span>.locked.trigger_type
     }
 
-    <span class="doccomment">/// Deserializes this trigger&#39;s configuration into a typed value.
-    </span><span class="kw">pub fn </span>typed_config&lt;Config: Deserialize&lt;<span class="lifetime">&#39;a</span>&gt;&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Config&gt; {
+    <span class="doccomment">/// Deserializes this trigger's configuration into a typed value.
+    </span><span class="kw">pub fn </span>typed_config&lt;Config: Deserialize&lt;<span class="lifetime">'a</span>&gt;&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Config&gt; {
         <span class="prelude-val">Ok</span>(Config::deserialize(<span class="kw-2">&amp;</span><span class="self">self</span>.locked.trigger_config)<span class="question-mark">?</span>)
     }
 
     <span class="doccomment">/// Returns a reference to the [`AppComponent`] configured for this trigger.
     ///
     /// This is a convenience wrapper that looks up the component based on the
-    /// &#39;component&#39; metadata value which is conventionally a component ID.
-    </span><span class="kw">pub fn </span>component(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;AppComponent&lt;<span class="lifetime">&#39;a</span>, L&gt;&gt; {
+    /// 'component' metadata value which is conventionally a component ID.
+    </span><span class="kw">pub fn </span>component(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;AppComponent&lt;<span class="lifetime">'a</span>, L&gt;&gt; {
         <span class="kw">let </span>id = <span class="kw-2">&amp;</span><span class="self">self</span>.locked.id;
         <span class="kw">let </span>common_config: CommonTriggerConfig = <span class="self">self</span>.typed_config()<span class="question-mark">?</span>;
         <span class="kw">let </span>component_id = common_config.component.ok_or_else(|| {
-            Error::MetadataError(<span class="macro">format!</span>(<span class="string">&quot;trigger {id:?} missing &#39;component&#39; config field&quot;</span>))
+            Error::MetadataError(<span class="macro">format!</span>(<span class="string">"trigger {id:?} missing 'component' config field"</span>))
         })<span class="question-mark">?</span>;
         <span class="self">self</span>.app.get_component(<span class="kw-2">&amp;</span>component_id).ok_or_else(|| {
             Error::MetadataError(<span class="macro">format!</span>(
-                <span class="string">&quot;missing component {component_id:?} configured for trigger {id:?}&quot;
+                <span class="string">"missing component {component_id:?} configured for trigger {id:?}"
             </span>))
         })
     }

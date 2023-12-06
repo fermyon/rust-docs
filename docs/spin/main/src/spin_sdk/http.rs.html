@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `sdk/rust/src/http.rs`."><title>http.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-c67e44d78ab2db17.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_sdk" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (0e2dac837 2023-12-04)" data-channel="nightly" data-search-js="search-5a66c239c06b3a66.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `sdk/rust/src/http.rs`."><title>http.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-c67e44d78ab2db17.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_sdk" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (e9013ac0e 2023-12-05)" data-channel="nightly" data-search-js="search-5a66c239c06b3a66.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -795,7 +795,7 @@
 
     <span class="doccomment">/// Creates a [`RequestBuilder`]
     </span><span class="kw">pub fn </span>builder() -&gt; RequestBuilder {
-        RequestBuilder::new(Method::Get, <span class="string">&quot;/&quot;</span>)
+        RequestBuilder::new(Method::Get, <span class="string">"/"</span>)
     }
 
     <span class="doccomment">/// Creates a [`RequestBuilder`] to GET the given `uri`
@@ -864,7 +864,7 @@
     <span class="kw">fn </span>parse_uri(uri: String) -&gt; (<span class="prelude-ty">Option</span>&lt;hyperium::Uri&gt;, String) {
         (
             hyperium::Uri::try_from(<span class="kw-2">&amp;</span>uri)
-                .or_else(|<span class="kw">_</span>| hyperium::Uri::try_from(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;http://{uri}&quot;</span>)))
+                .or_else(|<span class="kw">_</span>| hyperium::Uri::try_from(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">"http://{uri}"</span>)))
                 .ok(),
             uri,
         )
@@ -880,7 +880,7 @@
             .unwrap_or(<span class="bool-val">true</span>)
     }
 
-    <span class="doccomment">/// The URI&#39;s authority
+    <span class="doccomment">/// The URI's authority
     </span><span class="kw">fn </span>authority(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
         <span class="self">self</span>.uri
             .<span class="number">0
@@ -946,7 +946,7 @@
 
     <span class="doccomment">/// Build the `Request`
     </span><span class="kw">pub fn </span>build(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; Request {
-        std::mem::replace(<span class="kw-2">&amp;mut </span><span class="self">self</span>.request, Request::new(Method::Get, <span class="string">&quot;/&quot;</span>))
+        std::mem::replace(<span class="kw-2">&amp;mut </span><span class="self">self</span>.request, Request::new(Method::Get, <span class="string">"/"</span>))
     }
 }
 
@@ -1028,11 +1028,11 @@
 }
 
 <span class="kw">impl </span>std::fmt::Debug <span class="kw">for </span>Response {
-    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
-        f.debug_struct(<span class="string">&quot;Response&quot;</span>)
-            .field(<span class="string">&quot;status&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.status)
-            .field(<span class="string">&quot;headers&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.headers)
-            .field(<span class="string">&quot;body.len()&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.body.len())
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; std::fmt::Result {
+        f.debug_struct(<span class="string">"Response"</span>)
+            .field(<span class="string">"status"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.status)
+            .field(<span class="string">"headers"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.headers)
+            .field(<span class="string">"body.len()"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.body.len())
             .finish()
     }
 }
@@ -1188,17 +1188,17 @@
 }
 
 <span class="kw">impl </span>std::fmt::Display <span class="kw">for </span>Method {
-    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; std::fmt::Result {
         f.write_str(<span class="kw">match </span><span class="self">self </span>{
-            Method::Get =&gt; <span class="string">&quot;GET&quot;</span>,
-            Method::Post =&gt; <span class="string">&quot;POST&quot;</span>,
-            Method::Put =&gt; <span class="string">&quot;PUT&quot;</span>,
-            Method::Delete =&gt; <span class="string">&quot;DELETE&quot;</span>,
-            Method::Patch =&gt; <span class="string">&quot;PATCH&quot;</span>,
-            Method::Head =&gt; <span class="string">&quot;HEAD&quot;</span>,
-            Method::Options =&gt; <span class="string">&quot;OPTIONS&quot;</span>,
-            Method::Connect =&gt; <span class="string">&quot;CONNECT&quot;</span>,
-            Method::Trace =&gt; <span class="string">&quot;TRACE&quot;</span>,
+            Method::Get =&gt; <span class="string">"GET"</span>,
+            Method::Post =&gt; <span class="string">"POST"</span>,
+            Method::Put =&gt; <span class="string">"PUT"</span>,
+            Method::Delete =&gt; <span class="string">"DELETE"</span>,
+            Method::Patch =&gt; <span class="string">"PATCH"</span>,
+            Method::Head =&gt; <span class="string">"HEAD"</span>,
+            Method::Options =&gt; <span class="string">"OPTIONS"</span>,
+            Method::Connect =&gt; <span class="string">"CONNECT"</span>,
+            Method::Trace =&gt; <span class="string">"TRACE"</span>,
             Method::Other(o) =&gt; o,
         })
     }
@@ -1210,16 +1210,16 @@
         <span class="kw">let </span>scheme_and_authority =
             <span class="kw">if let </span>(<span class="prelude-val">Some</span>(scheme), <span class="prelude-val">Some</span>(authority)) = (<span class="self">self</span>.scheme(), <span class="self">self</span>.authority()) {
                 <span class="kw">let </span>scheme = <span class="kw">match </span><span class="kw-2">&amp;</span>scheme {
-                    Scheme::Http =&gt; <span class="string">&quot;http://&quot;</span>,
-                    Scheme::Https =&gt; <span class="string">&quot;https://&quot;</span>,
+                    Scheme::Http =&gt; <span class="string">"http://"</span>,
+                    Scheme::Https =&gt; <span class="string">"https://"</span>,
                     Scheme::Other(s) =&gt; s.as_str(),
                 };
-                <span class="macro">format!</span>(<span class="string">&quot;{scheme}{authority}&quot;</span>)
+                <span class="macro">format!</span>(<span class="string">"{scheme}{authority}"</span>)
             } <span class="kw">else </span>{
                 String::new()
             };
         <span class="kw">let </span>path_and_query = <span class="self">self</span>.path_with_query().unwrap_or_default();
-        <span class="macro">format!</span>(<span class="string">&quot;{scheme_and_authority}{path_and_query}&quot;</span>)
+        <span class="macro">format!</span>(<span class="string">"{scheme_and_authority}{path_and_query}"</span>)
     }
 
     <span class="doccomment">/// Return a `Stream` from which the body of the specified request may be read.
@@ -1228,7 +1228,7 @@
     ///
     /// Panics if the body was already consumed.
     </span><span class="kw">pub fn </span>into_body_stream(<span class="self">self</span>) -&gt; <span class="kw">impl </span>futures::Stream&lt;Item = <span class="prelude-ty">Result</span>&lt;Vec&lt;u8&gt;, streams::Error&gt;&gt; {
-        executor::incoming_body(<span class="self">self</span>.consume().expect(<span class="string">&quot;request body was already consumed&quot;</span>))
+        executor::incoming_body(<span class="self">self</span>.consume().expect(<span class="string">"request body was already consumed"</span>))
     }
 
     <span class="doccomment">/// Return a `Vec&lt;u8&gt;` of the body or fails
@@ -1252,11 +1252,11 @@
     </span><span class="comment">// TODO: This should ideally take ownership of `self` and be called `into_body_stream` (i.e. symmetric with
     // `IncomingRequest::into_body_stream`).  However, as of this writing, `wasmtime-wasi-http` is implemented in
     // such a way that dropping an `IncomingResponse` will cause the request to be cancelled, meaning the caller
-    // won&#39;t necessarily have a chance to send the request body if they haven&#39;t started doing so yet (or, if they
+    // won't necessarily have a chance to send the request body if they haven't started doing so yet (or, if they
     // have started, they might not be able to finish before the connection is closed).  See
     // https://github.com/bytecodealliance/wasmtime/issues/7413 for details.
     </span><span class="kw">pub fn </span>take_body_stream(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>futures::Stream&lt;Item = <span class="prelude-ty">Result</span>&lt;Vec&lt;u8&gt;, streams::Error&gt;&gt; {
-        executor::incoming_body(<span class="self">self</span>.consume().expect(<span class="string">&quot;response body was already consumed&quot;</span>))
+        executor::incoming_body(<span class="self">self</span>.consume().expect(<span class="string">"response body was already consumed"</span>))
     }
 
     <span class="doccomment">/// Return a `Vec&lt;u8&gt;` of the body or fails
@@ -1282,7 +1282,7 @@
     ///
     /// Panics if the body was already taken.
     </span><span class="kw">pub fn </span>take_body(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>futures::Sink&lt;Vec&lt;u8&gt;, Error = Error&gt; {
-        executor::outgoing_body(<span class="self">self</span>.write().expect(<span class="string">&quot;response body was already taken&quot;</span>))
+        executor::outgoing_body(<span class="self">self</span>.write().expect(<span class="string">"response body was already taken"</span>))
     }
 }
 
@@ -1293,7 +1293,7 @@
     ///
     /// Panics if the body was already taken.
     </span><span class="kw">pub fn </span>take_body(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>futures::Sink&lt;Vec&lt;u8&gt;, Error = Error&gt; {
-        executor::outgoing_body(<span class="self">self</span>.write().expect(<span class="string">&quot;request body was already taken&quot;</span>))
+        executor::outgoing_body(<span class="self">self</span>.write().expect(<span class="string">"request body was already taken"</span>))
     }
 }
 
@@ -1302,7 +1302,7 @@
 
 <span class="kw">impl </span>ResponseOutparam {
     <span class="attr">#[doc(hidden)]
-    </span><span class="comment">// This is needed for the macro so we can transfrom the macro&#39;s
+    </span><span class="comment">// This is needed for the macro so we can transfrom the macro's
     // `ResponseOutparam` to this `ResponseOutparam`
     </span><span class="kw">pub unsafe fn </span>from_handle(handle: u32) -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>(types::ResponseOutparam::from_handle(handle))
@@ -1336,9 +1336,9 @@
 </span><span class="kw">pub async fn </span>send&lt;I, O&gt;(request: I) -&gt; <span class="prelude-ty">Result</span>&lt;O, SendError&gt;
 <span class="kw">where
     </span>I: TryIntoOutgoingRequest,
-    I::Error: Into&lt;Box&lt;<span class="kw">dyn </span>std::error::Error + Send + Sync&gt;&gt; + <span class="lifetime">&#39;static</span>,
+    I::Error: Into&lt;Box&lt;<span class="kw">dyn </span>std::error::Error + Send + Sync&gt;&gt; + <span class="lifetime">'static</span>,
     O: TryFromIncomingResponse,
-    O::Error: Into&lt;Box&lt;<span class="kw">dyn </span>std::error::Error + Send + Sync&gt;&gt; + <span class="lifetime">&#39;static</span>,
+    O::Error: Into&lt;Box&lt;<span class="kw">dyn </span>std::error::Error + Send + Sync&gt;&gt; + <span class="lifetime">'static</span>,
 {
     <span class="kw">let </span>(request, body_buffer) = I::try_into_outgoing_request(request)
         .map_err(|e| SendError::RequestConversion(e.into()))<span class="question-mark">?</span>;
@@ -1385,17 +1385,17 @@
 </span><span class="kw">pub use </span>executor::run;
 
 <span class="doccomment">/// An error parsing a JSON body
-</span><span class="attr">#[cfg(feature = <span class="string">&quot;json&quot;</span>)]
+</span><span class="attr">#[cfg(feature = <span class="string">"json"</span>)]
 #[derive(Debug)]
 </span><span class="kw">pub struct </span>JsonBodyError(serde_json::Error);
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;json&quot;</span>)]
+<span class="attr">#[cfg(feature = <span class="string">"json"</span>)]
 </span><span class="kw">impl </span>std::error::Error <span class="kw">for </span>JsonBodyError {}
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;json&quot;</span>)]
+<span class="attr">#[cfg(feature = <span class="string">"json"</span>)]
 </span><span class="kw">impl </span>std::fmt::Display <span class="kw">for </span>JsonBodyError {
-    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
-        f.write_str(<span class="string">&quot;could not convert body to json&quot;</span>)
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; std::fmt::Result {
+        f.write_str(<span class="string">"could not convert body to json"</span>)
     }
 }
 
@@ -1406,8 +1406,8 @@
 <span class="kw">impl </span>std::error::Error <span class="kw">for </span>NonUtf8BodyError {}
 
 <span class="kw">impl </span>std::fmt::Display <span class="kw">for </span>NonUtf8BodyError {
-    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
-        f.write_str(<span class="string">&quot;body was expected to be utf8 but was not&quot;</span>)
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; std::fmt::Result {
+        f.write_str(<span class="string">"body was expected to be utf8 but was not"</span>)
     }
 }
 
@@ -1445,17 +1445,17 @@
 
     <span class="doccomment">/// Helper function to return a 404 Not Found response.
     </span><span class="kw">pub fn </span>not_found() -&gt; Response {
-        Response::new(<span class="number">404</span>, <span class="string">&quot;Not Found&quot;</span>)
+        Response::new(<span class="number">404</span>, <span class="string">"Not Found"</span>)
     }
 
     <span class="doccomment">/// Helper function to return a 500 Internal Server Error response.
     </span><span class="kw">pub fn </span>internal_server_error() -&gt; Response {
-        Response::new(<span class="number">500</span>, <span class="string">&quot;Internal Server Error&quot;</span>)
+        Response::new(<span class="number">500</span>, <span class="string">"Internal Server Error"</span>)
     }
 
     <span class="doccomment">/// Helper function to return a 405 Method Not Allowed response.
     </span><span class="kw">pub fn </span>method_not_allowed() -&gt; Response {
-        Response::new(<span class="number">405</span>, <span class="string">&quot;Method Not Allowed&quot;</span>)
+        Response::new(<span class="number">405</span>, <span class="string">"Method Not Allowed"</span>)
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>bad_request(msg: <span class="prelude-ty">Option</span>&lt;String&gt;) -&gt; Response {
@@ -1464,7 +1464,7 @@
 }
 
 <span class="kw">impl </span>std::fmt::Display <span class="kw">for </span>streams::Error {
-    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; std::fmt::Result {
         f.write_str(<span class="kw-2">&amp;</span><span class="self">self</span>.to_debug_string())
     }
 }
@@ -1477,23 +1477,23 @@
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>request_uri_parses() {
-        <span class="kw">let </span>uri = <span class="string">&quot;/hello?world=1&quot;</span>;
+        <span class="kw">let </span>uri = <span class="string">"/hello?world=1"</span>;
         <span class="kw">let </span>req = Request::new(Method::Get, uri);
         <span class="macro">assert_eq!</span>(req.uri(), uri);
-        <span class="macro">assert_eq!</span>(req.path(), <span class="string">&quot;/hello&quot;</span>);
-        <span class="macro">assert_eq!</span>(req.query(), <span class="string">&quot;world=1&quot;</span>);
+        <span class="macro">assert_eq!</span>(req.path(), <span class="string">"/hello"</span>);
+        <span class="macro">assert_eq!</span>(req.query(), <span class="string">"world=1"</span>);
 
-        <span class="kw">let </span>uri = <span class="string">&quot;http://localhost:3000/hello?world=1&quot;</span>;
+        <span class="kw">let </span>uri = <span class="string">"http://localhost:3000/hello?world=1"</span>;
         <span class="kw">let </span>req = Request::new(Method::Get, uri);
         <span class="macro">assert_eq!</span>(req.uri(), uri);
-        <span class="macro">assert_eq!</span>(req.path(), <span class="string">&quot;/hello&quot;</span>);
-        <span class="macro">assert_eq!</span>(req.query(), <span class="string">&quot;world=1&quot;</span>);
+        <span class="macro">assert_eq!</span>(req.path(), <span class="string">"/hello"</span>);
+        <span class="macro">assert_eq!</span>(req.query(), <span class="string">"world=1"</span>);
 
-        <span class="kw">let </span>uri = <span class="string">&quot;localhost:3000/hello?world=1&quot;</span>;
+        <span class="kw">let </span>uri = <span class="string">"localhost:3000/hello?world=1"</span>;
         <span class="kw">let </span>req = Request::new(Method::Get, uri);
         <span class="macro">assert_eq!</span>(req.uri(), uri);
-        <span class="macro">assert_eq!</span>(req.path(), <span class="string">&quot;/hello&quot;</span>);
-        <span class="macro">assert_eq!</span>(req.query(), <span class="string">&quot;world=1&quot;</span>);
+        <span class="macro">assert_eq!</span>(req.path(), <span class="string">"/hello"</span>);
+        <span class="macro">assert_eq!</span>(req.query(), <span class="string">"world=1"</span>);
     }
 }
 </code></pre></div></section></main></body></html>
