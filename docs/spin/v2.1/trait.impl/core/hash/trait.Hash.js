@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"spin_sdk":[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html\" title=\"trait core::hash::Hash\">Hash</a> for <a class=\"enum\" href=\"spin_sdk/redis/enum.RedisResult.html\" title=\"enum spin_sdk::redis::RedisResult\">RedisResult</a>"],["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html\" title=\"trait core::hash::Hash\">Hash</a> for <a class=\"enum\" href=\"spin_sdk/http/enum.Method.html\" title=\"enum spin_sdk::http::Method\">Method</a>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
