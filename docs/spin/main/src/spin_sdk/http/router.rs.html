@@ -597,24 +597,24 @@
 ///  
 /// This trait is automatically implemented for `Fn` types, and so is rarely implemented
 /// directly by Spin users.
-</span><span class="attr">#[async_trait]
-</span><span class="kw">pub trait </span>Handler: Send + Sync {
+</span><span class="attr">#[async_trait(<span class="question-mark">?</span>Send)]
+</span><span class="kw">pub trait </span>Handler {
     <span class="doccomment">/// Invoke the handler.
     </span><span class="kw">async fn </span>handle(<span class="kw-2">&amp;</span><span class="self">self</span>, req: Request, params: Params) -&gt; Response;
 }
 
-<span class="attr">#[async_trait]
+<span class="attr">#[async_trait(<span class="question-mark">?</span>Send)]
 </span><span class="kw">impl </span>Handler <span class="kw">for </span>Box&lt;<span class="kw">dyn </span>Handler&gt; {
     <span class="kw">async fn </span>handle(<span class="kw-2">&amp;</span><span class="self">self</span>, req: Request, params: Params) -&gt; Response {
         <span class="self">self</span>.as_ref().handle(req, params).<span class="kw">await
     </span>}
 }
 
-<span class="attr">#[async_trait]
+<span class="attr">#[async_trait(<span class="question-mark">?</span>Send)]
 </span><span class="kw">impl</span>&lt;F, Fut&gt; Handler <span class="kw">for </span>F
 <span class="kw">where
-    </span>F: Fn(Request, Params) -&gt; Fut + Send + Sync + <span class="lifetime">'static</span>,
-    Fut: Future&lt;Output = Response&gt; + Send + <span class="lifetime">'static</span>,
+    </span>F: Fn(Request, Params) -&gt; Fut + <span class="lifetime">'static</span>,
+    Fut: Future&lt;Output = Response&gt; + <span class="lifetime">'static</span>,
 {
     <span class="kw">async fn </span>handle(<span class="kw-2">&amp;</span><span class="self">self</span>, req: Request, params: Params) -&gt; Response {
         <span class="kw">let </span>fut = (<span class="self">self</span>)(req, params);
@@ -740,10 +740,10 @@
     <span class="doccomment">/// Register a handler at the path for all methods.
     </span><span class="kw">pub fn </span>any&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static </span>+ Send + Sync,
-        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
-        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static</span>,
+        Req: TryFromRequest + <span class="lifetime">'static</span>,
+        Req::Error: IntoResponse + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static</span>,
     {
         <span class="kw">let </span>handler = <span class="kw">move </span>|req, params| {
             <span class="kw">let </span>res = TryFromRequest::try_from_request(req).map(|r| handler(r, params));
@@ -761,11 +761,11 @@
     <span class="doccomment">/// Register an async handler at the path for all methods.
     </span><span class="kw">pub fn </span>any_async&lt;F, Fut, I, O&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(I, Params) -&gt; Fut + <span class="lifetime">'static </span>+ Send + Sync,
-        Fut: Future&lt;Output = O&gt; + Send + <span class="lifetime">'static</span>,
-        I: TryFromRequest + <span class="lifetime">'static </span>+ Send,
-        I::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
-        O: IntoResponse + <span class="lifetime">'static </span>+ Send,
+        </span>F: Fn(I, Params) -&gt; Fut + <span class="lifetime">'static</span>,
+        Fut: Future&lt;Output = O&gt; + <span class="lifetime">'static</span>,
+        I: TryFromRequest + <span class="lifetime">'static</span>,
+        I::Error: IntoResponse + <span class="lifetime">'static</span>,
+        O: IntoResponse + <span class="lifetime">'static</span>,
     {
         <span class="kw">let </span>handler = <span class="kw">move </span>|req, params| {
             <span class="kw">let </span>res = TryFromRequest::try_from_request(req).map(|r| handler(r, params));
@@ -783,10 +783,10 @@
     <span class="doccomment">/// Register a handler at the path for the specified HTTP method.
     </span><span class="kw">pub fn </span>add&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, method: Method, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static </span>+ Send + Sync,
-        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
-        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static</span>,
+        Req: TryFromRequest + <span class="lifetime">'static</span>,
+        Req::Error: IntoResponse + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static</span>,
     {
         <span class="kw">let </span>handler = <span class="kw">move </span>|req, params| {
             <span class="kw">let </span>res = TryFromRequest::try_from_request(req).map(|r| handler(r, params));
@@ -804,11 +804,11 @@
     <span class="doccomment">/// Register an async handler at the path for the specified HTTP method.
     </span><span class="kw">pub fn </span>add_async&lt;F, Fut, I, O&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, method: Method, handler: F)
     <span class="kw">where
-        </span>F: Fn(I, Params) -&gt; Fut + <span class="lifetime">'static </span>+ Send + Sync,
-        Fut: Future&lt;Output = O&gt; + Send + <span class="lifetime">'static</span>,
-        I: TryFromRequest + <span class="lifetime">'static </span>+ Send,
-        I::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
-        O: IntoResponse + <span class="lifetime">'static </span>+ Send,
+        </span>F: Fn(I, Params) -&gt; Fut + <span class="lifetime">'static</span>,
+        Fut: Future&lt;Output = O&gt; + <span class="lifetime">'static</span>,
+        I: TryFromRequest + <span class="lifetime">'static</span>,
+        I::Error: IntoResponse + <span class="lifetime">'static</span>,
+        O: IntoResponse + <span class="lifetime">'static</span>,
     {
         <span class="kw">let </span>handler = <span class="kw">move </span>|req, params| {
             <span class="kw">let </span>res = TryFromRequest::try_from_request(req).map(|r| handler(r, params));
@@ -830,10 +830,10 @@
     <span class="doccomment">/// Register a handler at the path for the HTTP GET method.
     </span><span class="kw">pub fn </span>get&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static </span>+ Send + Sync,
-        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
-        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static</span>,
+        Req: TryFromRequest + <span class="lifetime">'static</span>,
+        Req::Error: IntoResponse + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static</span>,
     {
         <span class="self">self</span>.add(path, Method::Get, handler)
     }
@@ -841,11 +841,11 @@
     <span class="doccomment">/// Register an async handler at the path for the HTTP GET method.
     </span><span class="kw">pub fn </span>get_async&lt;F, Fut, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">'static </span>+ Send + Sync,
-        Fut: Future&lt;Output = Resp&gt; + Send + <span class="lifetime">'static</span>,
-        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
-        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">'static</span>,
+        Fut: Future&lt;Output = Resp&gt; + <span class="lifetime">'static</span>,
+        Req: TryFromRequest + <span class="lifetime">'static</span>,
+        Req::Error: IntoResponse + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static</span>,
     {
         <span class="self">self</span>.add_async(path, Method::Get, handler)
     }
@@ -853,10 +853,10 @@
     <span class="doccomment">/// Register a handler at the path for the HTTP HEAD method.
     </span><span class="kw">pub fn </span>head&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static </span>+ Send + Sync,
-        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
-        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static</span>,
+        Req: TryFromRequest + <span class="lifetime">'static</span>,
+        Req::Error: IntoResponse + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static</span>,
     {
         <span class="self">self</span>.add(path, Method::Head, handler)
     }
@@ -864,11 +864,11 @@
     <span class="doccomment">/// Register an async handler at the path for the HTTP HEAD method.
     </span><span class="kw">pub fn </span>head_async&lt;F, Fut, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">'static </span>+ Send + Sync,
-        Fut: Future&lt;Output = Resp&gt; + Send + <span class="lifetime">'static</span>,
-        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
-        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">'static</span>,
+        Fut: Future&lt;Output = Resp&gt; + <span class="lifetime">'static</span>,
+        Req: TryFromRequest + <span class="lifetime">'static</span>,
+        Req::Error: IntoResponse + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static</span>,
     {
         <span class="self">self</span>.add_async(path, Method::Head, handler)
     }
@@ -876,10 +876,10 @@
     <span class="doccomment">/// Register a handler at the path for the HTTP POST method.
     </span><span class="kw">pub fn </span>post&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static </span>+ Send + Sync,
-        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
-        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static</span>,
+        Req: TryFromRequest + <span class="lifetime">'static</span>,
+        Req::Error: IntoResponse + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static</span>,
     {
         <span class="self">self</span>.add(path, Method::Post, handler)
     }
@@ -887,11 +887,11 @@
     <span class="doccomment">/// Register an async handler at the path for the HTTP POST method.
     </span><span class="kw">pub fn </span>post_async&lt;F, Fut, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">'static </span>+ Send + Sync,
-        Fut: Future&lt;Output = Resp&gt; + Send + <span class="lifetime">'static</span>,
-        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
-        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">'static</span>,
+        Fut: Future&lt;Output = Resp&gt; + <span class="lifetime">'static</span>,
+        Req: TryFromRequest + <span class="lifetime">'static</span>,
+        Req::Error: IntoResponse + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static</span>,
     {
         <span class="self">self</span>.add_async(path, Method::Post, handler)
     }
@@ -899,10 +899,10 @@
     <span class="doccomment">/// Register a handler at the path for the HTTP DELETE method.
     </span><span class="kw">pub fn </span>delete&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static </span>+ Send + Sync,
-        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
-        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static</span>,
+        Req: TryFromRequest + <span class="lifetime">'static</span>,
+        Req::Error: IntoResponse + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static</span>,
     {
         <span class="self">self</span>.add(path, Method::Delete, handler)
     }
@@ -910,11 +910,11 @@
     <span class="doccomment">/// Register an async handler at the path for the HTTP DELETE method.
     </span><span class="kw">pub fn </span>delete_async&lt;F, Fut, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">'static </span>+ Send + Sync,
-        Fut: Future&lt;Output = Resp&gt; + Send + <span class="lifetime">'static</span>,
-        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
-        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">'static</span>,
+        Fut: Future&lt;Output = Resp&gt; + <span class="lifetime">'static</span>,
+        Req: TryFromRequest + <span class="lifetime">'static</span>,
+        Req::Error: IntoResponse + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static</span>,
     {
         <span class="self">self</span>.add_async(path, Method::Delete, handler)
     }
@@ -922,10 +922,10 @@
     <span class="doccomment">/// Register a handler at the path for the HTTP PUT method.
     </span><span class="kw">pub fn </span>put&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static </span>+ Send + Sync,
-        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
-        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static</span>,
+        Req: TryFromRequest + <span class="lifetime">'static</span>,
+        Req::Error: IntoResponse + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static</span>,
     {
         <span class="self">self</span>.add(path, Method::Put, handler)
     }
@@ -933,11 +933,11 @@
     <span class="doccomment">/// Register an async handler at the path for the HTTP PUT method.
     </span><span class="kw">pub fn </span>put_async&lt;F, Fut, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">'static </span>+ Send + Sync,
-        Fut: Future&lt;Output = Resp&gt; + Send + <span class="lifetime">'static</span>,
-        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
-        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">'static</span>,
+        Fut: Future&lt;Output = Resp&gt; + <span class="lifetime">'static</span>,
+        Req: TryFromRequest + <span class="lifetime">'static</span>,
+        Req::Error: IntoResponse + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static</span>,
     {
         <span class="self">self</span>.add_async(path, Method::Put, handler)
     }
@@ -945,10 +945,10 @@
     <span class="doccomment">/// Register a handler at the path for the HTTP PATCH method.
     </span><span class="kw">pub fn </span>patch&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static </span>+ Send + Sync,
-        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
-        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static</span>,
+        Req: TryFromRequest + <span class="lifetime">'static</span>,
+        Req::Error: IntoResponse + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static</span>,
     {
         <span class="self">self</span>.add(path, Method::Patch, handler)
     }
@@ -956,11 +956,11 @@
     <span class="doccomment">/// Register an async handler at the path for the HTTP PATCH method.
     </span><span class="kw">pub fn </span>patch_async&lt;F, Fut, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">'static </span>+ Send + Sync,
-        Fut: Future&lt;Output = Resp&gt; + Send + <span class="lifetime">'static</span>,
-        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
-        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">'static</span>,
+        Fut: Future&lt;Output = Resp&gt; + <span class="lifetime">'static</span>,
+        Req: TryFromRequest + <span class="lifetime">'static</span>,
+        Req::Error: IntoResponse + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static</span>,
     {
         <span class="self">self</span>.add_async(path, Method::Patch, handler)
     }
@@ -968,10 +968,10 @@
     <span class="doccomment">/// Register a handler at the path for the HTTP OPTIONS method.
     </span><span class="kw">pub fn </span>options&lt;F, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static </span>+ Send + Sync,
-        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
-        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Resp + <span class="lifetime">'static</span>,
+        Req: TryFromRequest + <span class="lifetime">'static</span>,
+        Req::Error: IntoResponse + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static</span>,
     {
         <span class="self">self</span>.add(path, Method::Options, handler)
     }
@@ -979,11 +979,11 @@
     <span class="doccomment">/// Register an async handler at the path for the HTTP OPTIONS method.
     </span><span class="kw">pub fn </span>options_async&lt;F, Fut, Req, Resp&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>str, handler: F)
     <span class="kw">where
-        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">'static </span>+ Send + Sync,
-        Fut: Future&lt;Output = Resp&gt; + Send + <span class="lifetime">'static</span>,
-        Req: TryFromRequest + <span class="lifetime">'static </span>+ Send,
-        Req::Error: IntoResponse + Send + <span class="lifetime">'static</span>,
-        Resp: IntoResponse + <span class="lifetime">'static </span>+ Send,
+        </span>F: Fn(Req, Params) -&gt; Fut + <span class="lifetime">'static</span>,
+        Fut: Future&lt;Output = Resp&gt; + <span class="lifetime">'static</span>,
+        Req: TryFromRequest + <span class="lifetime">'static</span>,
+        Req::Error: IntoResponse + <span class="lifetime">'static</span>,
+        Resp: IntoResponse + <span class="lifetime">'static</span>,
     {
         <span class="self">self</span>.add_async(path, Method::Options, handler)
     }
