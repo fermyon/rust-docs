@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/core/src/store.rs`."><title>store.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-4e54bb2b497cc83f.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.0-nightly (190f4c961 2024-01-09)" data-channel="nightly" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-f2adc0d6ca4d09fb.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-0b2e2def73e61cbe.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/core/src/store.rs`."><title>store.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-4e54bb2b497cc83f.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.0-nightly (a2d9d73e6 2024-01-10)" data-channel="nightly" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-f2adc0d6ca4d09fb.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-0b2e2def73e61cbe.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
             <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
     <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../spin_core/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
@@ -601,11 +601,30 @@
 <a href="#599" id="599">599</a>
 <a href="#600" id="600">600</a>
 <a href="#601" id="601">601</a>
+<a href="#602" id="602">602</a>
+<a href="#603" id="603">603</a>
+<a href="#604" id="604">604</a>
+<a href="#605" id="605">605</a>
+<a href="#606" id="606">606</a>
+<a href="#607" id="607">607</a>
+<a href="#608" id="608">608</a>
+<a href="#609" id="609">609</a>
+<a href="#610" id="610">610</a>
+<a href="#611" id="611">611</a>
+<a href="#612" id="612">612</a>
+<a href="#613" id="613">613</a>
+<a href="#614" id="614">614</a>
+<a href="#615" id="615">615</a>
+<a href="#616" id="616">616</a>
+<a href="#617" id="617">617</a>
+<a href="#618" id="618">618</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>anyhow::{anyhow, <span class="prelude-ty">Result</span>};
 <span class="kw">use </span>bytes::Bytes;
+<span class="kw">use </span>cap_primitives::net::Pool;
 <span class="kw">use </span>cap_std::ipnet::IpNet;
 <span class="kw">use </span>std::{
     io::{Read, Write},
+    mem,
     path::{Path, PathBuf},
     sync::{Arc, Mutex},
     time::{Duration, Instant},
@@ -740,6 +759,7 @@
     wasi: std::result::Result&lt;WasiCtxBuilder, String&gt;,
     host_components_data: HostComponentsData,
     store_limits: StoreLimitsAsync,
+    net_pool: Pool,
 }
 
 <span class="kw">impl </span>StoreBuilder {
@@ -756,6 +776,7 @@
             wasi: <span class="prelude-val">Ok</span>(wasi.into()),
             host_components_data: host_components.new_data(),
             store_limits: StoreLimitsAsync::default(),
+            net_pool: Pool::default(),
         }
     }
 
@@ -790,10 +811,15 @@
             WasiCtxBuilder::Preview1(<span class="kw">_</span>) =&gt; {
                 <span class="macro">panic!</span>(<span class="string">"Enabling network only allowed in preview2"</span>)
             }
-            WasiCtxBuilder::Preview2(ctx) =&gt; {
-                ctx.insert_ip_net_port_range(ip_net, ports_start, ports_end);
-            }
+            WasiCtxBuilder::Preview2(<span class="kw">_</span>) =&gt; {}
         });
+
+        <span class="self">self</span>.net_pool.insert_ip_net_port_range(
+            ip_net,
+            ports_start,
+            ports_end,
+            cap_primitives::ambient_authority(),
+        );
     }
 
     <span class="doccomment">/// Inherit the host network with a few hardcoded caveats
@@ -804,7 +830,7 @@
             }
             WasiCtxBuilder::Preview2(ctx) =&gt; {
                 <span class="comment">// TODO: ctx.allow_udp(false);
-                </span>ctx.inherit_network(cap_std::ambient_authority());
+                </span>ctx.inherit_network();
             }
         });
     }
@@ -1001,7 +1027,15 @@
     <span class="doccomment">/// Builds a [`Store`] from this builder with given host state data.
     ///
     /// If `T: Default`, it may be preferable to use [`Store::build`].
-    </span><span class="kw">pub fn </span>build_with_data&lt;T&gt;(<span class="self">self</span>, inner_data: T) -&gt; <span class="prelude-ty">Result</span>&lt;Store&lt;T&gt;&gt; {
+    </span><span class="kw">pub fn </span>build_with_data&lt;T&gt;(<span class="kw-2">mut </span><span class="self">self</span>, inner_data: T) -&gt; <span class="prelude-ty">Result</span>&lt;Store&lt;T&gt;&gt; {
+        <span class="kw">let </span>net_pool = mem::take(<span class="kw-2">&amp;mut </span><span class="self">self</span>.net_pool);
+        <span class="self">self</span>.with_wasi(<span class="kw">move </span>|wasi| <span class="kw">match </span>wasi {
+            WasiCtxBuilder::Preview1(<span class="kw">_</span>) =&gt; {}
+            WasiCtxBuilder::Preview2(ctx) =&gt; {
+                ctx.socket_addr_check(<span class="kw">move </span>|addr, <span class="kw">_</span>| net_pool.check_addr(addr).is_ok());
+            }
+        });
+
         <span class="kw">let </span>wasi = <span class="self">self</span>.wasi.map_err(anyhow::Error::msg)<span class="question-mark">?</span>.build();
 
         <span class="kw">let </span><span class="kw-2">mut </span>inner = wasmtime::Store::new(
@@ -1011,7 +1045,7 @@
                 wasi,
                 host_components_data: <span class="self">self</span>.host_components_data,
                 store_limits: <span class="self">self</span>.store_limits,
-                table: wasi_preview2::Table::new(),
+                table: wasi_preview2::ResourceTable::new(),
             },
         );
 

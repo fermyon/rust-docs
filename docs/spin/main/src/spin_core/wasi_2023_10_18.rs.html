@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/core/src/wasi_2023_10_18.rs`."><title>wasi_2023_10_18.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-4e54bb2b497cc83f.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.0-nightly (190f4c961 2024-01-09)" data-channel="nightly" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-f2adc0d6ca4d09fb.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-0b2e2def73e61cbe.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/core/src/wasi_2023_10_18.rs`."><title>wasi_2023_10_18.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-4e54bb2b497cc83f.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.0-nightly (a2d9d73e6 2024-01-10)" data-channel="nightly" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-f2adc0d6ca4d09fb.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-0b2e2def73e61cbe.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
             <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
     <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../spin_core/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
@@ -2440,6 +2440,9 @@
 <a href="#2438" id="2438">2438</a>
 <a href="#2439" id="2439">2439</a>
 <a href="#2440" id="2440">2440</a>
+<a href="#2441" id="2441">2441</a>
+<a href="#2442" id="2442">2442</a>
+<a href="#2443" id="2443">2443</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(hidden)] </span><span class="comment">// internal implementation detail used in tests and spin-trigger
 
 </span><span class="kw">use </span>anyhow::Result;
@@ -2641,7 +2644,7 @@
 {
     <span class="kw">fn </span>filesystem_error_code(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
-        err: Resource&lt;Error&gt;,
+        err: Resource&lt;wasi::filesystem::types::Error&gt;,
     ) -&gt; wasmtime::Result&lt;<span class="prelude-ty">Option</span>&lt;FsErrorCode&gt;&gt; {
         <span class="prelude-val">Ok</span>(
             &lt;T <span class="kw">as </span>latest::filesystem::types::Host&gt;::filesystem_error_code(<span class="self">self</span>, err)<span class="question-mark">?
@@ -4475,11 +4478,12 @@
         self_: wasmtime::component::Resource&lt;FutureTrailers&gt;,
     ) -&gt; wasmtime::Result&lt;<span class="prelude-ty">Option</span>&lt;<span class="prelude-ty">Result</span>&lt;wasmtime::component::Resource&lt;Trailers&gt;, HttpError&gt;&gt;&gt; {
         <span class="kw">match </span>&lt;T <span class="kw">as </span>latest::http::types::HostFutureTrailers&gt;::get(<span class="self">self</span>, self_)<span class="question-mark">? </span>{
-            <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(trailers))) =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(trailers))),
+            <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(trailers)))) =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(trailers))),
             <span class="comment">// Return an empty trailers if no trailers popped out since this
             // version of WASI couldn't represent the lack of trailers.
-            </span><span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>)) =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(&lt;T <span class="kw">as </span>latest::http::types::HostFields&gt;::new(<span class="self">self</span>)<span class="question-mark">?</span>))),
-            <span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(e)) =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(e.into()))),
+            </span><span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>))) =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(&lt;T <span class="kw">as </span>latest::http::types::HostFields&gt;::new(<span class="self">self</span>)<span class="question-mark">?</span>))),
+            <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="prelude-val">Err</span>(e))) =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(e.into()))),
+            <span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(())) =&gt; <span class="prelude-val">Err</span>(<span class="macro">anyhow::anyhow!</span>(<span class="string">"trailers have already been retrieved"</span>)),
             <span class="prelude-val">None </span>=&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
         }
     }
@@ -4543,7 +4547,7 @@
 
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(ms) = connect_timeout_ms {
                     <span class="kw">if let </span><span class="prelude-val">Err</span>(()) =
-                        &lt;T <span class="kw">as </span>latest::http::types::HostRequestOptions&gt;::set_connect_timeout_ms(
+                        &lt;T <span class="kw">as </span>latest::http::types::HostRequestOptions&gt;::set_connect_timeout(
                             <span class="self">self</span>,
                             borrow(),
                             <span class="prelude-val">Some</span>(ms.into()),
@@ -4556,7 +4560,7 @@
 
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(ms) = first_byte_timeout_ms {
                     <span class="kw">if let </span><span class="prelude-val">Err</span>(()) =
-                        &lt;T <span class="kw">as </span>latest::http::types::HostRequestOptions&gt;::set_first_byte_timeout_ms(
+                        &lt;T <span class="kw">as </span>latest::http::types::HostRequestOptions&gt;::set_first_byte_timeout(
                             <span class="self">self</span>,
                             borrow(),
                             <span class="prelude-val">Some</span>(ms.into()),
@@ -4569,7 +4573,7 @@
 
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(ms) = between_bytes_timeout_ms {
                     <span class="kw">if let </span><span class="prelude-val">Err</span>(()) =
-                        &lt;T <span class="kw">as </span>latest::http::types::HostRequestOptions&gt;::set_between_bytes_timeout_ms(
+                        &lt;T <span class="kw">as </span>latest::http::types::HostRequestOptions&gt;::set_between_bytes_timeout(
                             <span class="self">self</span>,
                             borrow(),
                             <span class="prelude-val">Some</span>(ms.into()),
@@ -4675,6 +4679,8 @@
         <span class="macro">convert!</span>($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>);
     };
 }
+
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>convert;
 
 <span class="macro">convert! </span>{
     <span class="kw">struct </span>latest::clocks::wall_clock::Datetime [&lt;=&gt;] Datetime {
