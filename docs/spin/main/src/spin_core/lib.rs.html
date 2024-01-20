@@ -489,6 +489,7 @@
 <a href="#487" id="487">487</a>
 <a href="#488" id="488">488</a>
 <a href="#489" id="489">489</a>
+<a href="#490" id="490">490</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Spin core execution engine
 //!
 //! This crate provides low-level Wasm and WASI functionality required by Spin.
@@ -602,6 +603,7 @@
             </span>.max_component_instance_size(
                 env(<span class="string">"SPIN_WASMTIME_INSTANCE_SIZE"</span>, (<span class="number">10 </span>* MB) <span class="kw">as </span>u32) <span class="kw">as </span>usize
             )
+            .max_core_instances_per_component(env(<span class="string">"SPIN_WASMTIME_CORE_INSTANCE_COUNT"</span>, <span class="number">200</span>))
             .max_tables_per_component(env(<span class="string">"SPIN_WASMTIME_INSTANCE_TABLES"</span>, <span class="number">20</span>))
             .table_elements(env(<span class="string">"SPIN_WASMTIME_INSTANCE_TABLE_ELEMENTS"</span>, <span class="number">30_000</span>))
             <span class="comment">// The number of memories an instance can have effectively limits the number of inner components
