@@ -17,7 +17,7 @@
 ) -&gt; <a class="struct" href="https://doc.rust-lang.org/nightly/core/pin/struct.Pin.html" title="struct core::pin::Pin">Pin</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html" title="struct alloc::boxed::Box">Box</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a>&lt;Output = <a class="type" href="https://docs.rs/anyhow/1.0.89/anyhow/type.Result.html" title="type anyhow::Result">Result</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;Self::<a class="associatedtype" href="trait.Diagnostic.html#associatedtype.Diagnosis" title="type spin_doctor::Diagnostic::Diagnosis">Diagnosis</a>&gt;&gt;&gt; + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + 'async_trait&gt;&gt;<div class="where">where
     Self: 'async_trait,
     'life0: 'async_trait,
-    'life1: 'async_trait,</div></h4></section></summary><div class="docblock"><p>Check the given [<code>Patient</code>], returning any problem(s) found.</p>
+    'life1: 'async_trait,</div></h4></section></summary><div class="docblock"><p>Check the given <a href="struct.PatientApp.html" title="struct spin_doctor::PatientApp"><code>PatientApp</code></a>, returning any problem(s) found.</p>
 <p>If multiple <em>independently addressable</em> problems are found, this may
 return multiple instances. If two “logically separate” problems would
 have the same fix, they should be represented with the same instance.</p>

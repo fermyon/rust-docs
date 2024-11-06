@@ -170,8 +170,7 @@
 <a href="#169" id="169">169</a>
 <a href="#170" id="170">170</a>
 <a href="#171" id="171">171</a>
-<a href="#172" id="172">172</a>
-<a href="#173" id="173">173</a></pre></div><pre class="rust"><code><span class="doccomment">//! Runtime configuration implementation used by Spin CLI.
+<a href="#172" id="172">172</a></pre></div><pre class="rust"><code><span class="doccomment">//! Runtime configuration implementation used by Spin CLI.
 
 </span><span class="kw">use crate</span>::{RuntimeConfig, StoreManager};
 <span class="kw">use </span>anyhow::Context <span class="kw">as _</span>;
@@ -213,10 +212,9 @@
 
 <span class="doccomment">/// Converts from toml based runtime configuration into a [`RuntimeConfig`].
 ///
-/// Also acts as [`DefaultLabelResolver`].
-///
-/// The various store types (i.e., the "type" field in the toml field) are registered with the
-/// resolver using `add_store_type`. The default store for a label is registered using `add_default_store`.
+/// The various store types (i.e., the "type" field in the toml field) are
+/// registered with the resolver using `add_store_type`. The default store for a
+/// label is registered using `add_default_store`.
 </span><span class="attr">#[derive(Default, Clone)]
 </span><span class="kw">pub struct </span>RuntimeConfigResolver {
     <span class="doccomment">/// A map of store types to a function that returns the appropriate store

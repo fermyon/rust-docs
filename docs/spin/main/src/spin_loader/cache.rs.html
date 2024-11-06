@@ -188,7 +188,10 @@
 <a href="#187" id="187">187</a>
 <a href="#188" id="188">188</a>
 <a href="#189" id="189">189</a>
-<a href="#190" id="190">190</a></pre></div><pre class="rust"><code><span class="doccomment">//! Cache for OCI registry entities.
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a></pre></div><pre class="rust"><code><span class="doccomment">//! Cache for OCI registry entities.
 
 </span><span class="kw">use </span>anyhow::{ensure, Context, <span class="prelude-ty">Result</span>};
 
@@ -301,11 +304,14 @@
     }
 
     <span class="doccomment">/// Ensure the expected configuration directories are found in the root.
+    ///
+    /// ```text
     /// └── &lt;configuration-root&gt;
     ///     └── registry
     ///             └──manifests
     ///             └──wasm
-    ///             └─-data
+    ///             └──data
+    /// ```
     </span><span class="kw">pub async fn </span>ensure_dirs(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="macro">tracing::debug!</span>(<span class="string">"using cache root directory {}"</span>, <span class="self">self</span>.root.display());
 

@@ -403,7 +403,7 @@
         <span class="self">self</span>.hooks.push(Box::new(hooks));
     }
 
-    <span class="doccomment">/// Loads a [`FactorsApp`] with this executor.
+    <span class="doccomment">/// Loads a [`App`] with this executor.
     </span><span class="kw">pub async fn </span>load_app(
         <span class="self">self</span>: Arc&lt;<span class="self">Self</span>&gt;,
         app: App,
@@ -449,7 +449,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="doccomment">/// Prepare instance hooks run immediately before [`FactorsExecutor::prepare`] returns.
+    <span class="doccomment">/// Prepare instance hooks run immediately before [`FactorsExecutorApp::prepare`] returns.
     </span><span class="kw">fn </span>prepare_instance(<span class="kw-2">&amp;</span><span class="self">self</span>, builder: <span class="kw-2">&amp;mut </span>FactorsInstanceBuilder&lt;T, U&gt;) -&gt; anyhow::Result&lt;()&gt; {
         <span class="kw">let _ </span>= builder;
         <span class="prelude-val">Ok</span>(())
