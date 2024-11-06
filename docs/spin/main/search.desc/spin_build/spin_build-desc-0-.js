@@ -1,0 +1,1 @@
+searchState.loadedDescShard("spin_build", 0, "A library for building Spin components.\nIf present, run the build command of each component.")

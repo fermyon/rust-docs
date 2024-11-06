@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["ComponentDependency","ComponentSource","ComponentSpec","WasiFilesMount"],"struct":["AppDetails","AppManifest","Component","ComponentBuildConfig","ComponentDependencies","OneOrManyComponentSpecs","Trigger","Variable"],"type":["KebabId","SnakeId"]};
